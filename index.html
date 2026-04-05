@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nettsnekkeren — Nettsider håndlaget for norske bedrifter</title>
+  <meta name="description" content="Vi snekrer nettsider norske bedrifter er genuint stolte av. Skreddersydd, moderne, levert på 7–10 dager. Fornøydgaranti." />
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='8' fill='%23192140'/><path d='M9 27L9 9' stroke='%23FAF6EC' stroke-width='3' stroke-linecap='round'/><path d='M9 11C9 11,15 19,18 19C21 19,27 19,27 25' stroke='%23C07818' stroke-width='2.5' stroke-linecap='round' fill='none'/><path d='M27 9L27 27' stroke='%23FAF6EC' stroke-width='3' stroke-linecap='round'/><circle cx='27' cy='9' r='2.5' fill='%23C07818'/></svg>" />
+
+  <!-- Fonts: Bricolage Grotesque (display) + Caveat (handwritten accents) + Outfit (body) + Syne (logo only) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Caveat:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+
+  <style>
+  /* ─────────────────────────────────────
+     RESET & ROOT
+  ───────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream:       #FAF6EC;
+    --cream-mid:   #EFE3CA;
+    --cream-dark:  #E4D4B0;
+    --honey:       #C07818;
+    --honey-mid:   #D4901E;
+    --honey-light: #FDF2DC;
+    --honey-glow:  rgba(192,120,24,0.16);
+    --dark:        #192140;
+    --dark-mid:    #243356;
+    --dark-light:  #314475;
+    --ink:         #1C1A12;
+    --ink-55:      rgba(28,26,18,0.55);
+    --ink-30:      rgba(28,26,18,0.30);
+    --ink-10:      rgba(28,26,18,0.08);
+    --green:       #2A9452;
+    --green-bg:    #EBF5EF;
+    --border:      rgba(28,26,18,0.10);
+    --border-mid:  rgba(28,26,18,0.16);
+    --r:           14px;
+    --r-lg:        22px;
+    --r-xl:        30px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ─────────────────────────────────────
+     NAVIGATION
+  ───────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 70px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 52px;
+    transition: background .4s, border-color .4s, backdrop-filter .4s;
+    border-bottom: 1px solid transparent;
+  }
+  nav.scrolled {
+    background: rgba(250,246,236,.92);
+    backdrop-filter: blur(22px) saturate(1.5);
+    border-color: var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+
+  /* ── Logo with animated helmet + hammer ── */
+  .logo-anim-wrap { position: relative; display: inline-block; padding-top: 10px; }
+  .nav-wordmark {
+    font-family: 'Syne', sans-serif;
+    font-size: 19px; font-weight: 800;
+    color: var(--ink); letter-spacing: -.03em; line-height: 1;
+    display: block;
+  }
+  .nav-wordmark .hl { color: var(--honey); }
+
+  /* Helmet — sits on the top-left tip of the N */
+  .logo-helmet {
+    position: absolute; top: -2px; left: 0;
+    width: 19px; height: 12px;
+    animation: helmet-react 5s ease-in-out infinite 1.3s;
+    transform-origin: 50% 100%;
+    filter: drop-shadow(0 2px 3px rgba(192,120,24,.35));
+  }
+  /* Hammer — strikes the last n */
+  .logo-hammer {
+    position: absolute; top: -4px; right: 1px;
+    width: 12px; height: 16px;
+    transform-origin: 50% 100%;
+    animation: hammer-swing 5s ease-in-out infinite;
+    filter: drop-shadow(0 2px 3px rgba(25,33,64,.3));
+  }
+  @keyframes hammer-swing {
+    0%, 28%  { transform: rotate(-42deg); }
+    40%  { transform: rotate(16deg); }
+    43%  { transform: rotate(4deg); }
+    46%  { transform: rotate(13deg); }
+    54%  { transform: rotate(-42deg); }
+    100% { transform: rotate(-42deg); }
+  }
+  @keyframes helmet-react {
+    0%, 34%  { transform: translateY(0) rotate(0deg); }
+    41%  { transform: translateY(-3px) rotate(-9deg); }
+    46%  { transform: translateY(1px)  rotate(5deg); }
+    51%  { transform: translateY(-1px) rotate(-2deg); }
+    57%  { transform: translateY(0)    rotate(0deg); }
+    100% { transform: translateY(0)    rotate(0deg); }
+  }
+  .nav-links { display: flex; gap: 2px; }
+  .nav-links a {
+    font-size: 14px; font-weight: 500; color: var(--ink-55);
+    text-decoration: none; padding: 7px 16px; border-radius: 10px;
+    transition: color .18s, background .18s;
+  }
+  .nav-links a:hover { color: var(--ink); background: var(--ink-10); }
+  .nav-cta {
+    font-size: 14px; font-weight: 600;
+    background: var(--dark); color: var(--cream);
+    border-radius: 100px; padding: 10px 24px;
+    text-decoration: none; cursor: pointer;
+    box-shadow: 0 2px 18px rgba(25,33,64,.28);
+    transition: background .2s, transform .15s, box-shadow .2s;
+  }
+  .nav-cta:hover { background: var(--dark-mid); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(25,33,64,.38); }
+
+  /* ─────────────────────────────────────
+     PAGE & LAYOUT
+  ───────────────────────────────────── */
+  .page { padding-top: 70px; }
+  .container    { max-width: 1100px; margin: 0 auto; padding: 0 52px; }
+  .container-sm { max-width: 720px;  margin: 0 auto; padding: 0 52px; }
+
+  /* ─────────────────────────────────────
+     TYPOGRAPHY UTILITIES
+  ───────────────────────────────────── */
+  .label {
+    font-size: 11px; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--honey); display: block; margin-bottom: 14px;
+  }
+  .display {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800; line-height: 1.02; letter-spacing: -.04em;
+  }
+  /* em inside headings = honey accent, no italic */
+  h1 em, h2 em, h3 em, .display em {
+    font-style: normal; color: var(--honey); font-weight: inherit;
+  }
+  /* Handwritten accent font (Caveat) for gray subtitle text */
+  .handwritten {
+    font-family: 'Caveat', cursive;
+    font-size: 1.35em; font-weight: 600;
+    line-height: 1.4; letter-spacing: .01em;
+  }
+
+  /* ─────────────────────────────────────
+     BADGE
+  ───────────────────────────────────── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--honey-light); color: var(--honey);
+    font-size: 12px; font-weight: 600;
+    padding: 5px 14px; border-radius: 100px;
+    border: 1px solid rgba(192,120,24,.25);
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px rgba(42,148,82,.7);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.8)} }
+
+  /* ─────────────────────────────────────
+     BUTTONS
+  ───────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600;
+    padding: 13px 28px; border-radius: 100px;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: transform .22s cubic-bezier(.22,1,.36,1), box-shadow .2s, background .18s, color .18s, border-color .18s;
+  }
+  .btn-dark  { background: var(--dark); color: var(--cream); box-shadow: 0 2px 18px rgba(25,33,64,.25); }
+  .btn-dark:hover { background: var(--dark-mid); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(25,33,64,.34); }
+  .btn-honey { background: var(--honey); color: #fff; box-shadow: 0 2px 18px rgba(192,120,24,.35); }
+  .btn-honey:hover { background: var(--honey-mid); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(192,120,24,.45); }
+  .btn-outline { background: transparent; color: var(--ink); border: 1.5px solid var(--border-mid); }
+  .btn-outline:hover { border-color: var(--honey); color: var(--honey); background: var(--honey-light); transform: translateY(-2px); }
+  .btn-outline-light { background: transparent; color: rgba(250,246,236,.75); border: 1.5px solid rgba(250,246,236,.2); }
+  .btn-outline-light:hover { background: rgba(250,246,236,.08); color: var(--cream); border-color: rgba(250,246,236,.4); transform: translateY(-2px); }
+
+  /* ─────────────────────────────────────
+     SCROLL REVEAL
+  ───────────────────────────────────── */
+  .r {
+    opacity: 0; transform: translateY(26px);
+    transition: opacity .75s cubic-bezier(.22,1,.36,1), transform .75s cubic-bezier(.22,1,.36,1);
+  }
+  .r.in { opacity: 1; transform: translateY(0); }
+  .r.d1 { transition-delay: .09s; } .r.d2 { transition-delay: .17s; }
+  .r.d3 { transition-delay: .25s; } .r.d4 { transition-delay: .33s; }
+
+  /* ─────────────────────────────────────
+     BG SYMBOLS  (floating craft / code)
+  ───────────────────────────────────── */
+  .bg-syms { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .bs {
+    position: absolute; fill: currentColor; opacity: .045;
+    animation: bs-drift var(--t,22s) ease-in-out infinite var(--d,0s);
+    transform-origin: center;
+  }
+  @keyframes bs-drift {
+    0%,100% { transform: translateY(0) rotate(var(--r0,0deg)); }
+    33%  { transform: translateY(-10px) rotate(var(--r1,4deg)); }
+    66%  { transform: translateY(7px)  rotate(var(--r2,-3deg)); }
+  }
+  /* Dark section symbols: lighter color */
+  .dark-syms .bs { color: var(--cream); opacity: .05; }
+
+  /* ─────────────────────────────────────
+     HERO
+  ───────────────────────────────────── */
+  .hero {
+    min-height: calc(100svh - 70px);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 88px 0 80px;
+    position: relative; overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--cream);
+    background-image: radial-gradient(circle, rgba(28,26,18,.07) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  /* Subtle radial glow behind visual */
+  .hero-glow {
+    position: absolute; top: -10%; right: -5%;
+    width: 700px; height: 700px;
+    background: radial-gradient(ellipse, rgba(192,120,24,.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-glow-2 {
+    position: absolute; bottom: -15%; left: -5%;
+    width: 500px; height: 500px;
+    background: radial-gradient(ellipse, rgba(25,33,64,.09) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1fr 440px;
+    gap: 64px; align-items: center;
+  }
+
+  .hero-h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(50px, 6.5vw, 86px);
+    font-weight: 800; line-height: 1.02;
+    letter-spacing: -.03em; color: var(--ink);
+    margin-bottom: 26px;
+  }
+  .hero-h1 .line {
+    display: block; overflow: hidden;
+    padding-bottom: 0.12em; margin-bottom: -0.12em; /* prevent descender clipping */
+  }
+  .hero-h1 .word {
+    display: inline-block; opacity: 0; transform: translateY(110%);
+    transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
+  }
+  .hero-h1 .word.in { opacity: 1; transform: translateY(0); }
+  .hero-h1 .italic-honey { color: var(--honey); font-weight: 800; }
+
+  .hero-sub {
+    font-size: 18px; font-weight: 400; color: var(--ink-55);
+    line-height: 1.72; max-width: 460px; margin-bottom: 36px;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .hero-note { font-size: 13px; color: var(--ink-30); }
+  .hero-note strong { color: var(--honey); font-weight: 600; }
+
+  /* ── Hero visual: blueprint board ── */
+  .hero-vis {
+    position: relative; width: 440px; height: 480px;
+    flex-shrink: 0;
+    animation: vis-float 7s ease-in-out infinite;
+  }
+  @keyframes vis-float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+  .vis-board {
+    position: absolute; inset: 40px 0 0 40px;
+    background: var(--dark);
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    box-shadow:
+      0 32px 80px rgba(25,33,64,.45),
+      0 0 0 1px rgba(255,255,255,.07),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  /* dot grid */
+  .vis-board::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+  .vis-topbar {
+    height: 42px; border-bottom: 1px solid rgba(255,255,255,.06);
+    display: flex; align-items: center; gap: 6px; padding: 0 16px;
+  }
+  .vt-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .vt-dot.r { background: #FF5F57; }
+  .vt-dot.y { background: #FFBD2E; }
+  .vt-dot.g { background: #28CA41; }
+  .vt-url {
+    flex: 1; height: 20px; margin-left: 10px;
+    background: rgba(255,255,255,.07); border-radius: 6px;
+    display: flex; align-items: center; padding: 0 10px; gap: 6px;
+  }
+  .vt-url-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--honey); opacity: .7; }
+  .vt-url-bar { height: 3px; border-radius: 2px; background: rgba(255,255,255,.15); flex: 1; }
+
+  .vis-content { padding: 22px 22px 18px; display: flex; flex-direction: column; gap: 14px; }
+
+  /* abstract nav strip */
+  .vis-nav { display: flex; align-items: center; gap: 10px; }
+  .vis-nav-logo { width: 28px; height: 10px; background: var(--honey); border-radius: 4px; opacity: .75; }
+  .vis-nav-links { display: flex; gap: 8px; margin-left: 8px; }
+  .vis-nav-link { width: 28px; height: 6px; background: rgba(255,255,255,.15); border-radius: 3px; }
+  .vis-nav-cta { margin-left: auto; width: 48px; height: 18px; background: var(--honey); border-radius: 9px; opacity: .8; }
+
+  /* hero block */
+  .vis-hero { padding: 18px 0 14px; }
+  .vis-h1a { height: 13px; border-radius: 4px; background: rgba(255,255,255,.55); width: 82%; }
+  .vis-h1b { height: 13px; border-radius: 4px; background: rgba(255,255,255,.35); width: 64%; margin-top: 8px; }
+  .vis-sub  { height: 6px; border-radius: 3px; background: rgba(255,255,255,.15); width: 88%; margin-top: 14px; }
+  .vis-sub2 { height: 6px; border-radius: 3px; background: rgba(255,255,255,.1);  width: 72%; margin-top: 6px; }
+  .vis-btns { display: flex; gap: 8px; margin-top: 16px; }
+  .vis-btn-fill    { width: 72px; height: 22px; background: var(--honey); border-radius: 11px; opacity: .85; }
+  .vis-btn-outline { width: 72px; height: 22px; background: transparent; border: 1.5px solid rgba(255,255,255,.2); border-radius: 11px; }
+
+  /* cards row */
+  .vis-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 4px; }
+  .vis-card {
+    background: rgba(255,255,255,.06); border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.08);
+    padding: 10px; display: flex; flex-direction: column; gap: 5px;
+  }
+  .vc-icon { width: 18px; height: 18px; border-radius: 5px; background: var(--honey); opacity: .6; }
+  .vc-t  { height: 5px; border-radius: 2px; background: rgba(255,255,255,.3); width: 80%; }
+  .vc-t2 { height: 4px; border-radius: 2px; background: rgba(255,255,255,.12); width: 60%; }
+  .vc-t3 { height: 4px; border-radius: 2px; background: rgba(255,255,255,.08); width: 70%; }
+
+  /* cursor blink */
+  .vis-cursor {
+    position: absolute; bottom: 24px; right: 28px;
+    width: 18px; height: 18px;
+  }
+  .vis-cursor::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--honey); border-radius: 50% 0 50% 50%;
+    transform: rotate(-45deg); opacity: .7;
+    animation: cur-pulse 2s ease-in-out infinite;
+  }
+  .vis-cursor::after {
+    content: '';
+    position: absolute; left: 8px; top: 8px;
+    width: 8px; height: 8px;
+    background: #fff; border-radius: 50%; opacity: .9;
+    animation: cur-pulse 2s ease-in-out infinite .2s;
+  }
+  @keyframes cur-pulse { 0%,100%{opacity:.7;transform:rotate(-45deg) scale(1)} 50%{opacity:.4;transform:rotate(-45deg) scale(.9)} }
+
+  /* floating chips outside board */
+  .vis-chip {
+    position: absolute; z-index: 2;
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 100px; padding: 8px 14px;
+    font-size: 13px; font-weight: 600; color: var(--ink);
+    box-shadow: 0 8px 28px rgba(28,26,18,.1);
+    white-space: nowrap;
+    animation: chip-float var(--cf,5s) ease-in-out infinite var(--cfd,0s);
+  }
+  @keyframes chip-float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
+  }
+  .vc1 { top: 10px; left: -8px; --cf:6s; }
+  .vc2 { bottom: 68px; left: 0; --cf:5s; --cfd:-1.5s; }
+
+  /* glow ring behind board */
+  .vis-glow-ring {
+    position: absolute; inset: 20px; border-radius: var(--r-xl);
+    background: radial-gradient(ellipse at 60% 30%, rgba(192,120,24,.22), transparent 60%);
+    filter: blur(20px); z-index: -1;
+  }
+
+  /* ─────────────────────────────────────
+     MARQUEE
+  ───────────────────────────────────── */
+  .marquee-wrap { background: var(--dark); padding: 15px 0; overflow: hidden; }
+  .marquee-track {
+    display: flex; width: max-content;
+    animation: marquee 36s linear infinite;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .m-item {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 0 32px; font-size: 12px; font-weight: 600;
+    color: rgba(250,246,236,.45); letter-spacing: .08em;
+    text-transform: uppercase; white-space: nowrap;
+  }
+  .m-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--honey); opacity: .8; }
+
+  /* ─────────────────────────────────────
+     SERVICES (Hva vi gjør)
+  ───────────────────────────────────── */
+  .services {
+    padding: 108px 0; background: #fff;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .sec-header { text-align: center; margin-bottom: 64px; }
+  .sec-header h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(34px,4.2vw,54px); font-weight: 800;
+    letter-spacing: -.025em; line-height: 1.08; margin-bottom: 16px;
+  }
+  .sec-header p {
+    font-family: 'Caveat', cursive;
+    font-size: 22px; font-weight: 600;
+    color: var(--ink-55); max-width: 400px; margin: 0 auto; line-height: 1.5;
+  }
+
+  .svc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  .svc-card {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: var(--r-xl); padding: 38px 32px;
+    position: relative; overflow: hidden;
+    transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s, border-color .2s;
+  }
+  /* big faint background number */
+  .svc-card::before {
+    content: attr(data-n);
+    position: absolute; right: 20px; bottom: 10px;
+    font-family: 'Bricolage Grotesque', sans-serif; font-size: 100px; font-weight: 700; font-style: italic;
+    color: var(--honey); opacity: .07; line-height: 1; pointer-events: none;
+  }
+  .svc-card:hover { transform: translateY(-5px) rotate(.3deg); box-shadow: 0 22px 60px rgba(28,26,18,.1); border-color: var(--honey); }
+  .svc-card:hover .svc-icon-wrap { background: var(--honey); }
+  .svc-card:hover .svc-icon-wrap svg { stroke: #fff; }
+
+  .svc-icon-wrap {
+    width: 52px; height: 52px; border-radius: var(--r);
+    background: var(--honey-light);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 22px;
+    transition: background .25s;
+  }
+  .svc-icon-wrap svg { width: 24px; height: 24px; stroke: var(--honey); transition: stroke .25s; }
+  .svc-card h3 {
+    font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700;
+    letter-spacing: -.03em; margin-bottom: 10px;
+  }
+  .svc-card p { font-size: 15px; color: var(--ink-55); line-height: 1.7; }
+  .svc-num { font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--honey); display: block; margin-bottom: 18px; }
+
+  /* ─────────────────────────────────────
+     WHY (Hvorfor Nettsnekkeren)
+  ───────────────────────────────────── */
+  .why {
+    background: var(--dark); padding: 108px 0;
+    position: relative; overflow: hidden;
+  }
+  .why-glow-1 {
+    position: absolute; top: -80px; right: -80px;
+    width: 540px; height: 540px;
+    background: radial-gradient(circle, rgba(192,120,24,.15) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .why-glow-2 {
+    position: absolute; bottom: -100px; left: -60px;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(49,68,117,.6) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .why-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .why h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(34px,4.2vw,54px); font-weight: 700; line-height: 1.05;
+    letter-spacing: -.04em; color: var(--cream); margin-bottom: 24px;
+  }
+  .why h2 em { font-style: italic; font-weight: 300; color: rgba(250,246,236,.4); }
+  .why-lead { font-size: 17px; color: rgba(250,246,236,.5); line-height: 1.75; }
+  .why-args { display: flex; flex-direction: column; gap: 2px; }
+  .why-arg {
+    padding: 24px 26px;
+    border-left: 2px solid rgba(255,255,255,.07);
+    border-radius: 0 var(--r) var(--r) 0;
+    transition: border-color .25s, background .25s, padding-left .25s; cursor: default;
+  }
+  .why-arg:hover { border-color: var(--honey); background: rgba(255,255,255,.04); padding-left: 32px; }
+  .why-arg-n { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--honey); opacity: .8; margin-bottom: 6px; }
+  .why-arg h4 { font-size: 16px; font-weight: 600; color: var(--cream); margin-bottom: 7px; }
+  .why-arg p { font-size: 14px; color: rgba(250,246,236,.45); line-height: 1.68; }
+
+  /* ─────────────────────────────────────
+     PROCESS (horizontal sticky scroll)
+  ───────────────────────────────────── */
+  .process-outer {
+    position: relative;
+    background-color: var(--cream);
+    background-image:
+      linear-gradient(rgba(28,26,18,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(28,26,18,.05) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+  .process-sticky {
+    position: sticky; top: 0; height: 100vh; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .process-head {
+    padding: 0 52px; margin-bottom: 48px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    position: relative; z-index: 1;
+  }
+  .process-head h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(30px,3.8vw,46px); font-weight: 700;
+    letter-spacing: -.04em; line-height: 1.08;
+  }
+  .process-head h2 em { font-style: italic; font-weight: 300; color: var(--ink-55); }
+  .process-head-note { font-size: 14px; color: var(--ink-55); max-width: 240px; text-align: right; line-height: 1.6; }
+  .process-head-note a { color: var(--honey); text-decoration: none; font-weight: 600; }
+  .process-head-note a:hover { text-decoration: underline; }
+
+  .process-track-wrap { padding-left: 52px; overflow: visible; }
+  .process-track { display: flex; gap: 22px; will-change: transform; }
+
+  .process-card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: var(--r-xl); padding: 36px 32px;
+    min-width: 310px; flex-shrink: 0; position: relative;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .process-card:hover { border-color: var(--honey); box-shadow: 0 12px 40px rgba(28,26,18,.08); }
+  .process-card:not(:last-child)::after {
+    content: ''; position: absolute; right: -12px; top: 50%;
+    transform: translateY(-50%);
+    width: 22px; height: 2px; background: var(--border-mid); z-index: 1;
+  }
+  .proc-n { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--honey); display: block; margin-bottom: 20px; }
+  .proc-icon {
+    width: 54px; height: 54px; border-radius: var(--r);
+    background: var(--honey-light);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .proc-icon svg { width: 26px; height: 26px; stroke: var(--honey); }
+  .process-card h3 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -.03em; margin-bottom: 10px; }
+  .process-card p { font-size: 14px; color: var(--ink-55); line-height: 1.7; }
+
+  .proc-progress { display: flex; gap: 7px; padding: 36px 52px 0; }
+  .proc-dot { height: 3px; border-radius: 2px; background: var(--border-mid); flex: 1; transition: background .35s, flex .45s cubic-bezier(.22,1,.36,1); }
+  .proc-dot.active { background: var(--honey); flex: 3.5; }
+
+  /* ─────────────────────────────────────
+     PRICES
+  ───────────────────────────────────── */
+  .prices {
+    padding: 108px 0; background: #fff;
+    border-bottom: 1px solid var(--border);
+  }
+  .prices-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .prices h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(34px,4.2vw,54px); font-weight: 700;
+    letter-spacing: -.04em; line-height: 1.05; margin-bottom: 18px;
+  }
+  .prices h2 em { font-style: italic; font-weight: 300; color: var(--ink-55); }
+  .prices-lead { font-size: 17px; color: var(--ink-55); line-height: 1.72; margin-bottom: 32px; }
+  .price-from { font-size: 15px; color: var(--ink-55); font-weight: 500; margin-bottom: 4px; }
+  .price-num {
+    font-family: 'Bricolage Grotesque', sans-serif; font-size: 68px; font-weight: 700;
+    letter-spacing: -.05em; color: var(--ink); line-height: 1;
+  }
+  .price-note { font-size: 14px; color: var(--ink-30); margin-top: 10px; line-height: 1.6; }
+
+  .price-card {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: var(--r-xl); padding: 34px; position: relative; overflow: hidden;
+  }
+  .price-card::before {
+    content: '★'; position: absolute; bottom: -10px; right: 16px;
+    font-size: 120px; color: var(--honey); opacity: .05; line-height: 1; pointer-events: none;
+  }
+  .price-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .13em; color: var(--honey); margin-bottom: 18px; }
+  .price-item { display: flex; align-items: center; gap: 12px; font-size: 15px; margin-bottom: 12px; }
+  .price-item:last-child { margin-bottom: 0; }
+  .p-check {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    background: var(--honey-light); border: 1px solid rgba(192,120,24,.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; color: var(--honey);
+  }
+
+  /* ─────────────────────────────────────
+     CONTACT
+  ───────────────────────────────────── */
+  .contact {
+    padding: 108px 0; border-bottom: 1px solid var(--border);
+    background-color: var(--cream);
+    background-image: radial-gradient(circle, rgba(28,26,18,.06) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .contact h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(32px,4vw,50px); font-weight: 700;
+    letter-spacing: -.04em; line-height: 1.06; margin-bottom: 16px;
+  }
+  .contact h2 em { font-style: italic; font-weight: 300; color: var(--ink-55); }
+  .contact-lead { font-size: 17px; color: var(--ink-55); line-height: 1.72; margin-bottom: 30px; }
+  .contact-detail { display: flex; align-items: center; gap: 12px; font-size: 15px; margin-bottom: 12px; }
+  .cd-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--honey-light); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  .contact-detail a { color: var(--ink); text-decoration: none; font-weight: 500; transition: color .15s; }
+  .contact-detail a:hover { color: var(--honey); }
+
+  .contact-form {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: var(--r-xl); padding: 36px;
+  }
+  .form-row { margin-bottom: 18px; }
+  .form-row label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
+  .form-row input, .form-row textarea {
+    width: 100%; padding: 13px 16px;
+    background: var(--cream); border: 1.5px solid var(--border);
+    border-radius: var(--r); font-family: 'Outfit', sans-serif;
+    font-size: 15px; color: var(--ink); outline: none; resize: vertical;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .form-row input:focus, .form-row textarea:focus {
+    border-color: var(--honey); box-shadow: 0 0 0 3px rgba(192,120,24,.12);
+  }
+  .form-row textarea { min-height: 115px; }
+  .form-submit {
+    width: 100%; padding: 14px;
+    background: var(--dark); color: var(--cream); border: none;
+    border-radius: 100px; font-family: 'Outfit', sans-serif;
+    font-size: 16px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 2px 18px rgba(25,33,64,.25);
+    transition: background .2s, transform .2s, box-shadow .2s;
+  }
+  .form-submit:hover { background: var(--dark-mid); transform: translateY(-1px); box-shadow: 0 6px 26px rgba(25,33,64,.34); }
+  .form-success {
+    display: none; text-align: center; padding: 28px;
+    background: var(--green-bg); border: 1px solid rgba(42,148,82,.22);
+    border-radius: var(--r-lg); color: #1a7038; font-weight: 500; font-size: 16px;
+  }
+
+  /* ─────────────────────────────────────
+     FOOTER
+  ───────────────────────────────────── */
+  footer {
+    background: var(--dark); padding: 52px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 24px;
+    position: relative; overflow: hidden;
+  }
+  footer::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(192,120,24,.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .footer-left { position: relative; z-index: 1; }
+  .footer-brand {
+    font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800;
+    letter-spacing: -.03em; color: var(--cream); margin-bottom: 8px;
+  }
+  .footer-brand span { color: var(--honey); }
+  .footer-meta { font-size: 13px; color: rgba(250,246,236,.4); }
+  .footer-meta a { color: rgba(250,246,236,.55); text-decoration: none; transition: color .15s; }
+  .footer-meta a:hover { color: var(--cream); }
+  .footer-right { text-align: right; position: relative; z-index: 1; }
+  .footer-links { display: flex; gap: 22px; margin-bottom: 8px; justify-content: flex-end; }
+  .footer-links a { font-size: 13px; font-weight: 500; color: rgba(250,246,236,.5); text-decoration: none; transition: color .15s; }
+  .footer-links a:hover { color: var(--cream); }
+  footer p { font-size: 13px; color: rgba(250,246,236,.35); }
+
+  /* ─────────────────────────────────────
+     GUARANTEE BOX (in contact section)
+  ───────────────────────────────────── */
+  .guarantee {
+    margin-top: 28px; padding: 20px 22px;
+    background: var(--honey-light); border: 1px solid rgba(192,120,24,.22);
+    border-radius: var(--r-lg); display: flex; gap: 12px; align-items: flex-start;
+  }
+  .guarantee-icon { width: 28px; height: 28px; flex-shrink: 0; margin-top: 2px; stroke: var(--honey); }
+  .cd-icon svg    { width: 18px; height: 18px; stroke: var(--honey); }
+  .guarantee h5 { font-size: 14px; font-weight: 700; color: var(--honey); margin-bottom: 3px; }
+  .guarantee p  { font-size: 13px; color: var(--ink-55); line-height: 1.6; }
+
+  /* ─────────────────────────────────────
+     RESPONSIVE
+  ───────────────────────────────────── */
+  @media (max-width: 1000px) {
+    .hero-inner  { grid-template-columns: 1fr; }
+    .hero-vis    { display: none; }
+    .why-inner   { grid-template-columns: 1fr; gap: 44px; }
+    .prices-inner{ grid-template-columns: 1fr; gap: 44px; }
+    .contact-inner{ grid-template-columns: 1fr; gap: 44px; }
+    .svc-grid    { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .container, .container-sm { padding: 0 20px; }
+    footer { padding: 36px 20px; flex-direction: column; align-items: flex-start; }
+    .footer-right { text-align: left; }
+    .footer-links { justify-content: flex-start; }
+    .nav-links { display: none; }
+    .services, .why, .prices, .contact { padding: 72px 0; }
+    .process-outer  { height: auto !important; }
+    .process-sticky { position: relative; height: auto; padding: 72px 0; }
+    .process-head   { padding: 0 20px; flex-direction: column; align-items: flex-start; gap: 14px; }
+    .process-head-note { text-align: left; }
+    .process-track-wrap{ padding: 0 20px; overflow-x: auto; padding-bottom: 16px; -webkit-overflow-scrolling: touch; }
+    .process-track  { transform: none !important; }
+    .proc-progress  { display: none; }
+  }
+  @media (max-width: 640px) {
+    .svc-grid { grid-template-columns: 1fr; }
+    .hero { padding: 52px 0 44px; min-height: auto; }
+  }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────── -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <div class="logo-anim-wrap">
+      <!-- Hard hat resting on top-left tip of the N -->
+      <svg class="logo-helmet" viewBox="0 0 22 13" fill="none" aria-hidden="true">
+        <!-- Dome -->
+        <path d="M2 9.5C2 4 5 1 11 1C17 1 20 4 20 9.5" fill="var(--honey)"/>
+        <!-- Brim -->
+        <rect x="0" y="8.5" width="22" height="3.5" rx="1.75" fill="var(--honey)"/>
+        <!-- Front stub -->
+        <rect x="0" y="9" width="4" height="3" rx="1" fill="var(--honey-mid)"/>
+        <!-- Shine strip -->
+        <path d="M7 9C7 5.5 8.5 3 11 3C13.5 3 15 5.5 15 9" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <!-- Hammer striking the last n -->
+      <svg class="logo-hammer" viewBox="0 0 13 17" fill="none" aria-hidden="true">
+        <!-- Head -->
+        <rect x="0" y="0" width="13" height="6.5" rx="2" fill="var(--dark)"/>
+        <!-- Claw side detail -->
+        <rect x="9" y="0" width="4" height="3" rx="1" fill="var(--dark-mid)"/>
+        <!-- Handle -->
+        <rect x="4.5" y="5.5" width="4" height="11" rx="2" fill="var(--ink)" opacity=".75"/>
+      </svg>
+      <span class="nav-wordmark">Nett<span class="hl">snekkeren</span></span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#tjenester">Tjenester</a>
+    <a href="#prosess">Prosess</a>
+    <a href="#priser">Priser</a>
+    <a href="#kontakt">Kontakt</a>
+  </div>
+  <a href="#kontakt" class="nav-cta">Ta kontakt →</a>
+</nav>
+
+<div class="page">
+
+<!-- ─── HERO ─────────────────────────────────── -->
+<section class="hero" id="hjem">
+
+  <!-- Background symbols -->
+  <div class="bg-syms" aria-hidden="true">
+    <!-- Hammer -->
+    <svg class="bs" style="top:14%;left:7%;width:52px;--t:23s;--d:0s;--r0:-8deg;--r1:2deg;--r2:-12deg" viewBox="0 0 52 52"><rect x="2" y="10" width="26" height="13" rx="4" fill="currentColor"/><rect x="22" y="21" width="8" height="22" rx="3" fill="currentColor" transform="rotate(12 22 21)"/></svg>
+    <!-- </> -->
+    <svg class="bs" style="top:68%;left:11%;width:58px;--t:19s;--d:-4s;--r0:6deg;--r1:-2deg;--r2:10deg" viewBox="0 0 80 36"><text x="0" y="30" font-family="monospace" font-size="32" font-weight="700" fill="currentColor">&lt;/&gt;</text></svg>
+    <!-- {} -->
+    <svg class="bs" style="top:22%;left:42%;width:42px;--t:26s;--d:-9s;--r0:-5deg;--r1:3deg;--r2:-8deg" viewBox="0 0 56 36"><text x="0" y="30" font-family="monospace" font-size="32" font-weight="700" fill="currentColor">{}</text></svg>
+    <!-- Nail -->
+    <svg class="bs" style="top:55%;left:30%;width:16px;--t:18s;--d:-2s;--r0:0deg;--r1:6deg;--r2:-4deg" viewBox="0 0 20 60"><rect x="0" y="0" width="20" height="8" rx="2" fill="currentColor"/><rect x="7" y="8" width="6" height="42" rx="2" fill="currentColor"/><polygon points="7,50 13,50 10,60" fill="currentColor"/></svg>
+    <!-- # -->
+    <svg class="bs" style="top:30%;right:10%;width:44px;--t:21s;--d:-7s;--r0:10deg;--r1:-4deg;--r2:14deg" viewBox="0 0 40 36"><text x="0" y="30" font-family="monospace" font-size="32" font-weight="700" fill="currentColor">#</text></svg>
+    <!-- [] -->
+    <svg class="bs" style="top:78%;right:18%;width:38px;--t:25s;--d:-12s;--r0:-3deg;--r1:5deg;--r2:-7deg" viewBox="0 0 50 36"><text x="0" y="30" font-family="monospace" font-size="32" font-weight="700" fill="currentColor">[]</text></svg>
+    <!-- Wrench shape -->
+    <svg class="bs" style="top:48%;left:5%;width:38px;--t:28s;--d:-5s;--r0:20deg;--r1:28deg;--r2:14deg" viewBox="0 0 36 52"><ellipse cx="18" cy="10" rx="12" ry="8" fill="none" stroke="currentColor" stroke-width="4"/><rect x="14" y="16" width="8" height="30" rx="3" fill="currentColor"/></svg>
+    <!-- // -->
+    <svg class="bs" style="top:85%;left:55%;width:38px;--t:16s;--d:-8s;--r0:-6deg;--r1:0deg;--r2:-10deg" viewBox="0 0 56 36"><text x="0" y="30" font-family="monospace" font-size="30" font-weight="700" fill="currentColor">//</text></svg>
+    <!-- const -->
+    <svg class="bs" style="top:10%;right:28%;width:64px;--t:30s;--d:-14s;--r0:3deg;--r1:-2deg;--r2:6deg" viewBox="0 0 92 24"><text x="0" y="20" font-family="monospace" font-size="18" font-weight="700" fill="currentColor">const</text></svg>
+  </div>
+
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+
+  <div class="container">
+    <div class="hero-inner">
+
+      <!-- Text side -->
+      <div>
+        <div class="badge r" style="margin-bottom:28px;">
+          <span class="badge-dot"></span>
+          Tar på nye kunder nå
+        </div>
+
+        <h1 class="hero-h1">
+          <span class="line"><span class="word">Nettside</span></span>
+          <span class="line"><span class="word" style="transition-delay:.10s"><span class="italic-honey">håndlaget</span></span></span>
+          <span class="line"><span class="word" style="transition-delay:.20s">for deg.</span></span>
+        </h1>
+
+        <p class="hero-sub r d2">
+          Du får en moderne, rask nettside som gjør at kundene dine finner deg — uten at du trenger å løfte en finger.
+        </p>
+
+        <div class="hero-actions r d3">
+          <a href="#kontakt" class="btn btn-dark">Ta kontakt →</a>
+          <a href="#tjenester" class="btn btn-outline">Se hva vi kan gjøre</a>
+        </div>
+
+        <p class="hero-note r d3"><strong>Fornøydgaranti</strong> · Ring eller send en melding · Svar innen 24 timer</p>
+      </div>
+
+      <!-- Visual side -->
+      <div class="hero-vis r d2">
+        <div class="vis-glow-ring"></div>
+
+        <!-- Floating chips -->
+        <div class="vis-chip vc1">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--honey)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Levert på 7–10 dager
+        </div>
+        <div class="vis-chip vc2">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--honey)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Fornøydgaranti
+        </div>
+
+        <!-- Blueprint board -->
+        <div class="vis-board">
+          <div class="vis-topbar">
+            <span class="vt-dot r"></span>
+            <span class="vt-dot y"></span>
+            <span class="vt-dot g"></span>
+            <div class="vt-url">
+              <span class="vt-url-dot"></span>
+              <span class="vt-url-bar"></span>
+            </div>
+          </div>
+          <div class="vis-content">
+            <div class="vis-nav">
+              <div class="vis-nav-logo"></div>
+              <div class="vis-nav-links">
+                <div class="vis-nav-link"></div>
+                <div class="vis-nav-link"></div>
+                <div class="vis-nav-link"></div>
+              </div>
+              <div class="vis-nav-cta"></div>
+            </div>
+            <div class="vis-hero">
+              <div class="vis-h1a"></div>
+              <div class="vis-h1b"></div>
+              <div class="vis-sub"></div>
+              <div class="vis-sub2"></div>
+              <div class="vis-btns">
+                <div class="vis-btn-fill"></div>
+                <div class="vis-btn-outline"></div>
+              </div>
+            </div>
+            <div class="vis-cards">
+              <div class="vis-card"><div class="vc-icon"></div><div class="vc-t"></div><div class="vc-t2"></div><div class="vc-t3"></div></div>
+              <div class="vis-card"><div class="vc-icon"></div><div class="vc-t"></div><div class="vc-t2"></div><div class="vc-t3"></div></div>
+              <div class="vis-card"><div class="vc-icon"></div><div class="vc-t"></div><div class="vc-t2"></div><div class="vc-t3"></div></div>
+            </div>
+          </div>
+          <div class="vis-cursor"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── MARQUEE ────────────────────────────── -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="m-item"><span class="m-dot"></span>Ny nettside</span>
+    <span class="m-item"><span class="m-dot"></span>Redesign</span>
+    <span class="m-item"><span class="m-dot"></span>Nettbutikk</span>
+    <span class="m-item"><span class="m-dot"></span>Bookingsystem</span>
+    <span class="m-item"><span class="m-dot"></span>SEO</span>
+    <span class="m-item"><span class="m-dot"></span>Fornøydgaranti</span>
+    <span class="m-item"><span class="m-dot"></span>7–10 dager</span>
+    <span class="m-item"><span class="m-dot"></span>Fast pris</span>
+    <span class="m-item"><span class="m-dot"></span>Ny nettside</span>
+    <span class="m-item"><span class="m-dot"></span>Redesign</span>
+    <span class="m-item"><span class="m-dot"></span>Nettbutikk</span>
+    <span class="m-item"><span class="m-dot"></span>Bookingsystem</span>
+    <span class="m-item"><span class="m-dot"></span>SEO</span>
+    <span class="m-item"><span class="m-dot"></span>Fornøydgaranti</span>
+    <span class="m-item"><span class="m-dot"></span>7–10 dager</span>
+    <span class="m-item"><span class="m-dot"></span>Fast pris</span>
+  </div>
+</div>
+
+<!-- ─── SERVICES ──────────────────────────── -->
+<section class="services" id="tjenester">
+  <!-- bg code symbols - light version on white -->
+  <div class="bg-syms" aria-hidden="true" style="opacity:.55">
+    <svg class="bs" style="top:10%;right:5%;width:56px;--t:28s;--d:-3s;--r0:5deg;--r1:-2deg;--r2:9deg;opacity:.025" viewBox="0 0 80 36"><text x="0" y="30" font-family="monospace" font-size="32" font-weight="700" fill="currentColor">&lt;/&gt;</text></svg>
+    <svg class="bs" style="bottom:12%;left:4%;width:44px;--t:22s;--d:-11s;--r0:-6deg;--r1:2deg;--r2:-10deg;opacity:.025" viewBox="0 0 56 36"><text x="0" y="30" font-family="monospace" font-size="32" font-weight="700" fill="currentColor">{}</text></svg>
+  </div>
+
+  <div class="container">
+    <div class="sec-header r">
+      <span class="label">Hva vi gjør</span>
+      <h2>Fra idé til live nettside.<br /><em>Vi tar oss av alt.</em></h2>
+      <p>Du fokuserer på bedriften din — vi bygger resten.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card r" data-n="01">
+        <span class="svc-num">01 — Design</span>
+        <div class="svc-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        </div>
+        <h3>Moderne design</h3>
+        <p>Skreddersydd for din merkevare. Ser bra ut på alle skjermer — og gir kundene dine tillit fra første sekund.</p>
+      </div>
+      <div class="svc-card r d1" data-n="02">
+        <span class="svc-num">02 — Utvikling</span>
+        <div class="svc-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h3>Rask og solid</h3>
+        <p>Bygget med moderne teknologi. Lynrask lasting gir deg bedre Google-rangering og flere kunder som faktisk blir.</p>
+      </div>
+      <div class="svc-card r d2" data-n="03">
+        <span class="svc-num">03 — Lansering</span>
+        <div class="svc-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3>Vi setter opp alt</h3>
+        <p>Domene, hosting, e-post — vi ordner det hele og sørger for at du er synlig fra dag én. Du eier alt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── WHY ────────────────────────────────── -->
+<section class="why">
+  <div class="why-glow-1"></div>
+  <div class="why-glow-2"></div>
+  <!-- Dark section symbols in cream -->
+  <div class="bg-syms dark-syms" aria-hidden="true">
+    <svg class="bs" style="top:20%;right:6%;width:52px;--t:24s;--d:-5s;--r0:-10deg;--r1:0deg;--r2:-15deg" viewBox="0 0 52 52"><rect x="2" y="10" width="26" height="13" rx="4" fill="currentColor"/><rect x="22" y="21" width="8" height="22" rx="3" fill="currentColor" transform="rotate(12 22 21)"/></svg>
+    <svg class="bs" style="bottom:15%;left:8%;width:48px;--t:20s;--d:-9s;--r0:8deg;--r1:-3deg;--r2:12deg" viewBox="0 0 56 36"><text x="0" y="30" font-family="monospace" font-size="32" font-weight="700" fill="currentColor">{}</text></svg>
+    <svg class="bs" style="top:50%;left:42%;width:40px;--t:27s;--d:-13s;--r0:-4deg;--r1:3deg;--r2:-8deg" viewBox="0 0 40 36"><text x="0" y="30" font-family="monospace" font-size="32" font-weight="700" fill="currentColor">#</text></svg>
+  </div>
+
+  <div class="container">
+    <div class="why-inner">
+      <div>
+        <span class="label r" style="color:rgba(253,242,220,.6);">Hvorfor Nettsnekkeren</span>
+        <h2 class="r d1">Ikke et byrå.<br />Én <em>person.</em><br />Full kontroll.</h2>
+        <p class="why-lead r d2" style="margin-top:14px;">
+          Du snakker direkte med den som lager nettsiden din. Ingen mellomledd, ingen ventetid, ingen overraskelser.
+        </p>
+      </div>
+      <div class="why-args">
+        <div class="why-arg r">
+          <div class="why-arg-n">01</div>
+          <h4>Du snakker med én person</h4>
+          <p>Ikke et byrå med prosjektledere og designer-teams. Direkte kontakt med den som faktisk bygger — og det merkes på resultatet.</p>
+        </div>
+        <div class="why-arg r d1">
+          <div class="why-arg-n">02</div>
+          <h4>Ferdig på dager, ikke måneder</h4>
+          <p>Gjennomsnittlig leveringstid er 7–10 dager. Ikke seks uker med møter og statusoppdateringer — bare en ferdig nettside du er stolt av.</p>
+        </div>
+        <div class="why-arg r d2">
+          <div class="why-arg-n">03</div>
+          <h4>Ingen skjulte kostnader</h4>
+          <p>Fast pris. Ingen månedlige gebyrer til oss. Du betaler én gang og eier alt — for alltid. Ingen bindingstid.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROCESS ──────────────────────────────── -->
+<section class="process-outer" id="prosess">
+  <div class="process-sticky">
+    <!-- bg symbols -->
+    <div class="bg-syms" aria-hidden="true" style="position:absolute;z-index:0">
+      <svg class="bs" style="top:15%;right:4%;width:46px;--t:22s;--d:-6s;--r0:-5deg;--r1:2deg;--r2:-9deg;opacity:.03" viewBox="0 0 52 52"><rect x="2" y="10" width="26" height="13" rx="4" fill="currentColor"/><rect x="22" y="21" width="8" height="22" rx="3" fill="currentColor" transform="rotate(12 22 21)"/></svg>
+      <svg class="bs" style="bottom:18%;left:5%;width:38px;--t:19s;--d:-10s;--r0:7deg;--r1:-1deg;--r2:11deg;opacity:.03" viewBox="0 0 20 60"><rect x="0" y="0" width="20" height="8" rx="2" fill="currentColor"/><rect x="7" y="8" width="6" height="42" rx="2" fill="currentColor"/><polygon points="7,50 13,50 10,60" fill="currentColor"/></svg>
+    </div>
+
+    <div class="process-head">
+      <div>
+        <span class="label">Slik fungerer det</span>
+        <h2>Fra melding til<br /><em>live nettside.</em></h2>
+      </div>
+      <div class="process-head-note">
+        Ta kontakt direkte:<br />
+        <a href="mailto:post@nettsnekkeren.no">post@nettsnekkeren.no</a><br />
+        <a href="tel:+4700000000">+47 000 00 000</a>
+      </div>
+    </div>
+
+    <div class="process-track-wrap">
+      <div class="process-track" id="processTrack">
+        <div class="process-card">
+          <span class="proc-n">Steg 01</span>
+          <div class="proc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3>Ta kontakt</h3>
+          <p>Ring oss eller send en melding på e-post. Fortell hva du trenger, og vi svarer med pris og plan innen 24 timer.</p>
+        </div>
+        <div class="process-card">
+          <span class="proc-n">Steg 02</span>
+          <div class="proc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <h3>Du ser en skisse</h3>
+          <p>Før vi bygger, ser du et forslag. Du godkjenner — eller gir innspill. Ingen overraskelser når vi er ferdige.</p>
+        </div>
+        <div class="process-card">
+          <span class="proc-n">Steg 03</span>
+          <div class="proc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3>Vi snekrer</h3>
+          <p>Vi bygger nettsiden ferdig. Du følger med og kan gi innspill hele veien. Revisjoner til du er 100% fornøyd.</p>
+        </div>
+        <div class="process-card">
+          <span class="proc-n">Steg 04</span>
+          <div class="proc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          </div>
+          <h3>Du er live</h3>
+          <p>Nettsiden publiseres. Du eier alt — domene, kode og innhold. Vi feirer (litt) og er tilgjengelige etterpå.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="proc-progress" id="procProgress">
+      <div class="proc-dot active"></div>
+      <div class="proc-dot"></div>
+      <div class="proc-dot"></div>
+      <div class="proc-dot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRICES ───────────────────────────────── -->
+<section class="prices" id="priser">
+  <div class="container">
+    <div class="prices-inner">
+      <div>
+        <span class="label r">Priser</span>
+        <h2 class="r d1">Enkelt og<br /><em>forutsigbart.</em></h2>
+        <p class="prices-lead r d2">Ingen abonnementer til oss. Ingen skjulte kostnader. Du betaler én gang og eier alt.</p>
+        <div class="r d2">
+          <p class="price-from">Nettsider fra</p>
+          <div class="price-num">9.900,-</div>
+          <p class="price-note">Pris avhenger av omfanget. Ta kontakt for et gratis, uforpliktende tilbud — svar innen 24 timer.</p>
+        </div>
+        <div style="margin-top:32px" class="r d3">
+          <a href="#kontakt" class="btn btn-dark">Få et gratis tilbud →</a>
+        </div>
+      </div>
+      <div class="price-card r d1">
+        <h4>Alltid inkludert</h4>
+        <div class="price-item"><span class="p-check">✓</span>Skreddersydd design</div>
+        <div class="price-item"><span class="p-check">✓</span>Mobiltilpasset (responsivt)</div>
+        <div class="price-item"><span class="p-check">✓</span>SEO-grunnlag</div>
+        <div class="price-item"><span class="p-check">✓</span>Lynraske lastetider</div>
+        <div class="price-item"><span class="p-check">✓</span>Kontaktskjema</div>
+        <div class="price-item"><span class="p-check">✓</span>Revisjoner til du er fornøyd</div>
+        <div class="price-item"><span class="p-check">✓</span>Du eier domene, kode og innhold</div>
+        <div class="price-item"><span class="p-check">✓</span>Tilgjengelig etter lansering</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ──────────────────────────────── -->
+<section class="contact" id="kontakt">
+  <div class="container">
+    <div class="contact-inner">
+      <div>
+        <span class="label r">Kontakt</span>
+        <h2 class="r d1">La oss lage<br />noe <em>ordentlig</em><br />bra sammen.</h2>
+        <p class="contact-lead r d2">Send en melding og vi svarer innen 24 timer med et uforpliktende tilbud.</p>
+        <div class="r d3">
+          <div class="contact-detail">
+            <div class="cd-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <a href="mailto:post@nettsnekkeren.no">post@nettsnekkeren.no</a>
+          </div>
+          <div class="contact-detail">
+            <div class="cd-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <a href="tel:+4700000000">+47 000 00 000</a>
+          </div>
+        </div>
+        <div class="guarantee r d3">
+          <svg class="guarantee-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          <div>
+            <h5>Fornøydgaranti — alltid</h5>
+            <p>Vi er ikke ferdige før du er genuint fornøyd. Ubegrensede revisjoner, ingen ekstra kostnad.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form r d1">
+        <form id="contactForm">
+          <div class="form-row">
+            <label for="name">Navn</label>
+            <input type="text" id="name" name="name" placeholder="Kari Nordmann" required />
+          </div>
+          <div class="form-row">
+            <label for="email">E-post</label>
+            <input type="email" id="email" name="email" placeholder="kari@bedrift.no" required />
+          </div>
+          <div class="form-row">
+            <label for="message">Hva trenger du?</label>
+            <textarea id="message" name="message" placeholder="Fortell litt om bedriften og hva du trenger — ny nettside, redesign, nettbutikk, eller noe annet?" required></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send melding →</button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2A9452" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 10px;display:block"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Takk for meldingen! Vi svarer deg innen 24 timer.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.page -->
+
+<!-- ─── FOOTER ──────────────────────────────── -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-brand">Nett<span>snekkeren</span></div>
+    <div class="footer-meta">
+      <a href="mailto:post@nettsnekkeren.no">post@nettsnekkeren.no</a> ·
+      +47 000 00 000 ·
+      Org.nr: 000 000 000
+    </div>
+  </div>
+  <div class="footer-right">
+    <div class="footer-links">
+      <a href="#tjenester">Tjenester</a>
+      <a href="#prosess">Prosess</a>
+      <a href="#priser">Priser</a>
+      <a href="#kontakt">Kontakt</a>
+    </div>
+    <p>© 2025 Nettsnekkeren · Laget med kaffe og kode</p>
+  </div>
+</footer>
+
+<script>
+/* ── Scroll reveal ─────────────────────── */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.r').forEach(el => revealObs.observe(el));
+
+/* ── Hero word reveal ──────────────────── */
+setTimeout(() => {
+  document.querySelectorAll('.hero-h1 .word').forEach((w, i) => {
+    setTimeout(() => w.classList.add('in'), i * 130);
+  });
+}, 180);
+
+/* ── Nav scroll ────────────────────────── */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 20);
+}, { passive: true });
+
+/* ── Magnetic buttons ──────────────────── */
+document.querySelectorAll('.btn, .nav-cta').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    btn.style.transform = `translate(${(e.clientX-(r.left+r.width/2))*.16}px,${(e.clientY-(r.top+r.height/2))*.2}px)`;
+  });
+  btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+});
+
+/* ── Horizontal process scroll ─────────── */
+const procOuter = document.querySelector('.process-outer');
+const procTrack = document.getElementById('processTrack');
+const procDots  = document.querySelectorAll('.proc-dot');
+const NSTEPS    = 4;
+
+function initProc() {
+  if (window.innerWidth <= 768) return;
+  procOuter.style.height = (window.innerHeight + (NSTEPS - 1) * window.innerHeight * 0.78) + 'px';
+}
+
+function tickProc() {
+  if (window.innerWidth <= 768) return;
+  const rect     = procOuter.getBoundingClientRect();
+  const total    = procOuter.offsetHeight - window.innerHeight;
+  const progress = Math.max(0, Math.min(1, -rect.top / total));
+  const maxX     = Math.max(0, procTrack.scrollWidth - window.innerWidth + 104);
+  procTrack.style.transform = `translateX(${-progress * maxX}px)`;
+  const idx = Math.min(Math.floor(progress * NSTEPS), NSTEPS - 1);
+  procDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+
+initProc();
+window.addEventListener('scroll', tickProc, { passive: true });
+window.addEventListener('resize', () => { initProc(); tickProc(); });
+
+/* ── Contact form ──────────────────────── */
+document.getElementById('contactForm').addEventListener('submit', e => {
+  e.preventDefault();
+  document.getElementById('contactForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+});
+</script>
+</body>
+</html>
