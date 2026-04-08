@@ -407,7 +407,7 @@
     border: 1.5px solid var(--border);
     border-radius: 28px;
     padding: 32px 28px 0;
-    min-width: 300px; max-width: 300px;
+    min-width: 380px; max-width: 380px;
     flex-shrink: 0;
     display: flex; flex-direction: column;
     transition: border-color .25s, box-shadow .3s, transform .3s cubic-bezier(.22,1,.36,1);
@@ -883,8 +883,8 @@
         <div class="process-card">
           <div class="proc-badge">1.</div>
           <div class="proc-text">
-            <h3>Vi snakker sammen</h3>
-            <p>Jeg tar en kort prat for å forstå hva du trenger. Ingen forpliktelser, ingen salgspitch.</p>
+            <h3>Ta kontakt</h3>
+            <p>Send meg en mail eller ring — enten du vil ha en ny nettside fra bunnen av, eller en oppgradering av den du har. Fortell litt om bedriften din, så tar jeg en titt og gir deg et konkret tilbud. Ingen forpliktelser.</p>
           </div>
           <div class="proc-illus">
             <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
@@ -1235,7 +1235,7 @@ const NSTEPS    = 5;
 
 function initProc() {
   if (window.innerWidth <= 768) return;
-  procOuter.style.height = (window.innerHeight + (NSTEPS - 1) * window.innerHeight * 0.78) + 'px';
+  procOuter.style.height = (window.innerHeight + (NSTEPS - 1) * window.innerHeight * 0.52) + 'px';
 }
 
 function tickProc() {
