@@ -9,10 +9,10 @@
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='8' fill='%23192140'/><path d='M9 27L9 9' stroke='%23FAF6EC' stroke-width='3' stroke-linecap='round'/><path d='M9 11C9 11,15 19,18 19C21 19,27 19,27 25' stroke='%23C07818' stroke-width='2.5' stroke-linecap='round' fill='none'/><path d='M27 9L27 27' stroke='%23FAF6EC' stroke-width='3' stroke-linecap='round'/><circle cx='27' cy='9' r='2.5' fill='%23C07818'/></svg>" />
 
-  <!-- Fonts: Space Grotesk (display) + Inter (body) + Syne (logo only) -->
+  <!-- Fonts: Bricolage Grotesque (display) + Caveat (handwritten accents) + Outfit (body) + Syne (logo only) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Caveat:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
 
   <style>
   /* ─────────────────────────────────────
@@ -49,7 +49,7 @@
   body {
     background: var(--cream);
     color: var(--ink);
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Outfit', system-ui, sans-serif;
     font-size: 16px;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
@@ -147,7 +147,7 @@
     text-transform: uppercase; color: var(--honey); display: block; margin-bottom: 14px;
   }
   .display {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-weight: 800; line-height: 1.02; letter-spacing: -.04em;
   }
   /* em inside headings = honey accent, no italic */
@@ -178,7 +178,7 @@
   ───────────────────────────────────── */
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
-    font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600;
+    font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600;
     padding: 13px 28px; border-radius: 100px;
     text-decoration: none; cursor: pointer; border: none;
     transition: transform .22s cubic-bezier(.22,1,.36,1), box-shadow .2s, background .18s, color .18s, border-color .18s;
@@ -237,7 +237,7 @@
   }
 
   .hero-h1 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(50px, 6.5vw, 86px);
     font-weight: 800; line-height: 1.02;
     letter-spacing: -.03em; color: var(--ink);
@@ -298,7 +298,7 @@
   }
   .vt-url-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--honey); opacity: .7; }
   .vt-url-text {
-    font-size: 8px; font-family: 'Inter', monospace; color: rgba(255,255,255,.55);
+    font-size: 8px; font-family: monospace; color: rgba(255,255,255,.55);
     letter-spacing: .01em; white-space: nowrap; overflow: hidden;
   }
 
@@ -419,13 +419,14 @@
   }
   .sec-header { text-align: center; margin-bottom: 64px; }
   .sec-header h2 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(34px,4.2vw,54px); font-weight: 800;
     letter-spacing: -.025em; line-height: 1.08; margin-bottom: 16px;
   }
   .sec-header p {
-    font-size: 18px; font-weight: 400;
-    color: var(--ink-55); max-width: 400px; margin: 0 auto; line-height: 1.6;
+    font-family: 'Caveat', cursive;
+    font-size: 22px; font-weight: 600;
+    color: var(--ink-55); max-width: 400px; margin: 0 auto; line-height: 1.5;
   }
 
   .svc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
@@ -439,7 +440,7 @@
   .svc-card::before {
     content: attr(data-n);
     position: absolute; right: 20px; bottom: 10px;
-    font-family: 'Space Grotesk', sans-serif; font-size: 100px; font-weight: 700; font-style: italic;
+    font-family: 'Bricolage Grotesque', sans-serif; font-size: 100px; font-weight: 700; font-style: italic;
     color: var(--honey); opacity: .07; line-height: 1; pointer-events: none;
   }
   .svc-card:hover { transform: translateY(-5px) rotate(.3deg); box-shadow: 0 22px 60px rgba(28,26,18,.1); border-color: var(--honey); }
@@ -455,7 +456,7 @@
   }
   .svc-icon-wrap svg { width: 24px; height: 24px; stroke: var(--honey); transition: stroke .25s; }
   .svc-card h3 {
-    font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700;
+    font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700;
     letter-spacing: -.03em; margin-bottom: 10px;
   }
   .svc-card p { font-size: 15px; color: var(--ink-55); line-height: 1.7; }
@@ -482,7 +483,7 @@
   }
   .why-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
   .why h2 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(34px,4.2vw,54px); font-weight: 700; line-height: 1.05;
     letter-spacing: -.04em; color: var(--cream); margin-bottom: 24px;
   }
@@ -509,7 +510,7 @@
   }
   .prices-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
   .prices h2 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(34px,4.2vw,54px); font-weight: 700;
     letter-spacing: -.04em; line-height: 1.05; margin-bottom: 18px;
   }
@@ -517,7 +518,7 @@
   .prices-lead { font-size: 17px; color: var(--ink-55); line-height: 1.72; margin-bottom: 32px; }
   .price-from { font-size: 15px; color: var(--ink-55); font-weight: 500; margin-bottom: 4px; }
   .price-num {
-    font-family: 'Space Grotesk', sans-serif; font-size: 68px; font-weight: 700;
+    font-family: 'Bricolage Grotesque', sans-serif; font-size: 68px; font-weight: 700;
     letter-spacing: -.05em; color: var(--ink); line-height: 1;
   }
   .price-note { font-size: 14px; color: var(--ink-30); margin-top: 10px; line-height: 1.6; }
@@ -551,7 +552,7 @@
   }
   .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
   .contact h2 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(32px,4vw,50px); font-weight: 700;
     letter-spacing: -.04em; line-height: 1.06; margin-bottom: 16px;
   }
@@ -575,7 +576,7 @@
   .form-row input, .form-row textarea {
     width: 100%; padding: 13px 16px;
     background: var(--cream); border: 1.5px solid var(--border);
-    border-radius: var(--r); font-family: 'Inter', sans-serif;
+    border-radius: var(--r); font-family: 'Outfit', sans-serif;
     font-size: 15px; color: var(--ink); outline: none; resize: vertical;
     transition: border-color .2s, box-shadow .2s;
   }
@@ -586,7 +587,7 @@
   .form-submit {
     width: 100%; padding: 14px;
     background: var(--dark); color: var(--cream); border: none;
-    border-radius: 100px; font-family: 'Inter', sans-serif;
+    border-radius: 100px; font-family: 'Outfit', sans-serif;
     font-size: 16px; font-weight: 600; cursor: pointer;
     box-shadow: 0 2px 18px rgba(25,33,64,.25);
     transition: background .2s, transform .2s, box-shadow .2s;
