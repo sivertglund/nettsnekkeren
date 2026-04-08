@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kontakt — Nettsnekkeren</title>
+  <meta name="description" content="Ta kontakt med Nettsnekkeren. Jeg svarer innen 24 timer med et uforpliktende tilbud." />
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='8' fill='%23192140'/><path d='M9 27L9 9' stroke='%23FAF6EC' stroke-width='3' stroke-linecap='round'/><path d='M9 11C9 11,15 19,18 19C21 19,27 19,27 25' stroke='%23C07818' stroke-width='2.5' stroke-linecap='round' fill='none'/><path d='M27 9L27 27' stroke='%23FAF6EC' stroke-width='3' stroke-linecap='round'/><circle cx='27' cy='9' r='2.5' fill='%23C07818'/></svg>" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Kontakt — Nettsnekkeren" />
+  <meta property="og:description" content="Send en melding og få svar innen 24 timer med et uforpliktende tilbud." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nettsnekkeren.no/kontakt.html" />
+  <meta property="og:locale" content="nb_NO" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://nettsnekkeren.no/kontakt.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Outfit:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .contact-page {
+      padding: 72px 0 100px;
+      min-height: calc(100svh - 64px - 90px);
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 80px;
+      align-items: start;
+      margin-top: 56px;
+    }
+
+    /* Left side info */
+    .contact-info h1 {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: clamp(38px, 5vw, 58px);
+      font-weight: 800; letter-spacing: -0.03em;
+      line-height: 1.05; margin-bottom: 20px;
+    }
+    .contact-info h1 em { font-style: normal; font-weight: 800; color: var(--honey); }
+    .contact-info > p {
+      font-size: 18px; color: var(--ink-55);
+      line-height: 1.65; max-width: 400px; margin-bottom: 48px;
+    }
+    .contact-methods { display: flex; flex-direction: column; gap: 12px; }
+    .contact-method {
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 20px;
+      background: var(--cream-mid);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      text-decoration: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .contact-method:hover {
+      border-color: var(--border-mid);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .contact-method-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .contact-method-text { flex: 1; }
+    .contact-method-label { font-size: 12px; color: var(--ink-55); font-weight: 500; margin-bottom: 2px; }
+    .contact-method-val { font-size: 15px; font-weight: 600; color: var(--ink); }
+    .contact-method-arrow { font-size: 16px; color: var(--ink-55); }
+
+    .contact-promise {
+      margin-top: 28px;
+      padding: 20px;
+      background: var(--green-bg);
+      border-radius: var(--r);
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .contact-promise-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .contact-promise p {
+      font-size: 14px; color: #15803d; line-height: 1.5; font-weight: 500;
+    }
+
+    /* Right side form */
+    .contact-form-card {
+      background: var(--cream-mid);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 36px;
+    }
+    .contact-form-card h2 {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 22px; font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .contact-form-card .sub {
+      font-size: 14px; color: var(--ink-55); margin-bottom: 28px;
+    }
+
+    .fg { margin-bottom: 14px; }
+    .fg label {
+      display: block; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ink-55); margin-bottom: 6px;
+    }
+    .fg input, .fg select, .fg textarea {
+      width: 100%;
+      background: var(--cream);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-size: 15px; color: var(--ink);
+      font-family: 'Outfit', sans-serif;
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+    }
+    .fg input:focus, .fg select:focus, .fg textarea:focus {
+      border-color: rgba(15,15,15,0.35);
+    }
+    .fg input::placeholder, .fg textarea::placeholder { color: var(--ink-55); }
+    .fg textarea { resize: vertical; min-height: 110px; }
+    .fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .fg select { cursor: pointer; color: var(--ink); }
+    .fg select option { color: var(--ink); }
+
+    .char-hint { font-size: 12px; color: var(--ink-55); text-align: right; margin-top: 4px; }
+
+    .btn-submit {
+      width: 100%; background: var(--ink); color: white;
+      border: none; border-radius: 100px;
+      padding: 14px; font-size: 15px; font-weight: 700;
+      cursor: pointer; margin-top: 8px;
+      font-family: 'Outfit', sans-serif;
+      transition: background 0.15s, transform 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-submit:hover:not(:disabled) { background: #2a2a2a; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .form-fine {
+      text-align: center; font-size: 12px;
+      color: var(--ink-55); margin-top: 12px;
+    }
+
+    /* Success state */
+    .success-msg {
+      display: none;
+      flex-direction: column; align-items: center;
+      justify-content: center; text-align: center;
+      padding: 48px 24px; gap: 12px;
+    }
+    .success-msg.show { display: flex; }
+    .success-icon { font-size: 48px; }
+    .success-msg h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+    .success-msg p { font-size: 15px; color: var(--ink-55); }
+
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .contact-info h1 { font-size: clamp(32px, 8vw, 48px); }
+    }
+    @media (max-width: 600px) {
+      .fg-row { grid-template-columns: 1fr; }
+      .contact-form-card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Hopp til hovedinnhold</a>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor-ring" id="cursor-ring"></div>
+  <div class="cursor-dot"  id="cursor-dot"></div>
+</div>
+
+<nav id="nav" aria-label="Hovedmeny">
+  <a href="index.html" class="nav-logo" aria-label="Nettsnekkeren — til forsiden">
+    <svg class="nav-mark" width="32" height="36" viewBox="0 0 32 36" fill="none" aria-hidden="true">
+      <path d="M3 33 L3 3" stroke="var(--ink)" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M3 5 C 3 5, 10 14, 16 18 C 22 22, 29 25, 29 31" stroke="var(--honey)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+      <path d="M29 3 L29 33" stroke="var(--ink)" stroke-width="3.2" stroke-linecap="round"/>
+      <circle cx="29" cy="3" r="2.2" fill="var(--honey)"/>
+    </svg>
+    <span class="nav-wordmark">Nett<span class="hl">snekkeren</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Hjem</a>
+    <a href="portefolje.html">Eksempler</a>
+    <a href="kontakt.html" class="active">Kontakt</a>
+  </div>
+  <a href="kontakt.html" class="nav-cta">Ta kontakt →</a>
+</nav>
+
+<main id="main" class="page">
+  <section class="contact-page">
+    <div class="container">
+      <span class="label r">Kontakt</span>
+
+      <div class="contact-grid">
+
+        <!-- Left: info -->
+        <div class="r">
+          <h1>La oss lage<br />noe<br /><em>bra sammen.</em></h1>
+          <p>
+            Send en melding — beskriv kort hva du trenger. Innen 24 timer har du svar med pris og plan.
+          </p>
+
+          <div class="contact-methods">
+            <a href="mailto:hei@nettsnekkeren.no" class="contact-method">
+              <div class="contact-method-icon" aria-hidden="true">✉</div>
+              <div class="contact-method-text">
+                <div class="contact-method-label">E-post</div>
+                <div class="contact-method-val">hei@nettsnekkeren.no</div>
+              </div>
+              <span class="contact-method-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="tel:+4746781148" class="contact-method">
+              <div class="contact-method-icon" aria-hidden="true">☎</div>
+              <div class="contact-method-text">
+                <div class="contact-method-label">Telefon</div>
+                <div class="contact-method-val">+47 467 81 148</div>
+              </div>
+              <span class="contact-method-arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <div class="contact-promise">
+            <span class="contact-promise-icon">⚡</span>
+            <p>Vi svarer alltid innen 24 timer. Ofte mye raskere.</p>
+          </div>
+        </div>
+
+        <!-- Right: form -->
+        <div class="r d1">
+          <div class="contact-form-card">
+            <div id="form-area">
+              <h2>Send en melding</h2>
+              <p class="sub">Ingen møte nødvendig — vi tar det derfra.</p>
+              <form id="contact-form" onsubmit="handleSubmit(event)" novalidate>
+                <div class="fg-row">
+                  <div class="fg">
+                    <label>Fornavn *</label>
+                    <input type="text" id="fname" placeholder="Ola" required />
+                  </div>
+                  <div class="fg">
+                    <label>Etternavn</label>
+                    <input type="text" placeholder="Nordmann" />
+                  </div>
+                </div>
+                <div class="fg">
+                  <label>E-post *</label>
+                  <input type="email" id="email" placeholder="ola@bedriften.no" required />
+                </div>
+                <div class="fg">
+                  <label>Bedrift</label>
+                  <input type="text" placeholder="Bedriften AS (valgfritt)" />
+                </div>
+                <div class="fg">
+                  <label>Hva trenger du?</label>
+                  <select>
+                    <option value="">Velg type nettside...</option>
+                    <option>Landingsside / presentasjonsside</option>
+                    <option>Nettside med blogg</option>
+                    <option>Bookingside</option>
+                    <option>Nettbutikk</option>
+                    <option>Vet ikke ennå</option>
+                  </select>
+                </div>
+                <div class="fg">
+                  <label>Fortell litt mer *</label>
+                  <textarea id="msg" placeholder="Beskriv kort hva du trenger og hvem bedriften din er. Jo mer info, desto raskere kan vi svare med et godt tilbud." required maxlength="1000"></textarea>
+                  <div class="char-hint"><span id="char-count">0</span> / 1000</div>
+                </div>
+                <button type="submit" class="btn-submit" id="submit-btn">
+                  Send melding →
+                </button>
+                <p class="form-fine">Gratis og uforpliktende · Vi svarer innen 24 timer</p>
+              </form>
+            </div>
+            <div class="success-msg" id="success-msg">
+              <span class="success-icon">✅</span>
+              <h3>Melding sendt!</h3>
+              <p>Takk! Vi leser meldingen din og svarer innen 24 timer.</p>
+              <a href="index.html" class="btn btn-outline" style="margin-top:8px;">Tilbake til forsiden</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-left">
+    <a href="index.html" class="nav-logo" style="text-decoration:none;">
+      <svg width="28" height="32" viewBox="0 0 32 36" fill="none">
+        <path d="M3 33 L3 3" stroke="var(--ink)" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M3 5 C 3 5, 10 14, 16 18 C 22 22, 29 25, 29 31" stroke="var(--honey)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <path d="M29 3 L29 33" stroke="var(--ink)" stroke-width="3.2" stroke-linecap="round"/>
+        <circle cx="29" cy="3" r="2.2" fill="var(--honey)"/>
+      </svg>
+      <span class="nav-wordmark" style="font-size:17px;">Netts<span class="hl">nekkeren</span></span>
+    </a>
+    <a href="portefolje.html">Eksempler</a>
+    <a href="kontakt.html">Kontakt</a>
+    <a href="mailto:hei@nettsnekkeren.no">hei@nettsnekkeren.no</a>
+    <a href="tel:+4746781148">+47 467 81 148</a>
+  </div>
+  <p>© 2026 Nettsnekkeren</p>
+</footer>
+
+<script>
+  // Reveal
+  const obs = new IntersectionObserver(e => {
+    e.forEach(x => { if (x.isIntersecting) x.target.classList.add('in'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.r').forEach(el => obs.observe(el));
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', scrollY > 20);
+  }, { passive: true });
+
+  const cursor = document.getElementById('cursor');
+  const dot    = document.getElementById('cursor-dot');
+  const ring   = document.getElementById('cursor-ring');
+  let rx = 0, ry = 0, mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // Char counter
+  const msg = document.getElementById('msg');
+  const counter = document.getElementById('char-count');
+  if (msg) {
+    msg.addEventListener('input', () => { counter.textContent = msg.value.length; });
+  }
+
+  // Form submit
+  // TODO: Koble til ekte Formspree-ID n\u00e5r den er klar.
+  // Per n\u00e5 \u00e5pnes brukerens e-postklient med innholdet forh\u00e5ndsutfylt — funger som fallback.
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.textContent = 'Sender...';
+    btn.disabled = true;
+    console.warn('[Nettsnekkeren] TODO: koble til ekte Formspree-ID. Bruker mailto-fallback.');
+
+    const fname = (document.getElementById('fname')||{}).value || '';
+    const email = (document.getElementById('email')||{}).value || '';
+    const msg   = (document.getElementById('msg')||{}).value || '';
+    const subject = encodeURIComponent('Henvendelse fra ' + fname);
+    const body    = encodeURIComponent(msg + '\n\n--\nFra: ' + fname + ' <' + email + '>');
+    // Open mailto as a working fallback while Formspree TODO is pending
+    window.location.href = 'mailto:hei@nettsnekkeren.no?subject=' + subject + '&body=' + body;
+
+    setTimeout(() => {
+      document.getElementById('form-area').style.display = 'none';
+      document.getElementById('success-msg').classList.add('show');
+    }, 400);
+  }
+</script>
+</body>
+</html>

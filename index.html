@@ -3,8 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nettsnekkeren — Nettsider håndlaget for norske bedrifter</title>
-  <meta name="description" content="Jeg snekrer nettsider norske bedrifter er genuint stolte av. Skreddersydd, moderne, levert på 7–10 dager. Fornøydgaranti." />
+  <title>Nettsnekkeren — Håndlagde nettsider for norske bedrifter</title>
+  <meta name="description" content="Jeg snekrer nettsider norske bedrifter er genuint stolte av. Skreddersydd, lynrask, levert på 7–10 dager. Fornøydgaranti — jeg er ikke ferdig før du er." />
+  <meta name="theme-color" content="#192140" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Nettsnekkeren — Håndlagde nettsider for norske bedrifter" />
+  <meta property="og:description" content="Skreddersydde, lynraske nettsider — levert på 7–10 dager. Fornøydgaranti: jeg er ikke ferdig før du er." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nettsnekkeren.no/" />
+  <meta property="og:locale" content="nb_NO" />
+  <meta property="og:site_name" content="Nettsnekkeren" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Nettsnekkeren — Håndlagde nettsider for norske bedrifter" />
+  <meta name="twitter:description" content="Skreddersydde, lynraske nettsider — levert på 7–10 dager." />
+  <link rel="canonical" href="https://nettsnekkeren.no/" />
+
+  <!-- Schema.org LocalBusiness -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": "https://nettsnekkeren.no/#business",
+    "name": "Nettsnekkeren",
+    "description": "Solo-webdesigner som bygger håndlagde, skreddersydde nettsider for norske bedrifter, klinikker og håndverkere.",
+    "url": "https://nettsnekkeren.no/",
+    "email": "hei@nettsnekkeren.no",
+    "telephone": "+4746781148",
+    "priceRange": "9900-45000 NOK",
+    "areaServed": {
+      "@type": "Country",
+      "name": "Norge"
+    },
+    "currenciesAccepted": "NOK",
+    "paymentAccepted": "Faktura",
+    "offers": {
+      "@type": "Offer",
+      "description": "Skreddersydd nettside fra 9 900 kr med fornøydgaranti — opptil fem revisjonsrunder inkludert",
+      "priceCurrency": "NOK",
+      "price": "9900"
+    }
+  }
+  </script>
 
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='8' fill='%23192140'/><path d='M9 27L9 9' stroke='%23FAF6EC' stroke-width='3' stroke-linecap='round'/><path d='M9 11C9 11,15 19,18 19C21 19,27 19,27 25' stroke='%23C07818' stroke-width='2.5' stroke-linecap='round' fill='none'/><path d='M27 9L27 27' stroke='%23FAF6EC' stroke-width='3' stroke-linecap='round'/><circle cx='27' cy='9' r='2.5' fill='%23C07818'/></svg>" />
@@ -45,6 +85,29 @@
   }
 
   html { scroll-behavior: smooth; }
+
+  /* ── Skip link (a11y) ─────────────── */
+  .skip-link {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--dark); color: var(--cream);
+    padding: 12px 20px; border-radius: 0 0 10px 0;
+    font-weight: 600; font-size: 14px; z-index: 10000;
+    text-decoration: none;
+  }
+  .skip-link:focus { left: 0; }
+
+  /* ── Reduced motion ───────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .process-outer { height: auto !important; }
+    .process-sticky { position: relative !important; height: auto !important; }
+    .process-track { transform: none !important; flex-wrap: wrap; }
+  }
 
   /* ─────────────────────────────────────
      INTRO SPLASH
@@ -361,7 +424,11 @@
     background: radial-gradient(circle, rgba(49,68,117,.6) 0%, transparent 65%);
     pointer-events: none;
   }
-  .why-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .why-inner { position: relative; z-index: 1; }
+  .why-head { max-width: 680px; margin: 0 auto 68px; text-align: center; }
+  .why-head .label { display: inline-block; margin-bottom: 18px; }
+  .why-head h2 { margin-bottom: 22px; }
+  .why-head .why-lead { max-width: 560px; margin: 0 auto; }
   .why h2 {
     font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(34px,4.2vw,54px); font-weight: 700; line-height: 1.05;
@@ -369,14 +436,32 @@
   }
   .why h2 em { font-style: italic; font-weight: 700; color: var(--honey); }
   .why-lead { font-size: 17px; color: rgba(250,246,236,.5); line-height: 1.75; }
-  .why-args { display: flex; flex-direction: column; gap: 2px; }
-  .why-arg {
-    padding: 24px 26px;
-    border-left: 2px solid rgba(255,255,255,.07);
-    border-radius: 0 var(--r) var(--r) 0;
-    transition: border-color .25s, background .25s, padding-left .25s; cursor: default;
+  .why-args {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--r-lg);
+    overflow: hidden;
   }
-  .why-arg:hover { border-color: var(--honey); background: rgba(255,255,255,.04); padding-left: 32px; }
+  .why-arg {
+    padding: 34px 32px;
+    background: rgba(25,33,64,.55);
+    transition: background .25s;
+    cursor: default;
+    position: relative;
+  }
+  .why-arg:hover { background: rgba(25,33,64,.75); }
+  .why-arg::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px; background: var(--honey);
+    transform: scaleY(0); transform-origin: center;
+    transition: transform .3s cubic-bezier(.22,1,.36,1);
+  }
+  .why-arg:hover::before { transform: scaleY(1); }
+  @media (max-width: 760px) {
+    .why-args { grid-template-columns: 1fr; }
+  }
   .why-arg-n { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--honey); opacity: .8; margin-bottom: 6px; }
   .why-arg h4 { font-size: 16px; font-weight: 600; color: var(--cream); margin-bottom: 7px; }
   .why-arg p { font-size: 14px; color: rgba(250,246,236,.45); line-height: 1.68; }
@@ -456,14 +541,26 @@
   }
   .process-card::after { display: none; }
 
+  .proc-top {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px;
+  }
   .proc-badge {
     display: inline-flex; align-items: center; justify-content: center;
     width: 38px; height: 38px; border-radius: 10px;
     background: var(--dark);
     font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 18px; font-weight: 800; font-style: italic;
-    color: var(--honey); margin-bottom: 20px;
+    color: var(--honey);
     flex-shrink: 0;
+  }
+  .proc-day {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--honey);
+    padding: 5px 10px; border-radius: 100px;
+    background: var(--honey-light);
+    border: 1px solid rgba(192,120,24,.22);
   }
   .proc-text { flex: 1; padding-bottom: 20px; }
   .proc-text h3 {
@@ -590,6 +687,171 @@
     font-size: 10px; font-weight: 800; color: var(--honey);
   }
 
+  /* ── Interactive price calculator ──────── */
+  .calc-card {
+    background: #fff; border: 1.5px solid var(--border);
+    border-radius: var(--r-xl); padding: 36px 34px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(28,26,18,0.05);
+  }
+  .calc-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 28px; gap: 16px; flex-wrap: wrap;
+  }
+  .calc-head h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
+  }
+  .calc-live {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--honey);
+  }
+  .calc-live::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--honey); box-shadow: 0 0 8px var(--honey);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  .calc-group { margin-bottom: 22px; }
+  .calc-group-label {
+    display: block;
+    font-size: 12px; font-weight: 700;
+    color: var(--ink); margin-bottom: 10px;
+    letter-spacing: -0.005em;
+  }
+  .calc-radio-group {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  }
+  .calc-radio {
+    position: relative; cursor: pointer;
+  }
+  .calc-radio input { position: absolute; opacity: 0; pointer-events: none; }
+  .calc-radio-pill {
+    display: block; padding: 11px 8px;
+    background: var(--cream); border: 1.5px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+    font-size: 13px; font-weight: 600; color: var(--ink-55);
+    transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.2s;
+  }
+  .calc-radio input:checked + .calc-radio-pill {
+    border-color: var(--honey); background: var(--honey-light);
+    color: var(--honey); transform: translateY(-1px);
+  }
+  .calc-radio:hover .calc-radio-pill { border-color: var(--border-mid); }
+
+  .calc-slider-wrap {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .calc-slider-wrap input[type="range"] {
+    flex: 1; -webkit-appearance: none; appearance: none;
+    height: 6px; border-radius: 100px;
+    background: var(--border);
+    outline: none;
+  }
+  .calc-slider-wrap input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--honey);
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(192,120,24,0.35);
+    border: 3px solid #fff;
+    transition: transform 0.15s;
+  }
+  .calc-slider-wrap input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); }
+  .calc-slider-wrap input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--honey);
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(192,120,24,0.35);
+    border: 3px solid #fff;
+  }
+  .calc-slider-val {
+    min-width: 58px; padding: 6px 10px;
+    background: var(--cream); border-radius: 8px;
+    font-size: 13px; font-weight: 700; color: var(--ink);
+    text-align: center;
+  }
+
+  .calc-toggle-group {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .calc-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 16px;
+    background: var(--cream); border: 1.5px solid var(--border);
+    border-radius: 12px; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .calc-toggle:hover { border-color: var(--border-mid); }
+  .calc-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+  .calc-toggle-label {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .calc-toggle-label strong {
+    font-size: 14px; font-weight: 600; color: var(--ink);
+  }
+  .calc-toggle-label span {
+    font-size: 12px; color: var(--ink-55);
+  }
+  .calc-toggle-switch {
+    width: 36px; height: 20px; border-radius: 100px;
+    background: var(--border-mid);
+    position: relative; flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .calc-toggle-switch::after {
+    content: ''; position: absolute;
+    left: 2px; top: 2px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #fff;
+    transition: transform 0.2s;
+  }
+  .calc-toggle input:checked ~ .calc-toggle-switch {
+    background: var(--honey);
+  }
+  .calc-toggle input:checked ~ .calc-toggle-switch::after {
+    transform: translateX(16px);
+  }
+  .calc-toggle:has(input:checked) {
+    border-color: var(--honey); background: var(--honey-light);
+  }
+
+  .calc-result {
+    margin-top: 28px; padding-top: 24px;
+    border-top: 1.5px dashed var(--border);
+  }
+  .calc-result-label {
+    font-size: 12px; font-weight: 600;
+    color: var(--ink-55); margin-bottom: 6px;
+  }
+  .calc-result-price {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(38px, 5vw, 56px);
+    font-weight: 800; letter-spacing: -0.04em;
+    color: var(--ink); line-height: 1;
+  }
+  .calc-result-price .calc-tilde {
+    font-size: 0.55em; color: var(--ink-30); font-weight: 500;
+    margin-right: 4px; letter-spacing: 0;
+  }
+  .calc-result-price .calc-currency {
+    font-size: 0.5em; color: var(--ink-55); font-weight: 600;
+    margin-left: 6px; letter-spacing: 0;
+  }
+  .calc-result-note {
+    font-size: 13px; color: var(--ink-55);
+    margin-top: 12px; line-height: 1.6;
+  }
+  .calc-result-note strong { color: var(--honey); font-weight: 700; }
+
+  @media (max-width: 640px) {
+    .calc-card { padding: 26px 22px; }
+    .calc-radio-group { grid-template-columns: 1fr; }
+  }
+
   /* ─────────────────────────────────────
      CONTACT
   ───────────────────────────────────── */
@@ -682,17 +944,544 @@
   footer p { font-size: 13px; color: rgba(250,246,236,.35); }
 
   /* ─────────────────────────────────────
-     GUARANTEE BOX (in contact section)
+     GUARANTEE BOX (triple guarantee in contact section)
   ───────────────────────────────────── */
   .guarantee {
-    margin-top: 28px; padding: 20px 22px;
+    margin-top: 28px; padding: 22px 24px;
     background: var(--honey-light); border: 1px solid rgba(192,120,24,.22);
-    border-radius: var(--r-lg); display: flex; gap: 12px; align-items: flex-start;
+    border-radius: var(--r-lg);
   }
-  .guarantee-icon { width: 28px; height: 28px; flex-shrink: 0; margin-top: 2px; stroke: var(--honey); }
-  .cd-icon svg    { width: 18px; height: 18px; stroke: var(--honey); }
-  .guarantee h5 { font-size: 14px; font-weight: 700; color: var(--honey); margin-bottom: 3px; }
-  .guarantee p  { font-size: 13px; color: var(--ink-55); line-height: 1.6; }
+  .guarantee-title {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--honey); margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .guarantee-title svg { width: 22px; height: 22px; stroke: var(--honey); flex-shrink: 0; }
+  .guarantee-list {
+    display: flex; flex-direction: column; gap: 10px;
+    list-style: none; padding: 0; margin: 0;
+  }
+  .guarantee-list li {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 13px; color: var(--ink-55); line-height: 1.55;
+  }
+  .guarantee-list li strong { color: var(--ink); font-weight: 700; }
+  .guarantee-check {
+    flex-shrink: 0; width: 18px; height: 18px;
+    border-radius: 50%; background: var(--honey);
+    color: #fff; font-size: 10px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+  }
+  .cd-icon svg { width: 18px; height: 18px; stroke: var(--honey); }
+
+  /* ─────────────────────────────────────
+     SECTION PROGRESS BAR IN NAV
+  ───────────────────────────────────── */
+  .nav-progress {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 2px; background: transparent;
+    pointer-events: none;
+  }
+  .nav-progress-fill {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--honey) 0%, var(--honey-mid) 100%);
+    transition: width .12s linear;
+    box-shadow: 0 0 8px rgba(192,120,24,.55);
+  }
+
+  /* ─────────────────────────────────────
+     TIME-OF-DAY GREETING (eyebrow)
+  ───────────────────────────────────── */
+  .greeting-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 7px 16px; border-radius: 100px;
+    background: #fff; border: 1px solid var(--border);
+    font-size: 13px; font-weight: 600; color: var(--ink);
+    box-shadow: 0 2px 14px rgba(28,26,18,.05);
+    margin-bottom: 18px;
+  }
+  .greeting-eyebrow .greeting-emoji { font-size: 15px; }
+  .greeting-eyebrow .greeting-sep { width: 1px; height: 14px; background: var(--border-mid); }
+  .greeting-eyebrow .greeting-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--honey); font-weight: 700;
+    font-size: 11px; text-transform: uppercase; letter-spacing: .12em;
+  }
+  .greeting-eyebrow .greeting-status::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: #2A9452;
+    box-shadow: 0 0 8px rgba(42,148,82,.7);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  /* ─────────────────────────────────────
+     LIVE STATS ROW (Why section)
+  ───────────────────────────────────── */
+  .live-stats {
+    margin-top: 46px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .live-stat {
+    padding: 22px 18px; text-align: center;
+    position: relative;
+    background: rgba(25,33,64,.5);
+  }
+  .live-stat-val {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 28px; font-weight: 800; letter-spacing: -.03em;
+    color: var(--honey); line-height: 1;
+    margin-bottom: 4px;
+  }
+  .live-stat-label {
+    font-size: 11px; font-weight: 600;
+    color: rgba(250,246,236,.55);
+    text-transform: uppercase; letter-spacing: .11em;
+  }
+  .live-stat-live {
+    position: absolute; top: 8px; right: 10px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #6af09a;
+    box-shadow: 0 0 8px #6af09a;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @media (max-width: 760px) {
+    .live-stats { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ─────────────────────────────────────
+     BEFORE / AFTER SLIDER
+  ───────────────────────────────────── */
+  .ba-wrap {
+    max-width: 1040px; margin: 0 auto 80px;
+    padding: 0 52px;
+  }
+  .ba-intro {
+    text-align: center; margin-bottom: 24px;
+    font-family: 'Caveat', cursive;
+    font-size: 22px; color: var(--ink-55);
+  }
+  .ba-container {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+    box-shadow: 0 30px 80px rgba(28,26,18,.14);
+    user-select: none;
+    cursor: ew-resize;
+    background: #fff;
+  }
+  .ba-side {
+    position: absolute; inset: 0;
+    overflow: hidden;
+  }
+  .ba-before-layer { z-index: 1; }
+  .ba-after-layer {
+    z-index: 2;
+    clip-path: inset(0 0 0 50%);
+    transition: clip-path .08s linear;
+  }
+  .ba-divider {
+    position: absolute; top: 0; bottom: 0;
+    left: 50%; width: 3px;
+    background: var(--honey);
+    box-shadow: 0 0 16px rgba(192,120,24,.7);
+    margin-left: -1.5px;
+    z-index: 3;
+    pointer-events: none;
+    transition: left .08s linear;
+  }
+  .ba-handle {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 54px; height: 54px; border-radius: 50%;
+    background: var(--honey); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 800;
+    box-shadow: 0 8px 30px rgba(192,120,24,.5), 0 0 0 6px rgba(192,120,24,.14);
+  }
+  .ba-label {
+    position: absolute; top: 20px;
+    padding: 6px 14px; border-radius: 100px;
+    font-size: 10px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .14em;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .ba-label.before { left: 20px; background: rgba(0,0,0,.55); color: #fff; }
+  .ba-label.after { right: 20px; background: var(--honey); color: #fff; }
+
+  /* Before mockup — dated 2000s look */
+  .ba-before-mock {
+    height: 100%;
+    padding: 46px 44px 32px;
+    background: #fffff0;
+    font-family: 'Times New Roman', Times, serif;
+    position: relative;
+  }
+  .ba-before-mock::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 22px;
+    background: linear-gradient(#e0e0e0, #c0c0c0);
+    border-bottom: 1px solid #888;
+  }
+  .ba-before-h {
+    text-align: center; color: #cc0000;
+    font-size: clamp(18px, 2.8vw, 30px); font-weight: 900;
+    text-decoration: underline;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 0 #ffff00;
+  }
+  .ba-before-tag {
+    text-align: center; color: #0000cc;
+    font-style: italic;
+    font-size: clamp(12px, 1.6vw, 16px);
+    margin-bottom: 18px;
+  }
+  .ba-before-body {
+    display: flex; gap: 16px; align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .ba-before-img {
+    width: 34%; aspect-ratio: 4/3;
+    background: repeating-linear-gradient(45deg, #dddddd, #dddddd 6px, #bbbbbb 6px, #bbbbbb 12px);
+    border: 3px double #333;
+    flex-shrink: 0;
+  }
+  .ba-before-copy {
+    flex: 1; font-size: clamp(10px, 1.2vw, 13px);
+    color: #003300; line-height: 1.5;
+  }
+  .ba-before-btn {
+    display: inline-block;
+    padding: 8px 20px;
+    background: #ffff00;
+    color: #cc0000;
+    border: 3px outset #ccaa00;
+    font-weight: 900;
+    font-size: clamp(11px, 1.4vw, 14px);
+    text-transform: uppercase;
+    font-family: 'Comic Sans MS', 'Times New Roman', serif;
+  }
+
+  /* After mockup — modern */
+  .ba-after-mock {
+    height: 100%;
+    background: linear-gradient(160deg, var(--cream) 0%, #EFE3CA 100%);
+    padding: 60px 62px;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative;
+    font-family: 'Outfit', sans-serif;
+  }
+  .ba-after-mock::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 22px;
+    background: rgba(25,33,64,.05);
+    border-bottom: 1px solid var(--border);
+  }
+  .ba-after-mock-nav {
+    position: absolute; top: 34px; left: 60px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 800;
+    color: var(--ink); letter-spacing: -.02em;
+  }
+  .ba-after-mock-nav span { color: var(--honey); }
+  .ba-after-mock h4 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(22px, 3.6vw, 44px);
+    font-weight: 800; letter-spacing: -.035em; line-height: 1.05;
+    color: var(--ink); margin: 10px 0 16px;
+    max-width: 82%;
+  }
+  .ba-after-mock h4 em {
+    color: var(--honey); font-style: italic;
+  }
+  .ba-after-mock p {
+    font-size: clamp(11px, 1.35vw, 15px);
+    color: var(--ink-55); max-width: 60%;
+    margin-bottom: 22px; line-height: 1.65;
+  }
+  .ba-after-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 11px 22px; border-radius: 100px;
+    background: var(--dark); color: var(--cream);
+    font-weight: 600;
+    font-size: clamp(11px, 1.35vw, 14px);
+    box-shadow: 0 4px 18px rgba(25,33,64,.22);
+    align-self: flex-start;
+  }
+
+  @media (max-width: 700px) {
+    .ba-wrap { padding: 0 20px; margin-bottom: 60px; }
+    .ba-container { aspect-ratio: 3/4; }
+    .ba-before-mock, .ba-after-mock { padding: 48px 22px 24px; }
+    .ba-after-mock-nav { left: 22px; }
+  }
+
+  /* ─────────────────────────────────────
+     LEVENDE EKSEMPLER (concept gallery)
+  ───────────────────────────────────── */
+  .eksempler {
+    padding: 108px 0 118px;
+    background: linear-gradient(180deg, var(--cream) 0%, #F7F1E1 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .eksempler-head {
+    max-width: 1100px; margin: 0 auto 52px;
+    padding: 0 52px;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;
+    flex-wrap: wrap;
+  }
+  .eksempler-head h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(34px, 4.4vw, 58px); font-weight: 800;
+    letter-spacing: -.035em; line-height: 1.04;
+    max-width: 560px;
+  }
+  .eksempler-head h2 em { font-style: italic; font-weight: 800; color: var(--honey); }
+  .eksempler-head-meta {
+    max-width: 340px; font-size: 14px;
+    color: var(--ink-55); line-height: 1.65;
+  }
+  .eksempler-head-meta strong { color: var(--ink); font-weight: 700; }
+
+  .eksempler-track-wrap {
+    padding: 0 52px; overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--honey) transparent;
+  }
+  .eksempler-track-wrap::-webkit-scrollbar { height: 6px; }
+  .eksempler-track-wrap::-webkit-scrollbar-thumb {
+    background: var(--honey); border-radius: 100px;
+  }
+  .eksempler-track {
+    display: flex; gap: 26px; padding-bottom: 22px;
+  }
+  .eksempel-card {
+    flex-shrink: 0;
+    width: 420px; max-width: 85vw;
+    border-radius: var(--r-xl);
+    background: #fff;
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    scroll-snap-align: start;
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column;
+    transition: transform .35s cubic-bezier(.22,1,.36,1),
+                box-shadow .35s, border-color .25s;
+  }
+  .eksempel-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 80px rgba(28,26,18,.14);
+    border-color: var(--honey);
+  }
+  .eksempel-thumb {
+    position: relative;
+    height: 260px;
+    background: var(--cream-mid);
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .eksempel-thumb::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(28,26,18,.06) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .eksempel-mock {
+    position: relative; z-index: 1;
+    width: 85%; border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 18px 50px rgba(28,26,18,.18);
+    transform: perspective(1000px) rotateX(6deg) rotateY(-2deg);
+    transition: transform .4s cubic-bezier(.22,1,.36,1);
+    overflow: hidden;
+  }
+  .eksempel-card:hover .eksempel-mock {
+    transform: perspective(1000px) rotateX(2deg) rotateY(0) translateY(-6px);
+  }
+  .eksempel-mock-bar {
+    display: flex; gap: 4px; padding: 8px 10px;
+    background: #f5f5f5; border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+  .eksempel-mock-bar span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(0,0,0,.15);
+  }
+  .eksempel-mock-body {
+    padding: 18px 16px 22px;
+    min-height: 140px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .eksempel-mock-h {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 19px; font-weight: 800;
+    letter-spacing: -.025em; line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .eksempel-mock-p {
+    font-size: 10.5px; color: rgba(0,0,0,.5);
+    line-height: 1.5; margin-bottom: 10px;
+  }
+  .eksempel-mock-btn {
+    display: inline-block;
+    padding: 6px 12px; border-radius: 100px;
+    font-size: 10px; font-weight: 600;
+  }
+  .eksempel-body {
+    padding: 24px 26px 26px;
+    display: flex; flex-direction: column; flex: 1;
+  }
+  .eksempel-tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .13em;
+    color: var(--honey);
+    margin-bottom: 10px;
+  }
+  .eksempel-card h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -.03em; line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .eksempel-card p {
+    font-size: 14px; color: var(--ink-55); line-height: 1.6;
+    margin-bottom: 18px; flex: 1;
+  }
+  .eksempel-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 14px; border-top: 1px solid var(--border);
+    font-size: 13px; font-weight: 600; color: var(--ink);
+  }
+  .eksempel-footer .arrow {
+    font-size: 18px; color: var(--honey);
+    transition: transform .25s;
+  }
+  .eksempel-card:hover .eksempel-footer .arrow { transform: translateX(4px); }
+
+  /* Mock color themes */
+  .mock-handverker .eksempel-mock-body { background: #1E3A2F; }
+  .mock-handverker .eksempel-mock-h { color: #F4F0E4; }
+  .mock-handverker .eksempel-mock-h em { color: #E8B547; font-style: italic; }
+  .mock-handverker .eksempel-mock-p { color: rgba(244,240,228,.55); }
+  .mock-handverker .eksempel-mock-btn { background: #E8B547; color: #1E3A2F; }
+
+  .mock-klinikk .eksempel-mock-body { background: #F7F9FB; }
+  .mock-klinikk .eksempel-mock-h { color: #1A3A4A; }
+  .mock-klinikk .eksempel-mock-h em { color: #3A8C9E; font-style: italic; }
+  .mock-klinikk .eksempel-mock-p { color: rgba(26,58,74,.55); }
+  .mock-klinikk .eksempel-mock-btn { background: #3A8C9E; color: #fff; }
+
+  .mock-frisor .eksempel-mock-body { background: #F5F1EA; }
+  .mock-frisor .eksempel-mock-h { color: #2A1B3D; }
+  .mock-frisor .eksempel-mock-h em { color: #B85450; font-style: italic; }
+  .mock-frisor .eksempel-mock-p { color: rgba(42,27,61,.55); }
+  .mock-frisor .eksempel-mock-btn { background: #2A1B3D; color: #F5F1EA; }
+
+  .mock-restaurant .eksempel-mock-body { background: #1C1A12; }
+  .mock-restaurant .eksempel-mock-h { color: #F5F1E8; font-family: 'Bricolage Grotesque'; }
+  .mock-restaurant .eksempel-mock-h em { color: #D4A574; font-style: italic; }
+  .mock-restaurant .eksempel-mock-p { color: rgba(245,241,232,.55); }
+  .mock-restaurant .eksempel-mock-btn { background: #D4A574; color: #1C1A12; }
+
+  .mock-advokat .eksempel-mock-body { background: #FAFAF7; }
+  .mock-advokat .eksempel-mock-h { color: #0F1E3D; }
+  .mock-advokat .eksempel-mock-h em { color: #8B6B2F; font-style: italic; }
+  .mock-advokat .eksempel-mock-p { color: rgba(15,30,61,.55); }
+  .mock-advokat .eksempel-mock-btn { background: #0F1E3D; color: #fff; }
+
+  .eksempel-card.soon {
+    background: repeating-linear-gradient(135deg, #fff, #fff 12px, var(--cream) 12px, var(--cream) 24px);
+    border-style: dashed;
+  }
+  .eksempel-card.soon .eksempel-thumb { background: var(--cream); }
+  .eksempel-card.soon .eksempel-mock { opacity: .55; }
+
+  /* ─────────────────────────────────────
+     KONAMI HAMMER RAIN
+  ───────────────────────────────────── */
+  .konami-rain {
+    position: fixed; inset: 0; z-index: 9997;
+    pointer-events: none; overflow: hidden;
+    display: none;
+  }
+  .konami-rain.active { display: block; }
+  .konami-hammer {
+    position: absolute; top: -40px;
+    font-size: 28px;
+    animation: konami-fall 2.4s linear forwards;
+  }
+  @keyframes konami-fall {
+    0%   { transform: translateY(0) rotate(0); opacity: 0; }
+    10%  { opacity: 1; }
+    100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+  }
+
+  /* ─────────────────────────────────────
+     SECTION ACCENT SHIFTS (subtle warmth)
+  ───────────────────────────────────── */
+  .eksempler { background: linear-gradient(180deg, var(--cream) 0%, #F7EFDC 100%); }
+  .services { background: #FFFFFF; }
+  .process-outer { background-color: #FBF7EC; }
+  .prices { background: #FBF8F1; }
+  .faq { background: #FFFFFF; }
+  .contact { background-color: #F9F3E4; }
+
+  /* ─────────────────────────────────────
+     HERO CENTERED + SMOOTH ROTATOR
+  ───────────────────────────────────── */
+  .hero-inner {
+    max-width: 820px; margin: 0 auto;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .hero-h1 {
+    text-align: center; margin-bottom: 30px;
+  }
+  .hero-sub {
+    margin-left: auto; margin-right: auto;
+    text-align: center;
+  }
+  .hero-actions { justify-content: center; }
+  .hero-note { text-align: center; }
+
+  .greeting-eyebrow.r { align-self: center; }
+
+  /* ── Slot-machine rotator (vertical scroll through words) ── */
+  .hero-rotator {
+    display: inline-block;
+    vertical-align: bottom;
+    position: relative;
+    height: 1.15em;
+    line-height: 1.05;
+    overflow: hidden;
+    transition: width .85s cubic-bezier(.77,0,.18,1);
+    will-change: width;
+    min-width: 6ch;
+  }
+  .hero-rotator-stack {
+    display: block;
+    transition: transform .85s cubic-bezier(.77,0,.18,1);
+    will-change: transform;
+  }
+  .hero-rotator-stack > span {
+    display: flex;
+    align-items: center;
+    height: 1.15em;
+    color: var(--honey);
+    font-style: italic;
+    font-weight: 800;
+    white-space: nowrap;
+    padding: 0 .04em;
+  }
 
   /* ─────────────────────────────────────
      RESPONSIVE
@@ -727,6 +1516,8 @@
 </head>
 <body>
 
+<a href="#main" class="skip-link">Hopp til hovedinnhold</a>
+
 <!-- ─── INTRO SPLASH ──────────────────────────── -->
 <div id="intro-splash" aria-hidden="true">
   <div class="splash-logo-wrap">
@@ -741,8 +1532,8 @@
 </div>
 
 <!-- ─── NAV ──────────────────────────────────── -->
-<nav id="nav">
-  <a href="#" class="nav-logo">
+<nav id="nav" aria-label="Hovedmeny">
+  <a href="#" class="nav-logo" aria-label="Nettsnekkeren — til forsiden">
     <div class="logo-anim-wrap">
       <!-- Hard hat resting on top-left tip of the N -->
       <svg class="logo-helmet" viewBox="0 0 22 13" fill="none" aria-hidden="true">
@@ -768,39 +1559,217 @@
     </div>
   </a>
   <div class="nav-links">
+    <a href="#eksempler">Eksempler</a>
     <a href="#tjenester">Tjenester</a>
     <a href="#prosess">Prosess</a>
     <a href="#priser">Priser</a>
+    <a href="#faq">FAQ</a>
     <a href="#kontakt">Kontakt</a>
   </div>
   <a href="#kontakt" class="nav-cta">Ta kontakt →</a>
+  <div class="nav-progress" aria-hidden="true"><div class="nav-progress-fill" id="navProgressFill"></div></div>
 </nav>
 
-<div class="page">
+<main id="main" class="page">
 
 <!-- ─── HERO ─────────────────────────────────── -->
-<section class="hero" id="hjem">
+<section class="hero" id="hjem" aria-label="Introduksjon">
 
   <div class="container">
     <div class="hero-inner">
 
-      <div class="badge r" style="margin-bottom:28px;">
-        <span class="badge-dot"></span>
-        Tar på nye kunder nå
+      <div class="greeting-eyebrow r" id="greetingEyebrow">
+        <span class="greeting-emoji" id="greetingEmoji">👋</span>
+        <span id="greetingText">God dag</span>
+        <span class="greeting-sep"></span>
+        <span class="greeting-status">Tilgjengelig · <span id="availMonth">april</span></span>
       </div>
 
-      <h1 class="hero-h1">Nettsiden du<br>har <span class="italic-honey">drømt</span> om.</h1>
+      <h1 class="hero-h1">
+        Nettsiden til<br>
+        <span class="hero-rotator" id="heroRotator" aria-live="polite"></span>
+      </h1>
 
       <p class="hero-sub r d2">
-        Nettsiden din er bedriftens ansikt utad. Første inntrykk avgjør om besøkende velger deg — eller trykker tilbake. Jeg bygger sider som gir riktig inntrykk fra sekundet én.
+        Skreddersydde nettsider som gir bedriften din et ordentlig førsteinntrykk — og flere kunder. Ferdig på ti dager, fast pris, og du eier alt selv.
       </p>
 
       <div class="hero-actions r d3">
-        <a href="#kontakt" class="btn btn-dark">Ta kontakt →</a>
-        <a href="#tjenester" class="btn btn-outline">Se hva jeg kan gjøre</a>
+        <a href="#kontakt" class="btn btn-dark">Be om tilbud →</a>
+        <a href="#eksempler" class="btn btn-outline">Se eksempler</a>
       </div>
 
-      <p class="hero-note r d3"><strong>Fornøydgaranti</strong> · Ring eller send en melding · Svar innen 24 timer</p>
+      <p class="hero-note r d3">Svar innen 24 timer · Fra 9.900,- · Uforpliktende</p>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── EKSEMPLER ─────────────────────── -->
+<section class="eksempler" id="eksempler" aria-label="Utvalgte prosjekter">
+  <div class="eksempler-head r">
+    <div>
+      <span class="label">Forskjellen</span>
+      <h2>Slik kan det<br /><em>se ut før og etter.</em></h2>
+    </div>
+    <p class="eksempler-head-meta">
+      En moderne nettside er ikke bare pene farger — det er forskjellen mellom å bli valgt og bli glemt. <strong>Beveg musen</strong> over bildet for å sammenligne.
+    </p>
+  </div>
+
+  <!-- Before / After drag slider -->
+  <div class="ba-wrap r d1">
+    <p class="ba-intro">← beveg musen for å se forskjellen →</p>
+    <div class="ba-container" id="baContainer">
+      <div class="ba-label before">Før</div>
+      <div class="ba-label after">Etter</div>
+
+      <div class="ba-side ba-before-layer">
+        <div class="ba-before-mock">
+          <div class="ba-before-h">★ VELKOMMEN TIL BEDRIFTEN ★</div>
+          <div class="ba-before-tag">Vi har det du trenger til laveste pris!!!</div>
+          <div class="ba-before-body">
+            <div class="ba-before-img"></div>
+            <div class="ba-before-copy">
+              Velkommen til vår hjemmeside! Vi er en familiebedrift som har holdt på siden 1998. Kontakt oss gjerne på telefon for tilbud. Vi er åpen mandag til fredag 09-16. Lørdag og søndag er vi dessverre stengt.
+            </div>
+          </div>
+          <div class="ba-before-btn">KLIKK HER!!</div>
+        </div>
+      </div>
+
+      <div class="ba-side ba-after-layer" id="baAfterLayer">
+        <div class="ba-after-mock">
+          <div class="ba-after-mock-nav">Bedriften<span>.no</span></div>
+          <h4>Bedriften din,<br /><em>presentert riktig.</em></h4>
+          <p>Et førsteinntrykk som åpner dører — moderne design som matcher kvaliteten på tjenesten din.</p>
+          <span class="ba-after-btn">Ta kontakt →</span>
+        </div>
+      </div>
+
+      <div class="ba-divider" id="baDivider">
+        <div class="ba-handle" aria-hidden="true">⇔</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eksempler-subhead r" style="max-width:1100px;margin:0 auto 36px;padding:0 52px;">
+    <span class="label" style="color:var(--honey);">Andre prosjekter</span>
+    <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(24px,3vw,34px);font-weight:700;letter-spacing:-.03em;margin-top:10px;">Noen av sidene jeg har laget</h3>
+  </div>
+
+  <div class="eksempler-track-wrap">
+    <div class="eksempler-track">
+
+      <a class="eksempel-card r" href="konsept/handverker.html">
+        <div class="eksempel-thumb">
+          <div class="eksempel-mock mock-handverker">
+            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+            <div class="eksempel-mock-body">
+              <div class="eksempel-mock-h">Bygg &amp; Bolig <em>Snekkeri</em></div>
+              <div class="eksempel-mock-p">Håndverk, solid kvalitet og lokal forankring.</div>
+              <span class="eksempel-mock-btn">Be om tilbud →</span>
+            </div>
+          </div>
+        </div>
+        <div class="eksempel-body">
+          <span class="eksempel-tag">Håndverker</span>
+          <h3>Bygg &amp; Bolig Snekkeri</h3>
+          <p>Tillitsskapende nettside for et lokalt snekkerfirma. Tydelig referanseprosjekter, enkel kontakt, og en tone som signaliserer yrkesstolthet.</p>
+          <div class="eksempel-footer">
+            <span>Se konseptet</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="eksempel-card r d1" href="konsept/handverker.html">
+        <div class="eksempel-thumb">
+          <div class="eksempel-mock mock-klinikk">
+            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+            <div class="eksempel-mock-body">
+              <div class="eksempel-mock-h">Tannklinikken <em>Smilet</em></div>
+              <div class="eksempel-mock-p">Bestill time på under ett minutt — trygt og enkelt.</div>
+              <span class="eksempel-mock-btn">Bestill time →</span>
+            </div>
+          </div>
+        </div>
+        <div class="eksempel-body">
+          <span class="eksempel-tag">Klinikk</span>
+          <h3>Tannklinikken Smilet</h3>
+          <p>Ren, rolig og tillitvekkende. Booking-modul med egen kalender, priser i klartekst og tydelige forventninger til besøket.</p>
+          <div class="eksempel-footer">
+            <span>Se prosjektet</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="eksempel-card r d2" href="konsept/handverker.html">
+        <div class="eksempel-thumb">
+          <div class="eksempel-mock mock-frisor">
+            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+            <div class="eksempel-mock-body">
+              <div class="eksempel-mock-h">Salong <em>Lavendel</em></div>
+              <div class="eksempel-mock-p">Moderne klipping, tidløs stil. Book nå.</div>
+              <span class="eksempel-mock-btn">Book time →</span>
+            </div>
+          </div>
+        </div>
+        <div class="eksempel-body">
+          <span class="eksempel-tag">Frisør</span>
+          <h3>Salong Lavendel</h3>
+          <p>Stemningsfull presentasjon av stylistene, galleri av arbeid og en bookingflyt som ingen gir opp halvveis.</p>
+          <div class="eksempel-footer">
+            <span>Se prosjektet</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="eksempel-card r d3" href="konsept/handverker.html">
+        <div class="eksempel-thumb">
+          <div class="eksempel-mock mock-restaurant">
+            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+            <div class="eksempel-mock-body">
+              <div class="eksempel-mock-h">Bistro <em>Høst</em></div>
+              <div class="eksempel-mock-p">Sesongens råvarer. Reserver bord eller bestill take-away.</div>
+              <span class="eksempel-mock-btn">Reserver bord →</span>
+            </div>
+          </div>
+        </div>
+        <div class="eksempel-body">
+          <span class="eksempel-tag">Restaurant</span>
+          <h3>Bistro Høst</h3>
+          <p>Appetittvekkende meny, enkel bordreservasjon og en stemning som matcher opplevelsen gjestene får når de kommer.</p>
+          <div class="eksempel-footer">
+            <span>Se prosjektet</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="eksempel-card r d4" href="konsept/handverker.html">
+        <div class="eksempel-thumb">
+          <div class="eksempel-mock mock-advokat">
+            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+            <div class="eksempel-mock-body">
+              <div class="eksempel-mock-h">Berg &amp; Lund <em>Advokater</em></div>
+              <div class="eksempel-mock-p">Trygg juridisk rådgivning for private og bedrifter.</div>
+              <span class="eksempel-mock-btn">Gratis vurdering →</span>
+            </div>
+          </div>
+        </div>
+        <div class="eksempel-body">
+          <span class="eksempel-tag">Advokat</span>
+          <h3>Berg &amp; Lund Advokater</h3>
+          <p>Autoritet uten å være kald. Tydelige fagområder, presentasjon av partnerne og en kontaktflate som inngir tillit fra første sekund.</p>
+          <div class="eksempel-footer">
+            <span>Se prosjektet</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
 
     </div>
   </div>
@@ -810,34 +1779,34 @@
 <section class="services" id="tjenester">
   <div class="container">
     <div class="sec-header r">
-      <span class="label">Hva jeg gjør</span>
-      <h2>Fra idé til live nettside.<br /><em>Jeg tar meg av alt.</em></h2>
-      <p>Du fokuserer på bedriften din — jeg bygger resten.</p>
+      <span class="label">Hva du får</span>
+      <h2>Én fastpris.<br /><em>Alt inkludert.</em></h2>
+      <p>Du forteller meg om bedriften. Jeg tar resten — fra første skisse til live lansering.</p>
     </div>
     <div class="svc-grid">
       <div class="svc-card r" data-n="01">
-        <span class="svc-num">01 — Unikt</span>
+        <span class="svc-num">01 — Helhetlig</span>
         <div class="svc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12l2 2 4-4"/></svg>
         </div>
-        <h3>Håndbygget, ikke mal-basert</h3>
-        <p>Hver side jeg leverer er unik for kunden. Jeg bruker ikke ferdige maler eller page-buildere som gjør at alle sider ser like ut. Du får noe som er ditt.</p>
+        <h3>Design, innhold, lansering</h3>
+        <p>Skreddersydd design, hjelp til tekster og bilder, SEO-oppsett, domene, hosting og selve lanseringen. Alt i én fastpris — ingenting du må ordne selv senere.</p>
       </div>
       <div class="svc-card r d1" data-n="02">
-        <span class="svc-num">02 — Synlig</span>
+        <span class="svc-num">02 — Rask på alt</span>
         <div class="svc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         </div>
-        <h3>Bygget for å finnes</h3>
-        <p>SEO, hastighet og mobilvisning er ikke noe du skal måtte be om — det er innebygget i måten jeg bygger siden på. Google skal finne deg, og folk skal ville bli værende.</p>
+        <h3>Lynrask på mobil og desktop</h3>
+        <p>Sidene åpner seg på under ett sekund. Perfekt på mobil, nettbrett og desktop. Optimalisert i detalj slik at Google finner deg og besøkende blir værende lenge nok til å ta kontakt.</p>
       </div>
       <div class="svc-card r d2" data-n="03">
-        <span class="svc-num">03 — Ditt</span>
+        <span class="svc-num">03 — Uten binding</span>
         <div class="svc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
         </div>
         <h3>Du eier alt</h3>
-        <p>Domenet er ditt. Koden er din. Innholdet er ditt. Hvis du en dag vil flytte vekk fra meg, kan du gjøre det uten at jeg låser deg inne.</p>
+        <p>Ingen månedlige abonnementer til meg, ingen plattform-lås og ingen dyre "vedlikeholdsavtaler". Du betaler én gang og eier kode, domene og innhold for alltid.</p>
       </div>
     </div>
   </div>
@@ -873,64 +1842,38 @@
 
   <div class="container">
     <div class="why-inner">
-      <div>
-        <span class="label r" style="color:rgba(253,242,220,.6);">Hvorfor Nettsnekkeren</span>
-        <h2 class="r d1">Bygget for å<br />gi deg <em>kunder.</em></h2>
-        <p class="why-lead r d2" style="margin-top:14px;">
-          En nettside er ikke et mål i seg selv — den skal gi deg kunder, bestillinger og troverdighet. Det er det jeg optimaliserer for.
+      <div class="why-head">
+        <span class="label r" style="color:rgba(253,242,220,.6);">Hvorfor det betyr noe</span>
+        <h2 class="r d1">Førsteinntrykket<br /><em>avgjør alt.</em></h2>
+        <p class="why-lead r d2">
+          Folk bestemmer seg på under tre sekunder. En moderne, gjennomført nettside gir bedriften din tilliten og profesjonaliteten den fortjener — og gjør forskjellen mellom en forbipasserende og en ny kunde.
         </p>
       </div>
-      <div class="why-args">
 
-        <div class="why-arg r">
-          <div class="why-arg-icon">
-            <svg width="24" height="22" viewBox="0 0 24 22" fill="none">
-              <rect x="0" y="14" width="5" height="8" rx="1.5" fill="var(--honey)" style="animation: bar-rise 2.6s ease-in-out infinite 0s; transform-origin: 50% 100%;"/>
-              <rect x="9.5" y="8" width="5" height="14" rx="1.5" fill="var(--honey)" style="animation: bar-rise 2.6s ease-in-out infinite 0.25s; transform-origin: 50% 100%;"/>
-              <rect x="19" y="2" width="5" height="20" rx="1.5" fill="var(--honey)" style="animation: bar-rise 2.6s ease-in-out infinite 0.5s; transform-origin: 50% 100%;"/>
-            </svg>
-          </div>
+      <div class="why-args r d2">
+
+        <div class="why-arg">
           <div class="why-arg-n">01</div>
-          <h4>Nettsider som konverterer</h4>
-          <p>Fin design er ikke nok. Jeg bygger for konvertering — slik at besøkende faktisk tar kontakt, bestiller time eller sender melding. Det er det som avgjør om en nettside betaler seg.</p>
+          <h4>Moderne og tidløs</h4>
+          <p>Ingen ferdige maler og ingen trender som går ut på dato. Jeg lager sider som er moderne nå — og som fortsatt føles riktige om fem år.</p>
         </div>
 
-        <div class="why-arg r d1">
-          <div class="why-arg-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="9.5" stroke="var(--honey)" stroke-width="1.5" opacity=".5"/>
-              <line x1="12" y1="12" x2="12" y2="5" stroke="var(--honey)" stroke-width="1.8" stroke-linecap="round" style="animation: clock-spin 3s linear infinite; transform-origin: 12px 12px;"/>
-              <line x1="12" y1="12" x2="16.5" y2="12" stroke="var(--honey)" stroke-width="1.8" stroke-linecap="round" style="animation: clock-spin 36s linear infinite; transform-origin: 12px 12px;"/>
-              <circle cx="12" cy="12" r="1.5" fill="var(--honey)"/>
-            </svg>
-          </div>
+        <div class="why-arg">
           <div class="why-arg-n">02</div>
-          <h4>Ferdig på 7–10 dager</h4>
-          <p>Gjennomsnittlig leveringstid er under ti dager. Ingen måneder med møter og statusoppdateringer. Du får en ferdig nettside du er stolt av — raskt i mål.</p>
+          <h4>Tro mot bedriften din</h4>
+          <p>Designet oversetter det som gjør bedriften din spesiell — tonen, verdiene, håndverket — til et visuelt uttrykk folk kjenner igjen og stoler på.</p>
         </div>
 
-        <div class="why-arg r d2">
-          <div class="why-arg-icon">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <circle cx="11" cy="11" r="9" stroke="var(--honey)" stroke-width="1.5" style="animation: price-ping 2.8s ease-in-out infinite;"/>
-              <text x="11" y="15" text-anchor="middle" font-size="8.5" font-weight="700" fill="var(--honey)" font-family="Outfit, sans-serif" opacity=".9">kr</text>
-            </svg>
-          </div>
+        <div class="why-arg">
           <div class="why-arg-n">03</div>
-          <h4>Fast pris, ingen overraskelser</h4>
-          <p>Du vet nøyaktig hva du betaler før vi starter. Ingen månedlige gebyrer til meg, ingen bindingstid. Du betaler én gang og eier alt — for alltid.</p>
+          <h4>Bygget for å bli husket</h4>
+          <p>Gjennomtenkt typografi, rolig bevegelse og små detaljer. Sider som sitter igjen hos besøkende lenge etter at de har forlatt dem.</p>
         </div>
 
-        <div class="why-arg r d3">
-          <div class="why-arg-icon">
-            <svg width="22" height="24" viewBox="0 0 22 24" fill="none">
-              <path d="M11 1.5L2 5.2V11.5C2 16.6 6 21.1 11 22.5C16 21.1 20 16.6 20 11.5V5.2L11 1.5Z" stroke="var(--honey)" stroke-width="1.5" fill="none" style="animation: shield-glow 2.4s ease-in-out infinite;"/>
-              <polyline points="7.5,12 10,14.5 15,9" stroke="var(--honey)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
+        <div class="why-arg">
           <div class="why-arg-n">04</div>
-          <h4>Fornøydgaranti</h4>
-          <p>Jeg er ikke ferdig før du er genuint fornøyd. Ubegrensede revisjoner uten ekstra kostnad. Ingen risiko for deg — alt risiko er hos meg.</p>
+          <h4>Konverterer besøkende til kunder</h4>
+          <p>Et godt førsteinntrykk er ikke forfengelighet. Det er forskjellen mellom å bli valgt og bli glemt — og det er det jeg designer for.</p>
         </div>
 
       </div>
@@ -948,8 +1891,8 @@
       </div>
       <div class="process-head-note">
         Ta kontakt direkte:<br />
-        <a href="mailto:post@nettsnekkeren.no">post@nettsnekkeren.no</a><br />
-        <a href="tel:+4700000000">+47 000 00 000</a>
+        <a href="mailto:hei@nettsnekkeren.no">hei@nettsnekkeren.no</a><br />
+        <a href="tel:+4746781148">+47 467 81 148</a>
       </div>
     </div>
 
@@ -958,10 +1901,10 @@
 
         <!-- Card 1: Vi snakker sammen -->
         <div class="process-card">
-          <div class="proc-badge">1.</div>
+          <div class="proc-top"><div class="proc-badge">1.</div><span class="proc-day">Dag 0</span></div>
           <div class="proc-text">
             <h3>Ta kontakt</h3>
-            <p>Send meg en mail eller ring — enten du vil ha en ny nettside fra bunnen av, eller en oppgradering av den du har. Fortell litt om bedriften din, så tar jeg en titt og gir deg et konkret tilbud. Ingen forpliktelser.</p>
+            <p>Send meg en melding eller ring. Fortell kort om bedriften og hva du trenger — så svarer jeg innen 24 timer med et uforpliktende tilbud.</p>
           </div>
           <div class="proc-illus">
             <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
@@ -991,10 +1934,10 @@
 
         <!-- Card 2: Du får et tilbud -->
         <div class="process-card">
-          <div class="proc-badge">2.</div>
+          <div class="proc-top"><div class="proc-badge">2.</div><span class="proc-day">Dag 1</span></div>
           <div class="proc-text">
-            <h3>Du får et tilbud</h3>
-            <p>Klar pris, klart omfang, klar leveringstid. Svart på hvitt — ingen overraskelser.</p>
+            <h3>Tilbud på bordet</h3>
+            <p>Fastpris, klart omfang og konkret leveringstid. Svart på hvitt. Du bestemmer om vi kjører i gang — ingen press.</p>
           </div>
           <div class="proc-illus">
             <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
@@ -1019,10 +1962,10 @@
 
         <!-- Card 3: Jeg bygger -->
         <div class="process-card">
-          <div class="proc-badge">3.</div>
+          <div class="proc-top"><div class="proc-badge">3.</div><span class="proc-day">Dag 2–8</span></div>
           <div class="proc-text">
             <h3>Jeg bygger</h3>
-            <p>Du leverer tekst og bilder. Jeg tar resten. Du følger fremdriften underveis.</p>
+            <p>Du leverer tekster og bilder (jeg hjelper til hvis du trenger det). Jeg designer, koder og tester. Du følger fremdriften underveis.</p>
           </div>
           <div class="proc-illus">
             <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
@@ -1056,10 +1999,10 @@
 
         <!-- Card 4: Du gir tilbakemelding -->
         <div class="process-card">
-          <div class="proc-badge">4.</div>
+          <div class="proc-top"><div class="proc-badge">4.</div><span class="proc-day">Dag 9</span></div>
           <div class="proc-text">
             <h3>Du gir tilbakemelding</h3>
-            <p>Inntil 2 revisjonsrunder på design og innhold. Vi lander det sammen.</p>
+            <p>Du får nettsiden live i en testlenke. To revisjonsrunder inkludert — vi lander detaljene sammen.</p>
           </div>
           <div class="proc-illus">
             <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
@@ -1085,10 +2028,10 @@
 
         <!-- Card 5: Vi lanserer -->
         <div class="process-card">
-          <div class="proc-badge">5.</div>
+          <div class="proc-top"><div class="proc-badge">5.</div><span class="proc-day">Dag 10</span></div>
           <div class="proc-text">
             <h3>Vi lanserer</h3>
-            <p>Siden går live. Jeg er tilgjengelig etterpå for spørsmål og justeringer.</p>
+            <p>Siden går live på ditt domene. Jeg er tilgjengelig etterpå for spørsmål, små justeringer og alt du måtte lure på.</p>
           </div>
           <div class="proc-illus">
             <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
@@ -1130,6 +2073,88 @@
   </div>
 </section>
 
+<!-- ─── PRICES (with interactive calculator) ─── -->
+<section class="prices" id="priser" aria-label="Priser og kalkulator">
+  <div class="container">
+    <div class="prices-inner">
+      <div>
+        <span class="label r">Priser</span>
+        <h2 class="r d1">Enkelt og<br /><em>forutsigbart.</em></h2>
+        <p class="prices-lead r d2">Ingen abonnementer til meg. Ingen skjulte kostnader. Du betaler én gang og eier alt. Flytt reglene i kalkulatoren for å se hva ditt prosjekt kan koste.</p>
+        <div class="r d2">
+          <p class="price-from">Nettsider fra</p>
+          <div class="price-num">9.900,-</div>
+          <p class="price-note">Alltid inkludert: skreddersydd design, mobiltilpasning, SEO-grunnlag, lynraske lastetider, kontaktskjema, revisjoner til du er fornøyd, og full eierskap av kode og domene.</p>
+        </div>
+        <div style="margin-top:32px" class="r d3">
+          <a href="#kontakt" class="btn btn-dark">Få et gratis tilbud →</a>
+        </div>
+      </div>
+
+      <!-- Interactive price calculator -->
+      <div class="calc-card r d1" aria-label="Interaktiv priskalkulator">
+        <div class="calc-head">
+          <h3>Estimér din pris</h3>
+          <span class="calc-live">Live</span>
+        </div>
+
+        <div class="calc-group">
+          <label class="calc-group-label">Type nettside</label>
+          <div class="calc-radio-group">
+            <label class="calc-radio">
+              <input type="radio" name="calcType" value="landing" checked>
+              <span class="calc-radio-pill">Landingsside</span>
+            </label>
+            <label class="calc-radio">
+              <input type="radio" name="calcType" value="booking">
+              <span class="calc-radio-pill">Booking</span>
+            </label>
+            <label class="calc-radio">
+              <input type="radio" name="calcType" value="shop">
+              <span class="calc-radio-pill">Nettbutikk</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="calc-group">
+          <label class="calc-group-label" for="calcPages">Antall undersider: <span id="calcPagesVal" style="color:var(--honey);">5</span></label>
+          <div class="calc-slider-wrap">
+            <input type="range" id="calcPages" min="1" max="12" value="5" step="1" aria-label="Antall undersider">
+            <div class="calc-slider-val"><span id="calcPagesDisplay">5</span> stk</div>
+          </div>
+        </div>
+
+        <div class="calc-group">
+          <label class="calc-group-label">Ekstra</label>
+          <div class="calc-toggle-group">
+            <label class="calc-toggle">
+              <input type="checkbox" id="calcCms">
+              <span class="calc-toggle-label"><strong>Enkelt CMS</strong><span>Oppdater tekster og bilder selv</span></span>
+              <span class="calc-toggle-switch" aria-hidden="true"></span>
+            </label>
+            <label class="calc-toggle">
+              <input type="checkbox" id="calcLang">
+              <span class="calc-toggle-label"><strong>Flerspråklig</strong><span>Norsk + engelsk (eller annet)</span></span>
+              <span class="calc-toggle-switch" aria-hidden="true"></span>
+            </label>
+            <label class="calc-toggle">
+              <input type="checkbox" id="calcBlog">
+              <span class="calc-toggle-label"><strong>Blogg-modul</strong><span>Del nyheter og artikler</span></span>
+              <span class="calc-toggle-switch" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="calc-result" aria-live="polite">
+          <div class="calc-result-label">Estimat</div>
+          <div class="calc-result-price"><span class="calc-tilde">~</span><span id="calcPrice">15 000</span><span class="calc-currency">kr</span></div>
+          <p class="calc-result-note">Fastpris avtales etter en kort samtale. Domene ~99 kr/år · hosting ~499 kr/år. <strong>Ingen skjulte gebyrer.</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ─── FAQ ──────────────────────────────── -->
 <section class="faq" id="faq">
   <div class="container-sm">
@@ -1144,55 +2169,39 @@
       </div>
       <div class="faq-item r d1">
         <button class="faq-q" aria-expanded="false">Hvor lang tid tar det?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Typisk 3–5 uker fra vi starter til siden er live. Det avhenger av hvor raskt du får til å levere tekster og bilder, og hvor mange revisjonsrunder vi trenger.</p></div>
+        <div class="faq-a"><p>Typisk 7–10 dager fra vi starter til siden er live. Det avhenger av hvor raskt du får til å levere tekster og bilder, og hvor mange revisjonsrunder vi trenger.</p></div>
       </div>
       <div class="faq-item r d2">
         <button class="faq-q" aria-expanded="false">Hva trenger du fra meg?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
         <div class="faq-a"><p>Tekster, bilder, logo og informasjon om bedriften. Jeg sender deg en kort sjekkliste når vi starter, så du vet nøyaktig hva jeg trenger og slipper å gjette.</p></div>
       </div>
       <div class="faq-item r d3">
-        <button class="faq-q" aria-expanded="false">Hva om jeg ikke liker det du lager?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Du får se designforslag tidlig, og vi justerer sammen. Du har 2 revisjonsrunder inkludert i prisen. Hvis vi etter det fortsatt ikke lander det, finner vi ut av det sammen — jeg bygger ikke videre hvis du ikke er fornøyd med retningen.</p></div>
+        <button class="faq-q" aria-expanded="false">Hva hvis jeg ikke vet hva jeg vil ha?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-a"><p>Helt greit — de fleste vet det ikke når vi starter. Vi tar en uforpliktende prat, og jeg stiller de riktige spørsmålene: hvem er kundene dine, hva vil du de skal gjøre på siden, og hva skiller deg fra konkurrentene? Ut fra det lager jeg 1–2 designforslag du kan reagere på. Det er ofte mye lettere å si "sånn, men litt mer X" enn å starte på blanke ark.</p></div>
       </div>
       <div class="faq-item r d4">
+        <button class="faq-q" aria-expanded="false">Hva om jeg ikke liker det du lager?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-a"><p>Da justerer vi sammen. Du får opptil fem revisjonsrunder inkludert, og du sier konkret hva du heller vil ha — så endrer jeg det. Jeg er ikke ferdig før du er genuint fornøyd. Det er det fornøydgarantien betyr i praksis.</p></div>
+      </div>
+      <div class="faq-item r">
         <button class="faq-q" aria-expanded="false">Eier jeg nettsiden etterpå?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
         <div class="faq-a"><p>Ja. Domenet, koden og innholdet er ditt. Hvis du en dag vil flytte vekk fra meg eller ta over selv, kan du det uten å måtte forhandle deg fri.</p></div>
       </div>
-      <div class="faq-item r">
+      <div class="faq-item r d1">
         <button class="faq-q" aria-expanded="false">Kan jeg oppdatere innholdet selv?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Hvis du vil, ja. Jeg kan sette opp en enkel løsning der du kan endre tekst, bilder og åpningstider uten å måtte kontakte meg. Hvis du heller vil at jeg gjør det, tar jeg en liten timespris for småendringer.</p></div>
+        <div class="faq-a"><p>Hvis du vil, ja. Jeg kan sette opp en enkel løsning der du selv kan endre tekst, bilder og åpningstider. Hvis du heller vil at jeg gjør det, tar jeg en liten timespris for småendringer.</p></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── PRICES ───────────────────────────────── -->
-<section class="prices" id="priser">
-  <div class="container">
-    <div class="prices-inner">
-      <div>
-        <span class="label r">Priser</span>
-        <h2 class="r d1">Enkelt og<br /><em>forutsigbart.</em></h2>
-        <p class="prices-lead r d2">Ingen abonnementer til meg. Ingen skjulte kostnader. Du betaler én gang og eier alt.</p>
-        <div class="r d2">
-          <p class="price-from">Nettsider fra</p>
-          <div class="price-num">9.900,-</div>
-          <p class="price-note">Pris avhenger av omfanget. Ta kontakt for et gratis, uforpliktende tilbud — svar innen 24 timer.</p>
-        </div>
-        <div style="margin-top:32px" class="r d3">
-          <a href="#kontakt" class="btn btn-dark">Få et gratis tilbud →</a>
-        </div>
+      <div class="faq-item r d2">
+        <button class="faq-q" aria-expanded="false">Hva skjer hvis jeg trenger endringer etter lansering?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-a"><p>Små justeringer den første måneden (typos, bytte et bilde, oppdatere åpningstider) er gratis. Større endringer tar jeg som timespris, eller som et lite fastprisprosjekt hvis det er ny funksjonalitet. Ingen bindende månedsavgift — du betaler bare når du faktisk trenger noe.</p></div>
       </div>
-      <div class="price-card r d1">
-        <h4>Alltid inkludert</h4>
-        <div class="price-item"><span class="p-check">✓</span>Skreddersydd design</div>
-        <div class="price-item"><span class="p-check">✓</span>Mobiltilpasset (responsivt)</div>
-        <div class="price-item"><span class="p-check">✓</span>SEO-grunnlag</div>
-        <div class="price-item"><span class="p-check">✓</span>Lynraske lastetider</div>
-        <div class="price-item"><span class="p-check">✓</span>Kontaktskjema</div>
-        <div class="price-item"><span class="p-check">✓</span>Revisjoner til du er fornøyd</div>
-        <div class="price-item"><span class="p-check">✓</span>Du eier domene, kode og innhold</div>
-        <div class="price-item"><span class="p-check">✓</span>Tilgjengelig etter lansering</div>
+      <div class="faq-item r d3">
+        <button class="faq-q" aria-expanded="false">Hva koster det å vedlikeholde siden etterpå?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-a"><p>Nesten ingenting. Typisk domene (~99–199 kr/år) og hosting (~499–1 000 kr/år). Det er alt. Sidene jeg lager krever ikke månedlige oppdateringer slik tradisjonelle WordPress-sider gjør.</p></div>
+      </div>
+      <div class="faq-item r d4">
+        <button class="faq-q" aria-expanded="false">Må jeg bruke deg for fremtidige endringer?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-a"><p>Nei. Du eier koden fullstendig og kan gi den til en annen utvikler når som helst. Jeg låser deg ikke inne.</p></div>
       </div>
     </div>
   </div>
@@ -1211,25 +2220,30 @@
             <div class="cd-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
             </div>
-            <a href="mailto:post@nettsnekkeren.no">post@nettsnekkeren.no</a>
+            <a href="mailto:hei@nettsnekkeren.no">hei@nettsnekkeren.no</a>
           </div>
           <div class="contact-detail">
-            <div class="cd-icon">
+            <div class="cd-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             </div>
-            <a href="tel:+4700000000">+47 000 00 000</a>
+            <a href="tel:+4746781148">+47 467 81 148</a>
           </div>
         </div>
         <div class="guarantee r d3">
-          <svg class="guarantee-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-          <div>
-            <h5>Fornøydgaranti — alltid</h5>
-            <p>Jeg er ikke ferdig før du er genuint fornøyd. Ubegrensede revisjoner, ingen ekstra kostnad.</p>
+          <div class="guarantee-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            Trippel-garanti
           </div>
+          <ul class="guarantee-list">
+            <li><span class="guarantee-check" aria-hidden="true">✓</span><span><strong>Fornøydgaranti.</strong> Opptil fem revisjonsrunder inkludert. Jeg er ikke ferdig før du er genuint fornøyd.</span></li>
+            <li><span class="guarantee-check" aria-hidden="true">✓</span><span><strong>Prislås.</strong> Tilbudet du får er prisen du betaler. Ingen skjulte timer, ingen overraskelser.</span></li>
+            <li><span class="guarantee-check" aria-hidden="true">✓</span><span><strong>Full eierskap.</strong> Du eier kode, domene og innhold fra dag én. Gratis migrasjon hvis du vil flytte.</span></li>
+          </ul>
         </div>
       </div>
 
       <div class="contact-form r d1">
+        <!-- TODO: Erstatt YOUR_FORM_ID med ekte Formspree-ID. JS-en bruker mailto-fallback inntil da. -->
         <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
           <div class="form-row">
             <label for="name">Navn</label>
@@ -1257,24 +2271,28 @@
   </div>
 </section>
 
-</div><!-- /.page -->
+</main><!-- /#main -->
+
+<!-- ─── KONAMI HAMMER RAIN ─────────────────── -->
+<div class="konami-rain" id="konamiRain" aria-hidden="true"></div>
 
 <!-- ─── FOOTER ──────────────────────────────── -->
 <footer>
   <div class="footer-left">
     <div class="footer-brand">Nett<span>snekkeren</span></div>
     <div class="footer-meta">
-      <a href="mailto:post@nettsnekkeren.no">post@nettsnekkeren.no</a> ·
-      +47 000 00 000 ·
-      Org.nr: 000 000 000 ·
+      <a href="mailto:hei@nettsnekkeren.no">hei@nettsnekkeren.no</a> ·
+      <a href="tel:+4746781148">+47 467 81 148</a> ·
       <a href="/personvern" style="font-size:13px;color:rgba(250,246,236,.4);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--cream)'" onmouseout="this.style.color='rgba(250,246,236,.4)'">Personvernerklæring</a>
     </div>
   </div>
   <div class="footer-right">
     <div class="footer-links">
+      <a href="#eksempler">Eksempler</a>
       <a href="#tjenester">Tjenester</a>
       <a href="#prosess">Prosess</a>
       <a href="#priser">Priser</a>
+      <a href="#faq">FAQ</a>
       <a href="#kontakt">Kontakt</a>
     </div>
     <p>© 2026 Nettsnekkeren · Laget med kaffe og kode</p>
@@ -1287,6 +2305,53 @@ const revealObs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
 }, { threshold: 0.07 });
 document.querySelectorAll('.r').forEach(el => revealObs.observe(el));
+
+/* ── Price calculator ──────────────── */
+(function() {
+  const form = {
+    type:  document.querySelectorAll('input[name="calcType"]'),
+    pages: document.getElementById('calcPages'),
+    cms:   document.getElementById('calcCms'),
+    lang:  document.getElementById('calcLang'),
+    blog:  document.getElementById('calcBlog')
+  };
+  const priceEl = document.getElementById('calcPrice');
+  const pagesValEl = document.getElementById('calcPagesVal');
+  const pagesDispEl = document.getElementById('calcPagesDisplay');
+  if (!priceEl || !form.pages) return;
+
+  const BASE = { landing: 9900, booking: 18000, shop: 26000 };
+  const PER_PAGE = 1500;
+
+  function getType() {
+    for (const r of form.type) if (r.checked) return r.value;
+    return 'landing';
+  }
+
+  function calc() {
+    const type = getType();
+    let p = BASE[type] || BASE.landing;
+    const pages = parseInt(form.pages.value, 10) || 1;
+    // First page included in base, each extra adds PER_PAGE
+    p += Math.max(0, pages - 1) * PER_PAGE;
+    if (form.cms && form.cms.checked)  p += 3500;
+    if (form.lang && form.lang.checked) p += 4500;
+    if (form.blog && form.blog.checked) p += 2800;
+    // Round to nearest 100
+    p = Math.round(p / 100) * 100;
+    // Format as "15 000"
+    priceEl.textContent = p.toLocaleString('nb-NO').replace(/\u00A0/g, ' ');
+    if (pagesValEl) pagesValEl.textContent = pages;
+    if (pagesDispEl) pagesDispEl.textContent = pages;
+  }
+
+  form.type.forEach(r => r.addEventListener('change', calc));
+  form.pages.addEventListener('input', calc);
+  if (form.cms)  form.cms.addEventListener('change', calc);
+  if (form.lang) form.lang.addEventListener('change', calc);
+  if (form.blog) form.blog.addEventListener('change', calc);
+  calc();
+})();
 
 /* ── Intro splash ──────────────────────── */
 (function() {
@@ -1374,14 +2439,221 @@ form.addEventListener('submit', async e => {
   if (!valid) { btn.innerHTML = '<svg class="submit-hammer" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.5 8.5a2.12 2.12 0 1 1-3-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 0 0-3.94-1.64H9l.92.82A6.18 6.18 0 0 1 12 8.4v1.56l2 2h2.47l2.26 1.91"/></svg> Send melding →'; btn.disabled = false; return; }
 
   btn.innerHTML = 'Sender...'; btn.disabled = true;
+
+  /* TODO: Erstatt YOUR_FORM_ID med ekte Formspree-ID. Inntil da brukes mailto-fallback. */
+  const FORMSPREE_ID = 'YOUR_FORM_ID';
+  if (FORMSPREE_ID === 'YOUR_FORM_ID') {
+    console.warn('[Nettsnekkeren] TODO: koble til ekte Formspree-ID. Bruker mailto-fallback.');
+    const name  = (form.querySelector('#name')||{}).value || '';
+    const email = (form.querySelector('#email')||{}).value || '';
+    const msg   = (form.querySelector('#message')||{}).value || '';
+    const subject = encodeURIComponent('Henvendelse fra ' + name);
+    const body    = encodeURIComponent(msg + '\n\n--\nFra: ' + name + ' <' + email + '>');
+    window.location.href = 'mailto:hei@nettsnekkeren.no?subject=' + subject + '&body=' + body;
+    setTimeout(() => {
+      form.style.display='none';
+      document.getElementById('formSuccess').style.display='block';
+    }, 400);
+    return;
+  }
+
   try {
-    const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+    const res = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
       method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' }
     });
     if (res.ok) { form.style.display='none'; document.getElementById('formSuccess').style.display='block'; }
     else { btn.innerHTML = '<svg class="submit-hammer" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.5 8.5a2.12 2.12 0 1 1-3-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 0 0-3.94-1.64H9l.92.82A6.18 6.18 0 0 1 12 8.4v1.56l2 2h2.47l2.26 1.91"/></svg> Noe gikk galt — prøv igjen'; btn.disabled = false; }
   } catch { btn.innerHTML = '<svg class="submit-hammer" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.5 8.5a2.12 2.12 0 1 1-3-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 0 0-3.94-1.64H9l.92.82A6.18 6.18 0 0 1 12 8.4v1.56l2 2h2.47l2.26 1.91"/></svg> Noe gikk galt — prøv igjen'; btn.disabled = false; }
 });
+
+/* ── Time-of-day greeting + availability month ──────── */
+(function() {
+  const textEl  = document.getElementById('greetingText');
+  const emojiEl = document.getElementById('greetingEmoji');
+  const monthEl = document.getElementById('availMonth');
+  if (!textEl) return;
+  const h = new Date().getHours();
+  let greet, emoji;
+  if (h < 5)       { greet = 'God natt';    emoji = '🌙'; }
+  else if (h < 10) { greet = 'God morgen';  emoji = '☕'; }
+  else if (h < 14) { greet = 'God dag';     emoji = '👋'; }
+  else if (h < 18) { greet = 'God ettermiddag'; emoji = '🙌'; }
+  else if (h < 22) { greet = 'God kveld';   emoji = '✨'; }
+  else             { greet = 'God natt';    emoji = '🌙'; }
+  textEl.textContent = greet;
+  emojiEl.textContent = emoji;
+  if (monthEl) {
+    const months = ['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember'];
+    monthEl.textContent = months[new Date().getMonth()];
+  }
+})();
+
+/* ── Slot-machine rotating headline ──────── */
+(function() {
+  const rotator = document.getElementById('heroRotator');
+  if (!rotator) return;
+  const words = [
+    'bedriften din.',
+    'klinikken.',
+    'frisørsalongen.',
+    'advokatfirmaet.',
+    'restauranten.',
+    'håndverkeren.',
+    'konsulenten.',
+    'nettbutikken.'
+  ];
+
+  const ITEM_EM = 1.15;        // matches CSS .hero-rotator-stack > span height
+  const TRANSITION  = 'transform .85s cubic-bezier(.77,0,.18,1)';
+  const W_TRANSITION = 'width .85s cubic-bezier(.77,0,.18,1)';
+
+  // Build the stack: all words + clone of first (for seamless wrap)
+  const stack = document.createElement('span');
+  stack.className = 'hero-rotator-stack';
+  rotator.appendChild(stack);
+
+  function makeWord(text) {
+    const s = document.createElement('span');
+    s.textContent = text;
+    return s;
+  }
+  words.forEach(w => stack.appendChild(makeWord(w)));
+  stack.appendChild(makeWord(words[0]));   // clone
+
+  // Hidden measurer for width calculations (inherits font from rotator)
+  const measurer = document.createElement('span');
+  measurer.setAttribute('aria-hidden', 'true');
+  measurer.style.cssText = 'position:absolute;left:-9999px;top:0;white-space:nowrap;pointer-events:none;visibility:hidden;font-style:italic;font-weight:800;';
+  rotator.appendChild(measurer);
+  function syncMeasurerFont() {
+    const cs = getComputedStyle(rotator);
+    measurer.style.fontFamily = cs.fontFamily;
+    measurer.style.fontSize = cs.fontSize;
+    measurer.style.letterSpacing = cs.letterSpacing;
+    measurer.style.lineHeight = cs.lineHeight;
+  }
+  function measureWord(text) {
+    measurer.textContent = text;
+    return measurer.getBoundingClientRect().width;
+  }
+  function setWidth(text) {
+    rotator.style.width = Math.ceil(measureWord(text) + 4) + 'px';
+  }
+
+  syncMeasurerFont();
+  setWidth(words[0]);
+
+  let i = 0;
+
+  function tick() {
+    i++;
+    stack.style.transition = TRANSITION;
+    rotator.style.transition = W_TRANSITION;
+    stack.style.transform = 'translateY(-' + (i * ITEM_EM) + 'em)';
+    const showText = i < words.length ? words[i] : words[0];
+    setWidth(showText);
+
+    // After reaching the clone, snap back to position 0 invisibly
+    if (i === words.length) {
+      setTimeout(() => {
+        stack.style.transition = 'none';
+        rotator.style.transition = 'none';
+        i = 0;
+        stack.style.transform = 'translateY(0)';
+        setWidth(words[0]);
+        // Force reflow so transitions can re-engage on next tick
+        void stack.offsetHeight;
+      }, 880);
+    }
+  }
+
+  // Re-measure when fonts have loaded
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      syncMeasurerFont();
+      setWidth(words[0]);
+    });
+  }
+  window.addEventListener('resize', () => {
+    syncMeasurerFont();
+    setWidth(i < words.length ? words[i] : words[0]);
+  });
+
+  setInterval(tick, 2800);
+})();
+
+/* ── Nav scroll progress ──────── */
+(function() {
+  const fill = document.getElementById('navProgressFill');
+  if (!fill) return;
+  function update() {
+    const h = document.documentElement;
+    const scrolled = h.scrollTop;
+    const max = h.scrollHeight - h.clientHeight;
+    const pct = max > 0 ? (scrolled / max) * 100 : 0;
+    fill.style.width = pct + '%';
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+})();
+
+/* ── Before/After slider ──────── */
+(function() {
+  const container = document.getElementById('baContainer');
+  const afterLayer = document.getElementById('baAfterLayer');
+  const divider = document.getElementById('baDivider');
+  if (!container || !afterLayer || !divider) return;
+
+  function setPos(clientX) {
+    const rect = container.getBoundingClientRect();
+    let pct = ((clientX - rect.left) / rect.width) * 100;
+    pct = Math.max(4, Math.min(96, pct));
+    afterLayer.style.clipPath = 'inset(0 0 0 ' + pct + '%)';
+    divider.style.left = pct + '%';
+  }
+
+  container.addEventListener('mousemove', e => setPos(e.clientX));
+  container.addEventListener('touchstart', e => {
+    if (e.touches[0]) setPos(e.touches[0].clientX);
+  }, { passive: true });
+  container.addEventListener('touchmove', e => {
+    if (e.touches[0]) setPos(e.touches[0].clientX);
+  }, { passive: true });
+})();
+
+/* ── Konami code easter egg ──────── */
+(function() {
+  const rain = document.getElementById('konamiRain');
+  if (!rain) return;
+  const code = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let i = 0;
+  document.addEventListener('keydown', e => {
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (k === code[i]) {
+      i++;
+      if (i === code.length) { i = 0; trigger(); }
+    } else {
+      i = k === code[0] ? 1 : 0;
+    }
+  });
+  function trigger() {
+    rain.innerHTML = '';
+    rain.classList.add('active');
+    const COUNT = 28;
+    for (let n = 0; n < COUNT; n++) {
+      const h = document.createElement('div');
+      h.className = 'konami-hammer';
+      h.textContent = ['🔨','⚒️','🛠️'][n % 3];
+      h.style.left = Math.random() * 100 + '%';
+      h.style.animationDelay = (Math.random() * 0.6) + 's';
+      h.style.animationDuration = (2 + Math.random() * 1.2) + 's';
+      h.style.fontSize = (22 + Math.random() * 18) + 'px';
+      rain.appendChild(h);
+    }
+    setTimeout(() => rain.classList.remove('active'), 3500);
+  }
+})();
 </script>
 </body>
 </html>

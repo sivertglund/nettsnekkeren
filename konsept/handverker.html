@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bygg & Bolig Snekkeri — Konseptstudie · Nettsnekkeren</title>
+  <meta name="description" content="Konseptstudie: fullverdig nettside for en tenkt tømrer/byggmester. Viser hvordan en lokal håndverker kan fremstå profesjonelt." />
+  <meta name="robots" content="noindex,follow" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='8' fill='%231E3A2F'/><path d='M10 9L10 27' stroke='%23F5EFDF' stroke-width='3' stroke-linecap='round'/><path d='M26 9L26 27' stroke='%23F5EFDF' stroke-width='3' stroke-linecap='round'/><circle cx='18' cy='18' r='4' fill='%23E8B547'/></svg>" />
+
+  <meta property="og:title" content="Bygg & Bolig Snekkeri — Konseptstudie" />
+  <meta property="og:description" content="Konseptstudie av Nettsnekkeren. Ikke en ekte kunde." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="nb_NO" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,800;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #F5EFDF;
+      --cream-dark: #E8DFC4;
+      --forest: #1E3A2F;
+      --forest-mid: #2A5240;
+      --forest-light: #3D6B53;
+      --mustard: #E8B547;
+      --mustard-dark: #C99A2E;
+      --ink: #181712;
+      --ink-55: rgba(24,23,18,0.55);
+      --ink-30: rgba(24,23,18,0.30);
+      --ink-10: rgba(24,23,18,0.08);
+      --border: rgba(24,23,18,0.10);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+
+    /* ── Concept banner (honesty disclosure) ── */
+    .concept-banner {
+      background: var(--forest);
+      color: var(--cream);
+      padding: 11px 20px;
+      font-size: 13px;
+      text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      flex-wrap: wrap;
+      position: sticky; top: 0; z-index: 200;
+    }
+    .concept-banner strong { color: var(--mustard); font-weight: 600; }
+    .concept-banner a {
+      color: var(--cream); text-decoration: underline;
+      text-decoration-color: rgba(245,239,223,0.4);
+    }
+    .concept-banner a:hover { text-decoration-color: var(--mustard); }
+
+    /* ── Nav ── */
+    .bb-nav {
+      padding: 22px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
+    }
+    .bb-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: var(--ink);
+    }
+    .bb-logo-mark {
+      width: 40px; height: 40px;
+      background: var(--forest);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--mustard);
+      font-family: 'Fraunces', serif;
+      font-size: 22px; font-weight: 800;
+    }
+    .bb-logo-text {
+      font-family: 'Fraunces', serif;
+      font-size: 18px; font-weight: 700;
+      letter-spacing: -0.01em; line-height: 1.1;
+    }
+    .bb-logo-sub {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-55); margin-top: 2px;
+    }
+    .bb-nav-links { display: flex; gap: 32px; }
+    .bb-nav-links a {
+      font-size: 14px; font-weight: 500;
+      color: var(--ink); text-decoration: none;
+      transition: color 0.15s;
+    }
+    .bb-nav-links a:hover { color: var(--mustard-dark); }
+    .bb-nav-cta {
+      padding: 11px 22px;
+      background: var(--forest); color: var(--cream);
+      border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .bb-nav-cta:hover { background: var(--forest-mid); transform: translateY(-1px); }
+
+    /* ── Hero ── */
+    .bb-hero {
+      padding: 96px 40px 100px;
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.1fr 1fr;
+      gap: 64px; align-items: center;
+    }
+    .bb-hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 15px;
+      background: var(--mustard);
+      color: var(--forest);
+      border-radius: 100px;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.02em; margin-bottom: 24px;
+    }
+    .bb-hero-tag::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--forest);
+    }
+    .bb-hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(44px, 5.5vw, 74px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: var(--forest);
+      margin-bottom: 24px;
+    }
+    .bb-hero h1 em {
+      font-style: italic; font-weight: 400;
+      color: var(--forest-light);
+    }
+    .bb-hero p {
+      font-size: 18px; color: var(--ink-55);
+      line-height: 1.7; max-width: 480px;
+      margin-bottom: 32px;
+    }
+    .bb-hero-actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .bb-btn {
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 15px; font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .bb-btn-primary {
+      background: var(--forest); color: var(--cream);
+      box-shadow: 0 4px 20px rgba(30,58,47,0.22);
+    }
+    .bb-btn-primary:hover {
+      background: var(--forest-mid); transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(30,58,47,0.3);
+    }
+    .bb-btn-outline {
+      background: transparent; color: var(--ink);
+      border: 1.5px solid var(--border);
+    }
+    .bb-btn-outline:hover { border-color: var(--forest); color: var(--forest); }
+
+    .bb-hero-visual {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background: var(--forest);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(30,58,47,0.3);
+    }
+    .bb-hero-visual svg { width: 100%; height: 100%; display: block; }
+
+    /* ── Trust bar ── */
+    .bb-trust {
+      padding: 36px 40px;
+      background: var(--forest);
+      color: var(--cream);
+    }
+    .bb-trust-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 40px; text-align: center;
+    }
+    .bb-trust-num {
+      font-family: 'Fraunces', serif;
+      font-size: 42px; font-weight: 800;
+      color: var(--mustard); line-height: 1;
+      margin-bottom: 6px;
+    }
+    .bb-trust-label {
+      font-size: 12px; font-weight: 500;
+      color: rgba(245,239,223,0.6);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Services ── */
+    .bb-services {
+      padding: 120px 40px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .bb-section-head {
+      margin-bottom: 64px;
+      max-width: 600px;
+    }
+    .bb-section-label {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--mustard-dark);
+      margin-bottom: 14px; display: block;
+    }
+    .bb-section-head h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(34px, 4.5vw, 56px);
+      font-weight: 800; letter-spacing: -0.025em;
+      line-height: 1.05; color: var(--forest);
+      margin-bottom: 16px;
+    }
+    .bb-section-head h2 em { font-style: italic; font-weight: 400; }
+    .bb-section-head p {
+      font-size: 17px; color: var(--ink-55); line-height: 1.7;
+    }
+    .bb-svc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .bb-svc {
+      padding: 36px 32px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.2s;
+    }
+    .bb-svc:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 60px rgba(30,58,47,0.1);
+      border-color: var(--forest);
+    }
+    .bb-svc-icon {
+      width: 52px; height: 52px;
+      background: var(--cream-dark);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 22px;
+      color: var(--forest);
+    }
+    .bb-svc h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 24px; font-weight: 700;
+      color: var(--forest); margin-bottom: 10px;
+      letter-spacing: -0.015em;
+    }
+    .bb-svc p {
+      font-size: 15px; color: var(--ink-55); line-height: 1.7;
+    }
+
+    /* ── Process ── */
+    .bb-process {
+      padding: 120px 40px;
+      background: var(--cream-dark);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .bb-process-inner {
+      max-width: 1200px; margin: 0 auto;
+    }
+    .bb-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      position: relative;
+    }
+    .bb-step {
+      position: relative;
+    }
+    .bb-step-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px;
+      background: var(--forest); color: var(--mustard);
+      border-radius: 50%;
+      font-family: 'Fraunces', serif;
+      font-size: 18px; font-weight: 800;
+      margin-bottom: 18px;
+    }
+    .bb-step h4 {
+      font-family: 'Fraunces', serif;
+      font-size: 20px; font-weight: 700;
+      color: var(--forest); margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .bb-step p {
+      font-size: 14px; color: var(--ink-55); line-height: 1.7;
+    }
+
+    /* ── Contact band ── */
+    .bb-contact {
+      padding: 120px 40px;
+      background: var(--forest);
+      color: var(--cream);
+      text-align: center;
+    }
+    .bb-contact-inner {
+      max-width: 720px; margin: 0 auto;
+    }
+    .bb-contact h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800; letter-spacing: -0.025em;
+      line-height: 1.05; margin-bottom: 20px;
+    }
+    .bb-contact h2 em { font-style: italic; font-weight: 400; color: var(--mustard); }
+    .bb-contact p {
+      font-size: 18px; color: rgba(245,239,223,0.7);
+      line-height: 1.7; margin-bottom: 36px;
+      max-width: 520px; margin-left: auto; margin-right: auto;
+    }
+    .bb-contact-details {
+      display: flex; justify-content: center; gap: 40px;
+      flex-wrap: wrap; margin-top: 40px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(245,239,223,0.12);
+    }
+    .bb-contact-detail {
+      text-align: left;
+    }
+    .bb-contact-detail-label {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(245,239,223,0.5); margin-bottom: 6px;
+    }
+    .bb-contact-detail-val {
+      font-family: 'Fraunces', serif;
+      font-size: 18px; font-weight: 600;
+      color: var(--mustard);
+    }
+
+    /* ── Footer ── */
+    .bb-footer {
+      padding: 32px 40px;
+      background: #0F1F18;
+      color: rgba(245,239,223,0.4);
+      text-align: center;
+      font-size: 13px;
+    }
+    .bb-footer a { color: var(--mustard); text-decoration: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .bb-hero { grid-template-columns: 1fr; gap: 40px; padding: 56px 24px 72px; }
+      .bb-hero-visual { max-width: 420px; margin: 0 auto; }
+      .bb-nav { padding: 20px 24px; }
+      .bb-nav-links { display: none; }
+      .bb-trust { padding: 28px 24px; }
+      .bb-trust-inner { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+      .bb-services, .bb-process, .bb-contact { padding: 72px 24px; }
+      .bb-svc-grid { grid-template-columns: 1fr; }
+      .bb-steps { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .bb-steps { grid-template-columns: 1fr; }
+      .bb-contact-details { gap: 24px; flex-direction: column; align-items: center; }
+      .bb-contact-detail { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Honesty banner — always visible -->
+<div class="concept-banner">
+  <span><strong>Konseptstudie</strong> · Dette er ikke en ekte kunde · Laget av Nettsnekkeren for å vise retning</span>
+  <a href="../index.html">← Tilbake til Nettsnekkeren</a>
+</div>
+
+<!-- Nav -->
+<nav class="bb-nav">
+  <a href="#" class="bb-logo">
+    <div class="bb-logo-mark">B</div>
+    <div>
+      <span class="bb-logo-text">Bygg & Bolig</span>
+      <span class="bb-logo-sub">Snekkeri siden 1998</span>
+    </div>
+  </a>
+  <div class="bb-nav-links">
+    <a href="#tjenester">Tjenester</a>
+    <a href="#prosess">Slik jobber vi</a>
+    <a href="#kontakt">Kontakt</a>
+  </div>
+  <a href="#kontakt" class="bb-nav-cta">Be om tilbud</a>
+</nav>
+
+<!-- Hero -->
+<section class="bb-hero">
+  <div>
+    <div class="bb-hero-tag">Lokal · Sertifisert · Tar oppdrag i dag</div>
+    <h1>Solid håndverk<br><em>for hjemmet ditt.</em></h1>
+    <p>Vi er to tømrere med til sammen 35 års erfaring. Fra tilbygg til totalrenovering — vi gjør jobben ordentlig, til avtalt tid, til avtalt pris.</p>
+    <div class="bb-hero-actions">
+      <a href="#kontakt" class="bb-btn bb-btn-primary">Be om gratis befaring →</a>
+      <a href="#prosess" class="bb-btn bb-btn-outline">Se hvordan vi jobber</a>
+    </div>
+  </div>
+  <div class="bb-hero-visual" aria-hidden="true">
+    <svg viewBox="0 0 400 400">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2A5240"/>
+          <stop offset="1" stop-color="#1E3A2F"/>
+        </linearGradient>
+      </defs>
+      <rect width="400" height="400" fill="url(#bg)"/>
+      <!-- Stylized house frame -->
+      <g stroke="#E8B547" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Roof -->
+        <path d="M80 200 L200 100 L320 200"/>
+        <!-- Walls -->
+        <path d="M110 200 L110 310 L290 310 L290 200"/>
+        <!-- Door -->
+        <path d="M180 310 L180 240 L220 240 L220 310"/>
+        <!-- Windows -->
+        <rect x="130" y="220" width="30" height="30" rx="2"/>
+        <rect x="240" y="220" width="30" height="30" rx="2"/>
+        <!-- Floor beam -->
+        <path d="M70 310 L330 310"/>
+      </g>
+      <!-- Decorative nails -->
+      <circle cx="85" cy="205" r="4" fill="#E8B547"/>
+      <circle cx="200" cy="105" r="4" fill="#E8B547"/>
+      <circle cx="315" cy="205" r="4" fill="#E8B547"/>
+      <!-- Hammer -->
+      <g transform="translate(60, 340) rotate(-25)">
+        <rect x="0" y="0" width="42" height="14" rx="3" fill="#E8B547"/>
+        <rect x="28" y="12" width="6" height="40" rx="2" fill="#E8B547" opacity="0.8"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- Trust bar -->
+<section class="bb-trust">
+  <div class="bb-trust-inner">
+    <div>
+      <div class="bb-trust-num">35+</div>
+      <div class="bb-trust-label">Års samlet erfaring</div>
+    </div>
+    <div>
+      <div class="bb-trust-num">240+</div>
+      <div class="bb-trust-label">Fullførte prosjekter</div>
+    </div>
+    <div>
+      <div class="bb-trust-num">100%</div>
+      <div class="bb-trust-label">Fastpris-garanti</div>
+    </div>
+    <div>
+      <div class="bb-trust-num">4.9★</div>
+      <div class="bb-trust-label">Snitt på Mittanbud</div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="bb-services" id="tjenester">
+  <div class="bb-section-head">
+    <span class="bb-section-label">Våre tjenester</span>
+    <h2>Hva vi <em>tar oss av.</em></h2>
+    <p>Vi er en liten, fleksibel bedrift som gjør det vi er best på — trebaserte håndverksoppdrag. Hvis vi ikke kan gjøre jobben selv, setter vi deg i kontakt med noen som kan.</p>
+  </div>
+  <div class="bb-svc-grid">
+    <div class="bb-svc">
+      <div class="bb-svc-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <h3>Tilbygg & påbygg</h3>
+      <p>Trenger dere mer plass? Vi planlegger og bygger tilbygg som passer estetikken til huset — fra tegning til ferdig innredning.</p>
+    </div>
+    <div class="bb-svc">
+      <div class="bb-svc-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 12.5-3 3L9 13l-4 4v2h2l4-4 2.5 2.5 3-3"/><path d="M12.5 6.5 19 0l4 4-6.5 6.5"/><path d="M11 8 3 16v5h5l8-8"/></svg>
+      </div>
+      <h3>Total&shy;renovering</h3>
+      <p>Kjøkken, bad, stue — vi tar hele prosjektet. Koordinerer rørlegger, elektriker og maler så du slipper å ha ti telefonnumre å forholde deg til.</p>
+    </div>
+    <div class="bb-svc">
+      <div class="bb-svc-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      </div>
+      <h3>Terrasse & uteareal</h3>
+      <p>Terrasser, levegger, platting og utebod. Vi bruker kjerneved og kvalitetsfuru som tåler norsk vær i 20+ år.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="bb-process" id="prosess">
+  <div class="bb-process-inner">
+    <div class="bb-section-head">
+      <span class="bb-section-label">Slik jobber vi</span>
+      <h2>Fire steg fra idé <em>til ferdig.</em></h2>
+    </div>
+    <div class="bb-steps">
+      <div class="bb-step">
+        <div class="bb-step-num">1</div>
+        <h4>Gratis befaring</h4>
+        <p>Vi kommer hjem til deg, tar en kaffe, og ser på oppgaven. Helt uforpliktende.</p>
+      </div>
+      <div class="bb-step">
+        <div class="bb-step-num">2</div>
+        <h4>Fastpris-tilbud</h4>
+        <p>Du får et detaljert tilbud med fastpris. Ingen overraskelser, ingen timer-på-timer.</p>
+      </div>
+      <div class="bb-step">
+        <div class="bb-step-num">3</div>
+        <h4>Vi bygger</h4>
+        <p>Jobben utføres til avtalt tid. Vi rydder hver dag og respekterer ditt hjem.</p>
+      </div>
+      <div class="bb-step">
+        <div class="bb-step-num">4</div>
+        <h4>Overlevering</h4>
+        <p>Du får kvittert for hver detalj og 5 års garanti på utført arbeid.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="bb-contact" id="kontakt">
+  <div class="bb-contact-inner">
+    <h2>La oss <em>snakke sammen.</em></h2>
+    <p>Ring eller send en melding — vi svarer innen samme dag. Befaring er alltid gratis og uforpliktende.</p>
+    <a href="tel:+4700000000" class="bb-btn" style="background:var(--mustard);color:var(--forest);">Ring oss: 00 00 00 00</a>
+    <div class="bb-contact-details">
+      <div class="bb-contact-detail">
+        <div class="bb-contact-detail-label">Telefon</div>
+        <div class="bb-contact-detail-val">+47 00 00 00 00</div>
+      </div>
+      <div class="bb-contact-detail">
+        <div class="bb-contact-detail-label">E-post</div>
+        <div class="bb-contact-detail-val">post@byggogbolig.no</div>
+      </div>
+      <div class="bb-contact-detail">
+        <div class="bb-contact-detail-label">Adresse</div>
+        <div class="bb-contact-detail-val">Eksempelvegen 1</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bb-footer">
+  Dette er en <strong>konseptstudie</strong> laget av <a href="../index.html">Nettsnekkeren</a>. Bygg & Bolig Snekkeri er en fiktiv bedrift. Ingen av kontaktdetaljene er ekte. © 2026 Nettsnekkeren.
+</footer>
+
+</body>
+</html>
