@@ -375,77 +375,91 @@
   }
 
   /* ─────────────────────────────────────
-     MEET (Møt snekkeren)
+     WELCOME (greeting + video + scroll arrow)
   ───────────────────────────────────── */
-  .meet {
-    padding: clamp(80px, 10vw, 130px) 0;
+  .welcome {
+    min-height: calc(100svh - 70px);
+    display: flex; align-items: center;
+    padding: clamp(60px, 8vh, 100px) 0;
     background: var(--cream);
     position: relative;
   }
-  .meet-inner {
+  .welcome-inner {
     display: grid;
-    grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
-    gap: clamp(32px, 5vw, 88px);
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 80px);
     align-items: center;
     max-width: 1180px; margin: 0 auto;
+    width: 100%;
   }
-  .meet-media {
+  .welcome-media {
     display: flex; align-items: center; justify-content: center;
     min-width: 0;
   }
-  .meet-video {
+  .welcome-video {
     display: block;
-    width: 100%; max-width: 460px;
+    width: 100%; max-width: 380px;
     aspect-ratio: 3 / 4;
     object-fit: cover;
   }
-  .meet-copy { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
-  .meet-copy .label { color: var(--honey); margin-bottom: 14px; }
-  .meet-h {
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: clamp(36px, 4.2vw, 58px);
-    font-weight: 800; line-height: 1.04;
-    letter-spacing: -.03em; color: var(--ink);
-    margin-bottom: 24px;
+  .welcome-text {
+    display: flex; flex-direction: column; align-items: flex-start;
+    gap: clamp(40px, 6vh, 72px);
+    min-width: 0;
   }
-  .meet-h em { color: var(--honey); font-style: italic; font-weight: 800; }
-  .meet-lead {
-    font-size: 18px; line-height: 1.65; color: var(--ink-55);
-    margin-bottom: 28px; max-width: 540px;
+  .welcome-greeting {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(46px, 7.6vw, 104px);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.02;
+    letter-spacing: -.005em;
+    margin: 0;
+    animation: welcome-fade-in 1.1s cubic-bezier(.22,1,.36,1) .15s both;
   }
-  .meet-list {
-    list-style: none; padding: 0; margin: 0 0 32px;
-    display: flex; flex-direction: column; gap: 12px;
+  .welcome-greeting em {
+    font-style: italic;
+    font-weight: 700;
+    color: var(--honey);
+    display: inline-block;
   }
-  .meet-list li {
-    display: flex; align-items: flex-start; gap: 12px;
-    font-size: 15.5px; line-height: 1.55; color: var(--ink);
+  .welcome-scroll {
+    color: var(--honey);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 60px; height: 90px;
+    opacity: 0;
+    animation: welcome-fade-in 1.1s cubic-bezier(.22,1,.36,1) 1s forwards,
+               welcome-bob 2s ease-in-out 2.3s infinite;
+    transition: color .2s ease, transform .2s ease;
   }
-  .meet-tick {
-    flex-shrink: 0;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--honey-light); color: var(--honey);
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 800;
-    margin-top: 2px;
+  .welcome-scroll:hover { color: var(--honey-mid); transform: translateY(2px); }
+  .welcome-arrow { width: 100%; height: 100%; display: block; }
+  @keyframes welcome-fade-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
-  .meet-actions { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
-
+  @keyframes welcome-bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(10px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .welcome-greeting, .welcome-scroll { animation: none; opacity: 1; }
+  }
   @media (max-width: 860px) {
-    .meet-inner {
+    .welcome-inner {
       grid-template-columns: 1fr;
       gap: 36px;
       max-width: 560px;
       text-align: center;
     }
-    .meet-copy { align-items: center; }
-    .meet-list { align-items: flex-start; max-width: 440px; margin-left: auto; margin-right: auto; }
-    .meet-list li { text-align: left; }
-    .meet-video { max-width: 320px; }
-    .meet-actions { justify-content: center; }
+    .welcome-text { align-items: center; gap: 40px; }
+    .welcome-video { max-width: 280px; }
   }
   @media (max-width: 480px) {
-    .meet-video { max-width: 260px; }
+    .welcome-video { max-width: 230px; }
+    .welcome-scroll { width: 48px; height: 76px; }
   }
 
   /* ─────────────────────────────────────
@@ -1596,22 +1610,6 @@
   }
 
   /* ─────────────────────────────────────
-     HERO GLOW (mouse-following)
-  ───────────────────────────────────── */
-  .hero-glow {
-    position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
-  }
-  .hero-glow-orb {
-    position: absolute;
-    width: 500px; height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(192,120,24,.1) 0%, transparent 65%);
-    transform: translate(-50%, -50%);
-    transition: left .4s ease-out, top .4s ease-out;
-    will-change: left, top;
-  }
-
-  /* ─────────────────────────────────────
      HERO TRUST PILLS
   ───────────────────────────────────── */
   .hero-pills {
@@ -1813,10 +1811,36 @@
 
 <main id="main" class="page">
 
-<!-- ─── HERO ─────────────────────────────────── -->
-<section class="hero" id="hjem" aria-label="Introduksjon" data-nav-theme="light">
-  <div class="hero-glow" aria-hidden="true"><div class="hero-glow-orb" id="heroGlowOrb"></div></div>
+<!-- ─── WELCOME ─────────────────────────────── -->
+<section class="welcome" id="hjem" aria-label="Velkommen" data-nav-theme="light">
+  <div class="container">
+    <div class="welcome-inner">
 
+      <div class="welcome-media">
+        <video class="welcome-video" autoplay muted loop playsinline preload="metadata"
+               poster="media/snekker-meet-poster.jpg" aria-label="Snekkeren ved tegnebrettet">
+          <source src="media/snekker-meet.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="welcome-text">
+        <p class="welcome-greeting">
+          Hei! Velkommen til <em>Nettsnekkeren</em>
+        </p>
+        <a href="#intro" class="welcome-scroll" aria-label="Scroll videre">
+          <svg class="welcome-arrow" viewBox="0 0 60 96" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M30 6 C 56 24, 4 50, 30 84" />
+            <path d="M21 75 L30 84 L40 76" />
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── HERO (intro) ─────────────────────────── -->
+<section class="hero" id="intro" aria-label="Introduksjon" data-nav-theme="light">
   <div class="container">
     <div class="hero-inner">
 
@@ -1827,12 +1851,12 @@
         </div>
 
         <h1 class="hero-h1">
-          Nettsider<br>
-          <em class="italic-honey">som lever.</em>
+          Klar for en nettside<br>
+          <em class="italic-honey">som lever?</em>
         </h1>
 
         <p class="hero-sub r d1">
-          Levende detaljer, smart interaksjon, og et førsteinntrykk besøkende ikke glemmer — ingen statisk brosjyre.
+          Vi gjør nettsiden din til en opplevelse kundene ikke vil gå glipp av — ikke en statisk brosjyre de skummer forbi.
         </p>
 
         <div class="hero-actions r d2">
@@ -1848,42 +1872,6 @@
                poster="media/snekker-poster.jpg" aria-label="Animasjon av snekkeren">
           <source src="media/snekker-hero.mp4" type="video/mp4">
         </video>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ─── MØT SNEKKEREN ─────────────────── -->
-<section class="meet" id="meet" aria-label="Møt snekkeren" data-nav-theme="light">
-  <div class="container">
-    <div class="meet-inner">
-
-      <div class="meet-media r-left">
-        <video class="meet-video" autoplay muted loop playsinline preload="metadata"
-               poster="media/snekker-meet-poster.jpg" aria-label="Snekkeren ved tegnebrettet">
-          <source src="media/snekker-meet.mp4" type="video/mp4">
-        </video>
-      </div>
-
-      <div class="meet-copy">
-        <span class="label r">Hvem du jobber med</span>
-        <h2 class="meet-h r d1">
-          Bygges av én.<br /><em>Ikke et byrå.</em>
-        </h2>
-        <p class="meet-lead r d2">
-          Du sender melding kl. 10. Du får svar kl. 10:23. Sånn er det å jobbe med snekkeren direkte — ikke en kundekontakt, ikke en prosjektleder, ikke en juniorgrafiker.
-        </p>
-        <ul class="meet-list r d3">
-          <li><span class="meet-tick" aria-hidden="true">✓</span> Én person har ansvar fra første samtale til ferdig nettside</li>
-          <li><span class="meet-tick" aria-hidden="true">✓</span> Beslutninger tas på minutter, ikke i ukentlige møter</li>
-          <li><span class="meet-tick" aria-hidden="true">✓</span> Du vet alltid hvem som svarer — og hvem som har bygd det</li>
-          <li><span class="meet-tick" aria-hidden="true">✓</span> Derfor tør jeg gi fornøyd-garanti: ikke fornøyd, ikke betal</li>
-        </ul>
-        <div class="meet-actions r d3">
-          <a href="#kontakt" class="btn btn-honey">Si hei →</a>
-          <a href="#prosess" class="hero-link">Se prosessen ↓</a>
-        </div>
       </div>
 
     </div>
@@ -2857,18 +2845,6 @@ form.addEventListener('submit', async e => {
       lastTheme = current;
     }
   }, { passive: true });
-})();
-
-/* ── Hero glow (mouse-following) ──────── */
-(function() {
-  const orb = document.getElementById('heroGlowOrb');
-  const hero = document.querySelector('.hero');
-  if (!orb || !hero || !matchMedia('(hover: hover)').matches) return;
-  hero.addEventListener('mousemove', e => {
-    const rect = hero.getBoundingClientRect();
-    orb.style.left = (e.clientX - rect.left) + 'px';
-    orb.style.top = (e.clientY - rect.top) + 'px';
-  });
 })();
 
 /* ── Card tilt + shine effect ──────── */
