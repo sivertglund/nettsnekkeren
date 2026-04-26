@@ -436,7 +436,7 @@
     width: 100%; max-width: 540px;
     aspect-ratio: 3 / 4;
     object-fit: cover;
-    opacity: .62;
+    opacity: .95;
   }
   .welcome-text-wrap {
     position: relative;
@@ -473,49 +473,16 @@
     color: var(--honey);
     display: inline-block;
   }
-  .welcome-trail {
-    position: absolute;
-    top: 48%;
-    left: calc(100% + 14px);
-    width: clamp(120px, 17vw, 200px);
-    aspect-ratio: 220 / 240;
-    color: var(--honey);
-    pointer-events: auto;
-    opacity: 0;
-    animation: welcome-trail-show .35s linear 5.5s forwards;
-    transition: color .2s ease, transform .25s ease;
-  }
-  .welcome-trail:hover { color: var(--honey-mid); transform: translate(2px, 2px); }
-  .welcome-trail svg { width: 100%; height: 100%; display: block; overflow: visible; }
-  .welcome-trail .trail-line {
-    stroke-dasharray: 100;
-    stroke-dashoffset: 100;
-    animation: trail-draw 2.2s cubic-bezier(.5, 0, .5, 1) 5.5s forwards;
-  }
-  .welcome-trail .trail-tip {
-    opacity: 0;
-    animation: welcome-trail-show .25s ease-out 7.55s forwards;
-  }
-  @keyframes trail-draw {
-    to { stroke-dashoffset: 0; }
-  }
   @keyframes welcome-fade-in {
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  @keyframes welcome-trail-show {
-    to { opacity: 1; }
-  }
   @media (prefers-reduced-motion: reduce) {
-    .welcome-greeting, .welcome-media, .welcome-trail,
-    .welcome-trail .trail-line, .welcome-trail .trail-tip {
-      animation: none; opacity: 1; clip-path: none; stroke-dashoffset: 0;
-    }
-    .welcome-video { opacity: .62; }
+    .welcome-greeting, .welcome-media { animation: none; opacity: 1; clip-path: none; }
+    .welcome-video { opacity: .95; }
   }
   @media (max-width: 600px) {
     .welcome-video { max-width: 380px; }
-    .welcome-trail { left: calc(100% + 8px); top: 55%; }
   }
 
   /* ─────────────────────────────────────
@@ -1043,6 +1010,28 @@
     letter-spacing: -.04em; line-height: 1.06; margin-bottom: 16px;
   }
   .contact h2 em { font-style: italic; font-weight: 300; color: var(--ink-55); }
+
+  .contact-headline-row {
+    display: flex; align-items: center;
+    gap: clamp(8px, 1.6vw, 24px);
+    margin-bottom: 16px;
+  }
+  .contact-headline-row h2 { margin-bottom: 0; flex: 1 1 auto; min-width: 0; }
+  .contact-media {
+    flex-shrink: 0;
+    width: clamp(140px, 16vw, 200px);
+  }
+  .contact-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+  @media (max-width: 700px) {
+    .contact-headline-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .contact-media { width: 200px; align-self: center; }
+  }
+
   .contact-lead { font-size: 17px; color: var(--ink-55); line-height: 1.72; margin-bottom: 30px; }
   .contact-detail { display: flex; align-items: center; gap: 12px; font-size: 15px; margin-bottom: 12px; }
   .cd-icon {
@@ -1881,13 +1870,6 @@
           <h1 class="welcome-greeting">
             Velkommen til <strong class="nett">Nett</strong><em>snekkeren</em>
           </h1>
-          <a href="#intro" class="welcome-trail" aria-label="Scroll til neste seksjon">
-            <svg viewBox="0 0 220 240" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path class="trail-line" pathLength="100"
-                    d="M10 10 C 90 -2, 175 35, 145 95 C 130 145, 60 155, 55 105 C 50 65, 110 60, 105 110 C 95 165, 95 200, 95 220" />
-              <path class="trail-tip" d="M80 205 L 95 220 L 110 205" />
-            </svg>
-          </a>
         </div>
       </div>
 
@@ -1905,18 +1887,10 @@
         Ledig for nye prosjekter · <span id="availMonth">april</span>
       </div>
 
-      <div class="hero-headline-row">
-        <h2 class="hero-h1">
-          Bygd som<br>
-          <em class="italic-honey">et håndverk.</em>
-        </h2>
-        <div class="hero-media">
-          <video class="hero-video" autoplay muted loop playsinline preload="metadata"
-                 poster="media/snekker-poster.jpg" aria-label="Animasjon av snekkeren">
-            <source src="media/snekker-hero.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
+      <h2 class="hero-h1">
+        Bygd som<br>
+        <em class="italic-honey">et håndverk.</em>
+      </h2>
 
       <p class="hero-sub r d1">
         Skreddersydd for bedriften din — gjennomarbeidet for å gi det førsteinntrykket den fortjener.
@@ -2559,7 +2533,15 @@
     <div class="contact-inner">
       <div>
         <span class="label r">Kontakt</span>
-        <h2 class="r d1">La oss lage<br />noe <em>ordentlig</em><br />bra sammen.</h2>
+        <div class="contact-headline-row r d1">
+          <h2>La oss lage<br />noe <em>ordentlig</em><br />bra sammen.</h2>
+          <div class="contact-media">
+            <video class="contact-video" autoplay muted loop playsinline preload="metadata"
+                   poster="media/snekker-poster.jpg" aria-label="Animasjon av snekkeren">
+              <source src="media/snekker-hero.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
         <p class="contact-lead r d2">Send en melding og jeg svarer innen 24 timer med et uforpliktende tilbud.</p>
         <div class="r d3">
           <div class="contact-detail">
