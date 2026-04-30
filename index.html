@@ -453,6 +453,37 @@
        on the avatars, lighter pixels in both videos collapse to this color. */
     background: #e0dcd2;
     overflow: hidden;
+    perspective: 720px;
+  }
+  /* Rectangular mask: fades out before the avatars (sides) and below the logo (top) */
+  .welcome-grid-mask {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, transparent 23%, #000 34%, #000 66%, transparent 77%, transparent 100%),
+      linear-gradient(180deg, transparent 0%, rgba(0,0,0,.25) 4%, #000 16%, #000 100%);
+            mask-image:
+      linear-gradient(90deg, transparent 0%, transparent 23%, #000 34%, #000 66%, transparent 77%, transparent 100%),
+      linear-gradient(180deg, transparent 0%, rgba(0,0,0,.25) 4%, #000 16%, #000 100%);
+    -webkit-mask-composite: source-in;
+            mask-composite: intersect;
+  }
+  /* 3D floor-grid inside the mask — perspective-tilted, all the way down */
+  .welcome-grid {
+    position: absolute;
+    left: -50%; right: -50%;
+    bottom: 0;
+    width: 200%;
+    height: 200vh;
+    transform: rotateX(70deg);
+    transform-origin: 50% 100%;
+    background-image:
+      linear-gradient(rgba(30, 22, 8, .26) 1.4px, transparent 1.4px),
+      linear-gradient(90deg, rgba(30, 22, 8, .26) 1.4px, transparent 1.4px);
+    background-size: 80px 170px;
+    background-position: center bottom;
   }
   .welcome-stage {
     position: absolute; inset: 0;
@@ -502,14 +533,15 @@
     color: var(--ink);
   }
   .welcome-line-1 {
-    font-family: 'Marous', 'Bricolage Grotesque', sans-serif;
-    font-size: clamp(30px, 5vw, 72px);
+    font-family: 'Grow Year', 'Caveat', cursive;
+    font-size: clamp(36px, 6.2vw, 96px);
     font-weight: 400;
     line-height: 1;
-    margin: 0 0 .35em;
-    letter-spacing: -.01em;
+    margin: 0 0 .25em;
+    letter-spacing: 0;
     color: var(--ink);
-    animation: welcome-pulse 2.4s ease-in-out infinite;
+    animation: welcome-pulse 5.2s ease-in-out infinite;
+    transform-origin: center center;
   }
   .welcome-line-2 {
     font-family: 'Marous', 'Bricolage Grotesque', sans-serif;
@@ -518,18 +550,20 @@
     line-height: 1.35;
     margin: 0;
     color: var(--ink-70, #3a3a3e);
-    min-height: 1.35em;
+    /* Marker-reveal: clip from left to right */
+    clip-path: inset(0 100% 0 0);
+    animation: welcome-tusj 1.7s cubic-bezier(.66, .04, .34, 1) .9s forwards;
   }
-  .welcome-line-2.is-typing::after {
-    content: '_';
-    display: inline-block;
-    margin-left: 2px;
-    animation: welcome-blink .6s step-end infinite;
+  @keyframes welcome-tusj {
+    0%   { clip-path: inset(0 100% 0 0); }
+    100% { clip-path: inset(0 -2% 0 0); }
   }
-  @keyframes welcome-blink { 50% { opacity: 0; } }
   @keyframes welcome-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: .72; transform: scale(.985); }
+    0%, 100% { transform: scale(.92); }
+    50%      { transform: scale(1.10); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .welcome-line-2 { clip-path: none; animation: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     .welcome-line-1 { animation: none; }
@@ -1991,6 +2025,9 @@
 
 <!-- ─── WELCOME ─────────────────────────────── -->
 <section class="welcome" id="hjem" aria-label="Velkommen" data-nav-theme="light">
+  <div class="welcome-grid-mask" aria-hidden="true">
+    <div class="welcome-grid"></div>
+  </div>
   <div class="welcome-stage">
     <div class="welcome-logo">
       <div class="welcome-logo-anim">
@@ -2852,41 +2889,13 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
   }
 })();
 
-/* ── Welcome: line 1 pulses (static), line 2 types ──── */
+/* ── Welcome: line 1 pulses, line 2 marker-reveal via CSS ──── */
 (function() {
   const line1 = document.getElementById('welcomeLine1');
   const line2 = document.getElementById('welcomeLine2');
   if (!line1 || !line2) return;
-
-  const TEXT1 = 'Velkommen hit';
-  const TEXT2 = 'Vi hjelper deg å lage akkurat den nettsiden bedriften din trenger';
-
-  line1.textContent = TEXT1;
-
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    line2.textContent = TEXT2;
-    return;
-  }
-
-  function type(el, text, charDelay) {
-    return new Promise(resolve => {
-      el.classList.add('is-typing');
-      let i = 0;
-      const tick = () => {
-        if (i <= text.length) {
-          el.textContent = text.substring(0, i);
-          i++;
-          setTimeout(tick, charDelay);
-        } else {
-          el.classList.remove('is-typing');
-          resolve();
-        }
-      };
-      tick();
-    });
-  }
-
-  setTimeout(() => type(line2, TEXT2, 60), 700);
+  line1.textContent = 'Velkommen inn';
+  line2.textContent = 'Vi lager den nettsiden bedriften din trenger';
 })();
 
 /* ── Nav scroll: hide over welcome, show on intro ────────────────────────── */
