@@ -577,11 +577,11 @@
     .welcome-mid-line { clip-path: none; animation: none; }
   }
   @keyframes welcome-pulse {
-    0%   { transform: scale(.82) rotate(0deg); }
-    25%  { transform: scale(1.02) rotate(-2.6deg); }   /* upward tilt */
-    50%  { transform: scale(.82) rotate(0deg); }
-    75%  { transform: scale(1.02) rotate(2.6deg); }    /* downward tilt */
-    100% { transform: scale(.82) rotate(0deg); }
+    0%   { transform: scale(.94) rotate(0deg); }
+    25%  { transform: scale(1.0)  rotate(-1.2deg); }   /* upward tilt */
+    50%  { transform: scale(.94) rotate(0deg); }
+    75%  { transform: scale(1.0)  rotate(1.2deg); }    /* downward tilt */
+    100% { transform: scale(.94) rotate(0deg); }
   }
   @media (prefers-reduced-motion: reduce) {
     .welcome-line-1 { animation: none; }
@@ -642,6 +642,9 @@
   .services {
     padding: 108px 0 160px; background: #fff;
     position: relative;
+    z-index: 2;
+    border-radius: 28px 28px 0 0;
+    box-shadow: 0 -40px 70px -20px rgba(28,26,18,.18);
   }
   .sec-header { text-align: center; margin-bottom: 64px; }
   .sec-header h2 {
@@ -2037,11 +2040,10 @@
     </div>
   </a>
   <div class="nav-links">
+    <a href="#tjenester">Hva du får</a>
+    <a href="#prosess">Slik fungerer det</a>
     <a href="#eksempler">Eksempler</a>
-    <a href="#tjenester">Tjenester</a>
-    <a href="#prosess">Prosess</a>
     <a href="#priser">Priser</a>
-    <a href="#faq">FAQ</a>
     <a href="#kontakt">Kontakt</a>
   </div>
   <a href="#kontakt" class="nav-cta">Ta kontakt →</a>
@@ -2053,11 +2055,10 @@
 
 <!-- Mobile overlay menu -->
 <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true">
+  <a href="#tjenester">Hva du får</a>
+  <a href="#prosess">Slik fungerer det</a>
   <a href="#eksempler">Eksempler</a>
-  <a href="#tjenester">Tjenester</a>
-  <a href="#prosess">Prosess</a>
   <a href="#priser">Priser</a>
-  <a href="#faq">FAQ</a>
   <a href="#kontakt" class="mob-cta">Ta kontakt →</a>
 </div>
 
@@ -2103,171 +2104,10 @@
   </div>
 </section>
 
-<!-- ─── HERO (intro) ─────────────────────────── -->
-<section class="hero" id="intro" aria-label="Introduksjon" data-nav-theme="light">
-  <div class="container">
-    <div class="hero-stack">
-
-      <div class="avail-badge r" id="availBadge">
-        <span class="avail-dot"></span>
-        Ledig for nye prosjekter · <span id="availMonth">april</span>
-      </div>
-
-      <h2 class="hero-h1">
-        Bygd som<br>
-        <em class="italic-honey">et håndverk.</em>
-      </h2>
-
-      <p class="hero-sub r d1">
-        Skreddersydd for bedriften din — gjennomarbeidet for å gi det førsteinntrykket den fortjener.
-      </p>
-
-      <div class="hero-actions r d2">
-        <a href="#kontakt" class="btn btn-dark">Be om tilbud →</a>
-        <a href="#eksempler" class="hero-link r d3">Se eksempler ↓</a>
-      </div>
-
-      <p class="hero-note r d3">Svar innen 24 timer · Fra 9.900,- · Uforpliktende</p>
-
-    </div>
-  </div>
-</section>
-
-</div><!-- /overlay-pin -->
-
-<!-- ─── EKSEMPLER ─────────────────────── -->
-<section class="eksempler" id="eksempler" aria-label="Utvalgte prosjekter" data-nav-theme="light">
-  <div class="eksempler-head r">
-    <div>
-      <span class="label">Eksempler</span>
-      <h2>Noen av sidene<br /><em>jeg har laget.</em></h2>
-    </div>
-    <p class="eksempler-head-meta">
-      Konsept-sider for ulike bransjer. Det første kortet er klikkbart — resten er under arbeid og kommer fortløpende.
-    </p>
-  </div>
-
-  <div class="eksempler-track-wrap">
-    <div class="eksempler-track">
-
-      <a class="eksempel-card r" href="konsept/handverker.html">
-        <div class="eksempel-thumb">
-          <div class="eksempel-mock mock-handverker">
-            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-            <div class="eksempel-mock-body">
-              <div class="eksempel-mock-h">Bygg &amp; Bolig <em>Snekkeri</em></div>
-              <div class="eksempel-mock-p">Håndverk, solid kvalitet og lokal forankring.</div>
-              <span class="eksempel-mock-btn">Be om tilbud →</span>
-            </div>
-          </div>
-        </div>
-        <div class="eksempel-body">
-          <span class="eksempel-tag">Håndverker</span>
-          <h3>Bygg &amp; Bolig Snekkeri</h3>
-          <p>Tillitsskapende nettside for et lokalt snekkerfirma. Tydelig referanseprosjekter, enkel kontakt, og en tone som signaliserer yrkesstolthet.</p>
-          <div class="eksempel-footer">
-            <span>Se konseptet</span>
-            <span class="arrow">→</span>
-          </div>
-        </div>
-      </a>
-
-      <div class="eksempel-card soon r d1">
-        <div class="eksempel-thumb">
-          <div class="eksempel-mock mock-klinikk">
-            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-            <div class="eksempel-mock-body">
-              <div class="eksempel-mock-h">Tannklinikken <em>Smilet</em></div>
-              <div class="eksempel-mock-p">Bestill time på under ett minutt — trygt og enkelt.</div>
-              <span class="eksempel-mock-btn">Bestill time →</span>
-            </div>
-          </div>
-        </div>
-        <div class="eksempel-body">
-          <span class="eksempel-tag">Klinikk</span>
-          <h3>Tannklinikken Smilet</h3>
-          <p>Ren, rolig og tillitvekkende. Booking-modul med egen kalender, priser i klartekst og tydelige forventninger til besøket.</p>
-          <div class="eksempel-footer">
-            <span>Kommer snart</span>
-            <span class="arrow" style="opacity:.3">→</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="eksempel-card soon r d2">
-        <div class="eksempel-thumb">
-          <div class="eksempel-mock mock-frisor">
-            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-            <div class="eksempel-mock-body">
-              <div class="eksempel-mock-h">Salong <em>Lavendel</em></div>
-              <div class="eksempel-mock-p">Moderne klipping, tidløs stil. Book nå.</div>
-              <span class="eksempel-mock-btn">Book time →</span>
-            </div>
-          </div>
-        </div>
-        <div class="eksempel-body">
-          <span class="eksempel-tag">Frisør</span>
-          <h3>Salong Lavendel</h3>
-          <p>Stemningsfull presentasjon av stylistene, galleri av arbeid og en bookingflyt som ingen gir opp halvveis.</p>
-          <div class="eksempel-footer">
-            <span>Kommer snart</span>
-            <span class="arrow" style="opacity:.3">→</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="eksempel-card soon r d3">
-        <div class="eksempel-thumb">
-          <div class="eksempel-mock mock-restaurant">
-            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-            <div class="eksempel-mock-body">
-              <div class="eksempel-mock-h">Bistro <em>Høst</em></div>
-              <div class="eksempel-mock-p">Sesongens råvarer. Reserver bord eller bestill take-away.</div>
-              <span class="eksempel-mock-btn">Reserver bord →</span>
-            </div>
-          </div>
-        </div>
-        <div class="eksempel-body">
-          <span class="eksempel-tag">Restaurant</span>
-          <h3>Bistro Høst</h3>
-          <p>Appetittvekkende meny, enkel bordreservasjon og en stemning som matcher opplevelsen gjestene får når de kommer.</p>
-          <div class="eksempel-footer">
-            <span>Kommer snart</span>
-            <span class="arrow" style="opacity:.3">→</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="eksempel-card soon r d4">
-        <div class="eksempel-thumb">
-          <div class="eksempel-mock mock-advokat">
-            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-            <div class="eksempel-mock-body">
-              <div class="eksempel-mock-h">Berg &amp; Lund <em>Advokater</em></div>
-              <div class="eksempel-mock-p">Trygg juridisk rådgivning for private og bedrifter.</div>
-              <span class="eksempel-mock-btn">Gratis vurdering →</span>
-            </div>
-          </div>
-        </div>
-        <div class="eksempel-body">
-          <span class="eksempel-tag">Advokat</span>
-          <h3>Berg &amp; Lund Advokater</h3>
-          <p>Autoritet uten å være kald. Tydelige fagområder, presentasjon av partnerne og en kontaktflate som inngir tillit fra første sekund.</p>
-          <div class="eksempel-footer">
-            <span>Kommer snart</span>
-            <span class="arrow" style="opacity:.3">→</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ─── SERVICES ──────────────────────────── -->
+<!-- ─── HVA DU FÅR (slides up over welcome) ──── -->
 <section class="services" id="tjenester" data-nav-theme="light">
   <div class="container">
-    <div class="sec-header r">
+    <div class="sec-header r" id="intro">
       <span class="label">Hva du får</span>
       <h2>Én fastpris.<br /><em>Alt inkludert.</em></h2>
       <p>Du forteller meg om bedriften. Jeg tar resten — fra første skisse til live lansering.</p>
@@ -2303,6 +2143,8 @@
     </div>
   </div>
 </section>
+
+</div><!-- /overlay-pin -->
 
 <!-- Wave: services → why -->
 <svg class="wave-divider" viewBox="0 0 1440 60" preserveAspectRatio="none" fill="none" aria-hidden="true" style="background:#fff;">
@@ -2378,56 +2220,10 @@
   </div>
 </section>
 
-<!-- Wave: why → testimonials -->
+<!-- Wave: why → process -->
 <svg class="wave-divider" viewBox="0 0 1440 60" preserveAspectRatio="none" fill="none" aria-hidden="true" style="background:#192140;">
   <path d="M0 60 L0 20 Q360 60 720 25 Q1080 -5 1440 30 L1440 60Z" fill="#F7F1E9"/>
 </svg>
-
-<!-- ─── TESTIMONIALS ──────────────────────────── -->
-<section class="testimonials" data-nav-theme="light">
-  <div class="testimonials-deco" aria-hidden="true">"</div>
-  <div class="container">
-    <div class="testimonials-head r">
-      <span class="label">Hva folk sier</span>
-      <h2>Tilbakemeldinger <em>som varmer.</em></h2>
-      <p>Fornøyde kunder er den beste reklamen — her er noen av dem.</p>
-    </div>
-
-    <div class="testimonials-grid">
-      <div class="testi-card r-blur">
-        <div class="card-shine"></div>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">«Vi fikk en nettside som faktisk ser ut som bedriften vår. Kunder ringer og sier de valgte oss på grunn av nettsiden. Det har aldri skjedd før.»</p>
-        <div class="testi-author">
-          <div class="testi-avatar">KL</div>
-          <div><div class="testi-name">Kari Larsen</div><div class="testi-role">Daglig leder, Bygg & Bolig Snekkeri</div></div>
-        </div>
-      </div>
-
-      <div class="testi-card r-blur d1">
-        <div class="card-shine"></div>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">«Lynrask levering, null stress. Jeg sendte tekst og bilder, og fikk en ferdig side som var bedre enn jeg hadde forestilt meg. Prisen var helt riktig også.»</p>
-        <div class="testi-author">
-          <div class="testi-avatar">TH</div>
-          <div><div class="testi-name">Thomas Hansen</div><div class="testi-role">Eier, Salong Lavendel</div></div>
-        </div>
-      </div>
-
-      <div class="testi-card r-blur d2">
-        <div class="card-shine"></div>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">«Endelig en utvikler som forstår at det handler om tillit. Pasientene våre sier bookingen er enkel, og vi har fått merkbart flere timer via nettsiden.»</p>
-        <div class="testi-author">
-          <div class="testi-avatar">MJ</div>
-          <div><div class="testi-name">Maria Johansen</div><div class="testi-role">Tannlege, Tannklinikken Smilet</div></div>
-        </div>
-      </div>
-    </div>
-
-    <p class="testi-concept-note r d3">Konseptuelle eksempler — ekte anmeldelser kommer snart.</p>
-  </div>
-</section>
 
 <!-- ─── PROCESS ──────────────────────────────── -->
 <section class="process-outer" id="prosess" data-nav-theme="light">
@@ -2621,6 +2417,181 @@
   </div>
 </section>
 
+<!-- ─── EKSEMPLER ─────────────────────── -->
+<section class="eksempler" id="eksempler" aria-label="Utvalgte prosjekter" data-nav-theme="light">
+  <div class="eksempler-head r">
+    <div>
+      <span class="label">Eksempler</span>
+      <h2>Noen av sidene<br /><em>jeg har laget.</em></h2>
+    </div>
+    <p class="eksempler-head-meta">
+      Konsept-sider for ulike bransjer. Det første kortet er klikkbart — resten er under arbeid og kommer fortløpende.
+    </p>
+  </div>
+
+  <div class="eksempler-track-wrap">
+    <div class="eksempler-track">
+
+      <a class="eksempel-card r" href="konsept/handverker.html">
+        <div class="eksempel-thumb">
+          <div class="eksempel-mock mock-handverker">
+            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+            <div class="eksempel-mock-body">
+              <div class="eksempel-mock-h">Bygg &amp; Bolig <em>Snekkeri</em></div>
+              <div class="eksempel-mock-p">Håndverk, solid kvalitet og lokal forankring.</div>
+              <span class="eksempel-mock-btn">Be om tilbud →</span>
+            </div>
+          </div>
+        </div>
+        <div class="eksempel-body">
+          <span class="eksempel-tag">Håndverker</span>
+          <h3>Bygg &amp; Bolig Snekkeri</h3>
+          <p>Tillitsskapende nettside for et lokalt snekkerfirma. Tydelig referanseprosjekter, enkel kontakt, og en tone som signaliserer yrkesstolthet.</p>
+          <div class="eksempel-footer">
+            <span>Se konseptet</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <div class="eksempel-card soon r d1">
+        <div class="eksempel-thumb">
+          <div class="eksempel-mock mock-klinikk">
+            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+            <div class="eksempel-mock-body">
+              <div class="eksempel-mock-h">Tannklinikken <em>Smilet</em></div>
+              <div class="eksempel-mock-p">Bestill time på under ett minutt — trygt og enkelt.</div>
+              <span class="eksempel-mock-btn">Bestill time →</span>
+            </div>
+          </div>
+        </div>
+        <div class="eksempel-body">
+          <span class="eksempel-tag">Klinikk</span>
+          <h3>Tannklinikken Smilet</h3>
+          <p>Ren, rolig og tillitvekkende. Booking-modul med egen kalender, priser i klartekst og tydelige forventninger til besøket.</p>
+          <div class="eksempel-footer">
+            <span>Kommer snart</span>
+            <span class="arrow" style="opacity:.3">→</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="eksempel-card soon r d2">
+        <div class="eksempel-thumb">
+          <div class="eksempel-mock mock-frisor">
+            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+            <div class="eksempel-mock-body">
+              <div class="eksempel-mock-h">Salong <em>Lavendel</em></div>
+              <div class="eksempel-mock-p">Moderne klipping, tidløs stil. Book nå.</div>
+              <span class="eksempel-mock-btn">Book time →</span>
+            </div>
+          </div>
+        </div>
+        <div class="eksempel-body">
+          <span class="eksempel-tag">Frisør</span>
+          <h3>Salong Lavendel</h3>
+          <p>Stemningsfull presentasjon av stylistene, galleri av arbeid og en bookingflyt som ingen gir opp halvveis.</p>
+          <div class="eksempel-footer">
+            <span>Kommer snart</span>
+            <span class="arrow" style="opacity:.3">→</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="eksempel-card soon r d3">
+        <div class="eksempel-thumb">
+          <div class="eksempel-mock mock-restaurant">
+            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+            <div class="eksempel-mock-body">
+              <div class="eksempel-mock-h">Bistro <em>Høst</em></div>
+              <div class="eksempel-mock-p">Sesongens råvarer. Reserver bord eller bestill take-away.</div>
+              <span class="eksempel-mock-btn">Reserver bord →</span>
+            </div>
+          </div>
+        </div>
+        <div class="eksempel-body">
+          <span class="eksempel-tag">Restaurant</span>
+          <h3>Bistro Høst</h3>
+          <p>Appetittvekkende meny, enkel bordreservasjon og en stemning som matcher opplevelsen gjestene får når de kommer.</p>
+          <div class="eksempel-footer">
+            <span>Kommer snart</span>
+            <span class="arrow" style="opacity:.3">→</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="eksempel-card soon r d4">
+        <div class="eksempel-thumb">
+          <div class="eksempel-mock mock-advokat">
+            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+            <div class="eksempel-mock-body">
+              <div class="eksempel-mock-h">Berg &amp; Lund <em>Advokater</em></div>
+              <div class="eksempel-mock-p">Trygg juridisk rådgivning for private og bedrifter.</div>
+              <span class="eksempel-mock-btn">Gratis vurdering →</span>
+            </div>
+          </div>
+        </div>
+        <div class="eksempel-body">
+          <span class="eksempel-tag">Advokat</span>
+          <h3>Berg &amp; Lund Advokater</h3>
+          <p>Autoritet uten å være kald. Tydelige fagområder, presentasjon av partnerne og en kontaktflate som inngir tillit fra første sekund.</p>
+          <div class="eksempel-footer">
+            <span>Kommer snart</span>
+            <span class="arrow" style="opacity:.3">→</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ──────────────────────────── -->
+<section class="testimonials" data-nav-theme="light">
+  <div class="testimonials-deco" aria-hidden="true">"</div>
+  <div class="container">
+    <div class="testimonials-head r">
+      <span class="label">Hva folk sier</span>
+      <h2>Tilbakemeldinger <em>som varmer.</em></h2>
+      <p>Fornøyde kunder er den beste reklamen — her er noen av dem.</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testi-card r-blur">
+        <div class="card-shine"></div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">«Vi fikk en nettside som faktisk ser ut som bedriften vår. Kunder ringer og sier de valgte oss på grunn av nettsiden. Det har aldri skjedd før.»</p>
+        <div class="testi-author">
+          <div class="testi-avatar">KL</div>
+          <div><div class="testi-name">Kari Larsen</div><div class="testi-role">Daglig leder, Bygg & Bolig Snekkeri</div></div>
+        </div>
+      </div>
+
+      <div class="testi-card r-blur d1">
+        <div class="card-shine"></div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">«Lynrask levering, null stress. Jeg sendte tekst og bilder, og fikk en ferdig side som var bedre enn jeg hadde forestilt meg. Prisen var helt riktig også.»</p>
+        <div class="testi-author">
+          <div class="testi-avatar">TH</div>
+          <div><div class="testi-name">Thomas Hansen</div><div class="testi-role">Eier, Salong Lavendel</div></div>
+        </div>
+      </div>
+
+      <div class="testi-card r-blur d2">
+        <div class="card-shine"></div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">«Endelig en utvikler som forstår at det handler om tillit. Pasientene våre sier bookingen er enkel, og vi har fått merkbart flere timer via nettsiden.»</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MJ</div>
+          <div><div class="testi-name">Maria Johansen</div><div class="testi-role">Tannlege, Tannklinikken Smilet</div></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="testi-concept-note r d3">Konseptuelle eksempler — ekte anmeldelser kommer snart.</p>
+  </div>
+</section>
+
 <!-- ─── PRICES (with interactive calculator) ─── -->
 <section class="prices" id="priser" aria-label="Priser og kalkulator" data-nav-theme="light">
   <div class="container">
@@ -2698,58 +2669,6 @@
           <div class="calc-result-price"><span class="calc-tilde">~</span><span id="calcPrice">15 000</span><span class="calc-currency">kr</span></div>
           <p class="calc-result-note">Fastpris avtales etter en kort samtale. Domene ~99 kr/år · hosting ~499 kr/år. <strong>Ingen skjulte gebyrer.</strong></p>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── FAQ ──────────────────────────────── -->
-<section class="faq" id="faq" data-nav-theme="light">
-  <div class="container-sm">
-    <div class="sec-header r" style="text-align:left;margin-bottom:48px;">
-      <span class="label">FAQ</span>
-      <h2>Spørsmål jeg får mye</h2>
-    </div>
-    <div class="faq-list">
-      <div class="faq-item r">
-        <button class="faq-q" aria-expanded="false">Hva koster det?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Det kommer an på omfanget. En enkel side med 5 undersider ligger typisk rundt 15 000 kr. En mer omfattende side med custom design, bookingmodul eller e-handel kan ligge mellom 25 000 og 45 000. Du får alltid et klart tilbud før vi starter, så du vet nøyaktig hva du betaler for.</p></div>
-      </div>
-      <div class="faq-item r d1">
-        <button class="faq-q" aria-expanded="false">Hvor lang tid tar det?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Typisk 7–10 dager fra vi starter til siden er live. Det avhenger av hvor raskt du får til å levere tekster og bilder, og hvor mange revisjonsrunder vi trenger.</p></div>
-      </div>
-      <div class="faq-item r d2">
-        <button class="faq-q" aria-expanded="false">Hva trenger du fra meg?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Tekster, bilder, logo og informasjon om bedriften. Jeg sender deg en kort sjekkliste når vi starter, så du vet nøyaktig hva jeg trenger og slipper å gjette.</p></div>
-      </div>
-      <div class="faq-item r d3">
-        <button class="faq-q" aria-expanded="false">Hva hvis jeg ikke vet hva jeg vil ha?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Helt greit — de fleste vet det ikke når vi starter. Vi tar en uforpliktende prat, og jeg stiller de riktige spørsmålene: hvem er kundene dine, hva vil du de skal gjøre på siden, og hva skiller deg fra konkurrentene? Ut fra det lager jeg 1–2 designforslag du kan reagere på. Det er ofte mye lettere å si "sånn, men litt mer X" enn å starte på blanke ark.</p></div>
-      </div>
-      <div class="faq-item r d4">
-        <button class="faq-q" aria-expanded="false">Hva om jeg ikke liker det du lager?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Da justerer vi sammen. Du får opptil fem revisjonsrunder inkludert, og du sier konkret hva du heller vil ha — så endrer jeg det. Jeg er ikke ferdig før du er genuint fornøyd. Det er det fornøydgarantien betyr i praksis.</p></div>
-      </div>
-      <div class="faq-item r">
-        <button class="faq-q" aria-expanded="false">Eier jeg nettsiden etterpå?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Ja. Domenet, koden og innholdet er ditt. Hvis du en dag vil flytte vekk fra meg eller ta over selv, kan du det uten å måtte forhandle deg fri.</p></div>
-      </div>
-      <div class="faq-item r d1">
-        <button class="faq-q" aria-expanded="false">Kan jeg oppdatere innholdet selv?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Hvis du vil, ja. Jeg kan sette opp en enkel løsning der du selv kan endre tekst, bilder og åpningstider. Hvis du heller vil at jeg gjør det, tar jeg en liten timespris for småendringer.</p></div>
-      </div>
-      <div class="faq-item r d2">
-        <button class="faq-q" aria-expanded="false">Hva skjer hvis jeg trenger endringer etter lansering?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Små justeringer den første måneden (typos, bytte et bilde, oppdatere åpningstider) er gratis. Større endringer tar jeg som timespris, eller som et lite fastprisprosjekt hvis det er ny funksjonalitet. Ingen bindende månedsavgift — du betaler bare når du faktisk trenger noe.</p></div>
-      </div>
-      <div class="faq-item r d3">
-        <button class="faq-q" aria-expanded="false">Hva koster det å vedlikeholde siden etterpå?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Nesten ingenting. Typisk domene (~99–199 kr/år) og hosting (~499–1 000 kr/år). Det er alt. Sidene jeg lager krever ikke månedlige oppdateringer slik tradisjonelle WordPress-sider gjør.</p></div>
-      </div>
-      <div class="faq-item r d4">
-        <button class="faq-q" aria-expanded="false">Må jeg bruke deg for fremtidige endringer?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="faq-a"><p>Nei. Du eier koden fullstendig og kan gi den til en annen utvikler når som helst. Jeg låser deg ikke inne.</p></div>
       </div>
     </div>
   </div>
@@ -2856,11 +2775,10 @@
   </div>
   <div class="footer-right">
     <div class="footer-links">
+      <a href="#tjenester">Hva du får</a>
+      <a href="#prosess">Slik fungerer det</a>
       <a href="#eksempler">Eksempler</a>
-      <a href="#tjenester">Tjenester</a>
-      <a href="#prosess">Prosess</a>
       <a href="#priser">Priser</a>
-      <a href="#faq">FAQ</a>
       <a href="#kontakt">Kontakt</a>
     </div>
     <p>© 2026 Nettsnekkeren · Laget med kaffe og kode</p>
@@ -3017,22 +2935,6 @@ function tickProc() {
 initProc();
 window.addEventListener('scroll', tickProc, { passive: true });
 window.addEventListener('resize', () => { initProc(); tickProc(); });
-
-/* ── FAQ accordion ──────────────────────── */
-document.querySelectorAll('.faq-q').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const item = btn.closest('.faq-item');
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item.open').forEach(i => {
-      i.classList.remove('open');
-      i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
-    });
-    if (!isOpen) {
-      item.classList.add('open');
-      btn.setAttribute('aria-expanded', 'true');
-    }
-  });
-});
 
 /* ── Contact form (Formspree AJAX) ──────── */
 const form = document.getElementById('contactForm');
@@ -3207,14 +3109,6 @@ function animateCounter(el, target, duration) {
   }
   requestAnimationFrame(tick);
 }
-
-/* ── FAQ numbering ──────── */
-document.querySelectorAll('.faq-q').forEach((btn, i) => {
-  const num = document.createElement('span');
-  num.className = 'faq-num';
-  num.textContent = String(i + 1).padStart(2, '0');
-  btn.insertBefore(num, btn.firstChild);
-});
 
 /* ── Parallax dot backgrounds ──────── */
 (function() {
