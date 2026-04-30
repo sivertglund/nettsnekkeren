@@ -434,6 +434,14 @@
     font-style: normal;
     font-display: swap;
   }
+  @font-face {
+    font-family: 'Marous';
+    src: url('fonts/Marous.woff2') format('woff2'),
+         url('fonts/Marous.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
   /* ─────────────────────────────────────
      WELCOME (gradient bg matching avatar bgs, sticky)
   ───────────────────────────────────── */
@@ -494,25 +502,24 @@
     color: var(--ink);
   }
   .welcome-line-1 {
-    font-family: 'Bricolage Grotesque', 'Outfit', sans-serif;
-    font-size: clamp(24px, 3.6vw, 52px);
-    font-weight: 600;
-    line-height: 1.18;
-    margin: 0 0 .55em;
-    letter-spacing: -.018em;
-    min-height: 1.18em;
+    font-family: 'Marous', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(30px, 5vw, 72px);
+    font-weight: 400;
+    line-height: 1;
+    margin: 0 0 .35em;
+    letter-spacing: -.01em;
     color: var(--ink);
+    animation: welcome-pulse 2.4s ease-in-out infinite;
   }
   .welcome-line-2 {
-    font-family: 'Outfit', 'Bricolage Grotesque', sans-serif;
-    font-size: clamp(16px, 2.1vw, 28px);
+    font-family: 'Marous', 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(18px, 2.4vw, 34px);
     font-weight: 400;
     line-height: 1.35;
     margin: 0;
     color: var(--ink-70, #3a3a3e);
     min-height: 1.35em;
   }
-  .welcome-line-1.is-typing::after,
   .welcome-line-2.is-typing::after {
     content: '_';
     display: inline-block;
@@ -520,6 +527,13 @@
     animation: welcome-blink .6s step-end infinite;
   }
   @keyframes welcome-blink { 50% { opacity: 0; } }
+  @keyframes welcome-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .72; transform: scale(.985); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .welcome-line-1 { animation: none; }
+  }
   .welcome-avatars {
     flex: 1 1 auto;
     margin-top: auto;
@@ -2838,14 +2852,21 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
   }
 })();
 
-/* ── Welcome typewriter ────────────────────────────── */
+/* ── Welcome: line 1 pulses (static), line 2 types ──── */
 (function() {
   const line1 = document.getElementById('welcomeLine1');
   const line2 = document.getElementById('welcomeLine2');
   if (!line1 || !line2) return;
 
-  const TEXT1 = 'Velkommen hit, vi står klare for å hjelpe deg å lage en ny nettside.';
-  const TEXT2 = 'Vi hjelper deg å lage akkurat det bedriften din trenger.';
+  const TEXT1 = 'Velkommen hit';
+  const TEXT2 = 'Vi hjelper deg å lage akkurat den nettsiden bedriften din trenger';
+
+  line1.textContent = TEXT1;
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    line2.textContent = TEXT2;
+    return;
+  }
 
   function type(el, text, charDelay) {
     return new Promise(resolve => {
@@ -2865,18 +2886,7 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
     });
   }
 
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    line1.textContent = TEXT1;
-    line2.textContent = TEXT2;
-    return;
-  }
-
-  (async () => {
-    await new Promise(r => setTimeout(r, 600));
-    await type(line1, TEXT1, 32);
-    await new Promise(r => setTimeout(r, 400));
-    await type(line2, TEXT2, 28);
-  })();
+  setTimeout(() => type(line2, TEXT2, 60), 700);
 })();
 
 /* ── Nav scroll: hide over welcome, show on intro ────────────────────────── */
