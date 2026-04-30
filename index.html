@@ -540,30 +540,47 @@
     margin: 0 0 .25em;
     letter-spacing: 0;
     color: var(--ink);
-    animation: welcome-pulse 5.2s ease-in-out infinite;
+    animation: welcome-pulse 10.4s ease-in-out infinite;
     transform-origin: center center;
   }
-  .welcome-line-2 {
+  .welcome-mid {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 5;
+    max-width: min(92vw, 980px);
+  }
+  .welcome-mid-line {
     font-family: 'Marous', 'Bricolage Grotesque', sans-serif;
-    font-size: clamp(18px, 2.4vw, 34px);
+    font-size: clamp(20px, 3vw, 44px);
     font-weight: 400;
-    line-height: 1.35;
+    line-height: 1.25;
     margin: 0;
     color: var(--ink-70, #3a3a3e);
-    /* Marker-reveal: clip from left to right */
+    /* Marker-reveal: clip from left to right; both lines share the same px/sec speed */
     clip-path: inset(0 100% 0 0);
-    animation: welcome-tusj 1.7s cubic-bezier(.66, .04, .34, 1) .9s forwards;
+    will-change: clip-path;
+  }
+  .welcome-mid-line-a {
+    animation: welcome-tusj 1.8s linear .8s forwards;
+  }
+  .welcome-mid-line-b {
+    animation: welcome-tusj 1.8s linear 2.6s forwards;
   }
   @keyframes welcome-tusj {
     0%   { clip-path: inset(0 100% 0 0); }
     100% { clip-path: inset(0 -2% 0 0); }
   }
-  @keyframes welcome-pulse {
-    0%, 100% { transform: scale(.92); }
-    50%      { transform: scale(1.10); }
-  }
   @media (prefers-reduced-motion: reduce) {
-    .welcome-line-2 { clip-path: none; animation: none; }
+    .welcome-mid-line { clip-path: none; animation: none; }
+  }
+  @keyframes welcome-pulse {
+    0%   { transform: scale(.92) rotate(0deg); }
+    25%  { transform: scale(1.02) rotate(-2.6deg); }   /* upward tilt */
+    50%  { transform: scale(.92) rotate(0deg); }
+    75%  { transform: scale(1.02) rotate(2.6deg); }    /* downward tilt */
+    100% { transform: scale(.92) rotate(0deg); }
   }
   @media (prefers-reduced-motion: reduce) {
     .welcome-line-1 { animation: none; }
@@ -2047,7 +2064,10 @@
     </div>
     <div class="welcome-text">
       <h1 class="welcome-line-1" id="welcomeLine1"></h1>
-      <p class="welcome-line-2" id="welcomeLine2"></p>
+    </div>
+    <div class="welcome-mid">
+      <p class="welcome-mid-line welcome-mid-line-a" id="welcomeLineA"></p>
+      <p class="welcome-mid-line welcome-mid-line-b" id="welcomeLineB"></p>
     </div>
     <div class="welcome-avatars">
       <video class="welcome-avatar" src="media/avatar-1.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
@@ -2889,13 +2909,14 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
   }
 })();
 
-/* ── Welcome: line 1 pulses, line 2 marker-reveal via CSS ──── */
+/* ── Welcome: line 1 pulses, mid lines marker-reveal via CSS ──── */
 (function() {
   const line1 = document.getElementById('welcomeLine1');
-  const line2 = document.getElementById('welcomeLine2');
-  if (!line1 || !line2) return;
-  line1.textContent = 'Velkommen inn';
-  line2.textContent = 'Vi lager den nettsiden bedriften din trenger';
+  const lineA = document.getElementById('welcomeLineA');
+  const lineB = document.getElementById('welcomeLineB');
+  if (line1) line1.textContent = 'Velkommen inn';
+  if (lineA) lineA.textContent = 'Vi bygger nettsiden';
+  if (lineB) lineB.textContent = 'bedriften din trenger';
 })();
 
 /* ── Nav scroll: hide over welcome, show on intro ────────────────────────── */
