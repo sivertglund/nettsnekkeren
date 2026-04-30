@@ -1918,6 +1918,12 @@
     margin-top: -2px;
     position: relative; z-index: 2;
   }
+  /* Overlay wave: sits at top of a section so the section's background (incl. grid) extends up to the wavy edge */
+  .wave-divider-overlay {
+    display: block; width: 100%; height: auto;
+    position: relative; z-index: 2;
+    margin-bottom: -2px;
+  }
 
   /* ─────────────────────────────────────
      HERO TRUST PILLS
@@ -2283,13 +2289,12 @@
   </div>
 </section>
 
-<!-- Wave: why → process -->
-<svg class="wave-divider" viewBox="0 0 1440 60" preserveAspectRatio="none" fill="none" aria-hidden="true" style="background:#192140;">
-  <path d="M0 60 L0 20 Q360 60 720 25 Q1080 -5 1440 30 L1440 60Z" fill="#F7F1E9"/>
-</svg>
-
 <!-- ─── PROCESS ──────────────────────────────── -->
 <section class="process-outer" id="prosess" data-nav-theme="light">
+  <!-- Wave: why → process (dark-blue overlay so grid extends up to the wave) -->
+  <svg class="wave-divider-overlay" viewBox="0 0 1440 60" preserveAspectRatio="none" fill="none" aria-hidden="true">
+    <path d="M0 0 L1440 0 L1440 30 Q1080 -5 720 25 Q360 60 0 20 Z" fill="#192140"/>
+  </svg>
   <div class="process-sticky">
     <div class="process-head">
       <div>
