@@ -660,6 +660,11 @@
     z-index: 0;
     opacity: .82;
   }
+  /* Second band stacks flush against the bottom of the first, no gap */
+  .services-deco-2 {
+    top: clamp(780px, 74vw, 1140px);
+    background-image: url('media/watercolor-grass.jpg');
+  }
   .services-deco-left {
     left: 0;
     background-position: left center;
@@ -848,16 +853,22 @@
   .pause {
     background: var(--dark);
     padding: clamp(96px, 14vw, 180px) 0;
-    text-align: center;
     position: relative;
   }
+  .pause-inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(40px, 6vw, 80px);
+    align-items: center;
+  }
+  .pause-text { text-align: left; }
   .pause-h {
     font-family: 'Super Wonder', sans-serif;
     font-size: clamp(40px, 6.4vw, 84px);
     font-weight: 700; line-height: 1.05;
     letter-spacing: -.04em;
     color: var(--cream);
-    margin: 0 auto 26px;
+    margin: 0 0 26px;
     max-width: 14ch;
   }
   .pause-h em { font-style: italic; font-weight: 700; color: var(--honey); }
@@ -865,8 +876,34 @@
     font-size: clamp(16px, 1.55vw, 19px);
     color: rgba(250,246,236,.62);
     line-height: 1.65;
-    max-width: 580px;
-    margin: 0 auto;
+    max-width: 540px;
+    margin: 0;
+  }
+  .pause-video-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 1 / 1;
+    justify-self: center;
+  }
+  .pause-video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    /* Screen blend treats the video's dark bg as a mask against the dark section.
+       The video has a subtle vignette making its center lift slightly, so we (1) push
+       its blacks down with brightness/contrast and (2) tightly mask around the hourglass. */
+    mix-blend-mode: screen;
+    filter: brightness(.88) contrast(1.18);
+    -webkit-mask-image: radial-gradient(ellipse 42% 58% at center, #000 60%, transparent 92%);
+            mask-image: radial-gradient(ellipse 42% 58% at center, #000 60%, transparent 92%);
+  }
+  @media (max-width: 760px) {
+    .pause-inner { grid-template-columns: 1fr; gap: 32px; }
+    .pause-text { text-align: center; }
+    .pause-h { margin-left: auto; margin-right: auto; }
+    .pause-p  { margin-left: auto; margin-right: auto; }
+    .pause-video-wrap { max-width: 280px; }
   }
 
   /* ─────────────────────────────────────
@@ -2148,6 +2185,8 @@
 <section class="services" id="tjenester" data-nav-theme="light">
   <div class="services-deco services-deco-left" aria-hidden="true"></div>
   <div class="services-deco services-deco-right" aria-hidden="true"></div>
+  <div class="services-deco services-deco-2 services-deco-left" aria-hidden="true"></div>
+  <div class="services-deco services-deco-2 services-deco-right" aria-hidden="true"></div>
   <div class="container">
     <div class="services-header-row">
       <div class="sec-header r" id="intro">
@@ -2203,9 +2242,16 @@
 
 <!-- ─── PAUSE (visual breath between Hva du får and Slik fungerer det) ─── -->
 <section class="pause" data-nav-theme="dark">
-  <div class="container">
-    <h2 class="pause-h r">Førsteinntrykket <em>avgjør alt.</em></h2>
-    <p class="pause-p r d1">Folk bestemmer seg på under tre sekunder. Jeg sørger for at de bestemmer seg for deg.</p>
+  <div class="container pause-inner">
+    <div class="pause-text">
+      <h2 class="pause-h r">Førsteinntrykket <em>avgjør alt.</em></h2>
+      <p class="pause-p r d1">Folk bestemmer seg på under tre sekunder. Jeg sørger for at de bestemmer seg for deg.</p>
+    </div>
+    <div class="pause-video-wrap r d2" aria-hidden="true">
+      <video class="pause-video" id="pauseVideo" muted playsinline preload="metadata">
+        <source src="media/hourglass.mp4" type="video/mp4">
+      </video>
+    </div>
   </div>
 </section>
 
@@ -2931,6 +2977,26 @@ const revealObs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
 }, { threshold: 0.07 });
 document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').forEach(el => revealObs.observe(el));
+
+/* ── Pause-section hourglass video: replay on every scroll into view ─── */
+(function() {
+  const video = document.getElementById('pauseVideo');
+  if (!video) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Rewind and play from the start each time the video enters the viewport.
+        try { video.currentTime = 0; } catch (e) {}
+        const p = video.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {/* autoplay blocked, ignore */});
+      } else {
+        // Pause when out of view so it's ready to replay on re-entry.
+        video.pause();
+      }
+    });
+  }, { threshold: 0.4 });
+  obs.observe(video);
+})();
 
 /* ── Eksempler: filter cards by category ───────────────────────── */
 (function() {
