@@ -82,6 +82,7 @@
     --r:           14px;
     --r-lg:        22px;
     --r-xl:        30px;
+    --ease-snap:   cubic-bezier(.34, 1.56, .64, 1);
   }
 
   html { scroll-behavior: smooth; scroll-padding-top: 80px; }
@@ -646,6 +647,36 @@
     border-radius: 28px 28px 0 0;
     box-shadow: 0 -40px 70px -20px rgba(28,26,18,.18);
   }
+  /* Watercolor split: same image on both edges, positioned to show left/right half. */
+  .services-deco {
+    position: absolute;
+    top: clamp(360px, 32vw, 480px);
+    width: clamp(140px, 14vw, 220px);
+    aspect-ratio: 1 / 3;
+    background-image: url('media/watercolor-mountains.jpg');
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 0;
+    opacity: .82;
+  }
+  .services-deco-left {
+    left: 0;
+    background-position: left center;
+    -webkit-mask-image: linear-gradient(to right, #000 30%, transparent 100%);
+            mask-image: linear-gradient(to right, #000 30%, transparent 100%);
+  }
+  .services-deco-right {
+    right: 0;
+    background-position: right center;
+    -webkit-mask-image: linear-gradient(to left, #000 30%, transparent 100%);
+            mask-image: linear-gradient(to left, #000 30%, transparent 100%);
+  }
+  /* Cards must paint above the bands */
+  .services > .container { position: relative; z-index: 1; }
+  @media (max-width: 920px) {
+    .services-deco { display: none; }
+  }
   /* Right column of contact: form on top + ladder below, filling the empty
      space that sits beside the trippel-garanti card. Scroll-controlled by
      the page's scroll position through the contact section. */
@@ -813,84 +844,29 @@
   /* ─────────────────────────────────────
      WHY (Hvorfor Nettsnekkeren)
   ───────────────────────────────────── */
-  .why {
-    background: var(--dark); padding: 108px 0;
-    position: relative; overflow: hidden;
-  }
-  .why-glow-1 {
-    position: absolute; top: -80px; right: -80px;
-    width: 540px; height: 540px;
-    background: radial-gradient(circle, rgba(192,120,24,.15) 0%, transparent 65%);
-    pointer-events: none;
-  }
-  .why-glow-2 {
-    position: absolute; bottom: -100px; left: -60px;
-    width: 420px; height: 420px;
-    background: radial-gradient(circle, rgba(49,68,117,.6) 0%, transparent 65%);
-    pointer-events: none;
-  }
-  .why-inner { position: relative; z-index: 1; }
-  .why-head { max-width: 680px; margin: 0 auto 68px; text-align: center; }
-  .why-head .label { display: inline-block; margin-bottom: 18px; }
-  .why-head h2 { margin-bottom: 22px; }
-  .why-head .why-lead { max-width: 560px; margin: 0 auto; }
-  .why h2 {
-    font-family: 'Super Wonder', sans-serif;
-    font-size: clamp(34px,4.2vw,54px); font-weight: 700; line-height: 1.05;
-    letter-spacing: -.04em; color: var(--cream); margin-bottom: 24px;
-  }
-  .why h2 em { font-style: italic; font-weight: 700; color: var(--honey); }
-  .why-lead { font-size: 17px; color: rgba(250,246,236,.5); line-height: 1.75; }
-  .why-args {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    background: rgba(255,255,255,.05);
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: var(--r-lg);
-    overflow: hidden;
-  }
-  .why-arg {
-    padding: 34px 32px;
-    background: rgba(25,33,64,.55);
-    transition: background .25s;
-    cursor: default;
+  /* PAUSE — visual breath between Hva du får and Slik fungerer det */
+  .pause {
+    background: var(--dark);
+    padding: clamp(96px, 14vw, 180px) 0;
+    text-align: center;
     position: relative;
   }
-  .why-arg:hover { background: rgba(25,33,64,.75); }
-  .why-arg::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 2px; background: var(--honey);
-    transform: scaleY(0); transform-origin: center;
-    transition: transform .3s cubic-bezier(.22,1,.36,1);
+  .pause-h {
+    font-family: 'Super Wonder', sans-serif;
+    font-size: clamp(40px, 6.4vw, 84px);
+    font-weight: 700; line-height: 1.05;
+    letter-spacing: -.04em;
+    color: var(--cream);
+    margin: 0 auto 26px;
+    max-width: 14ch;
   }
-  .why-arg:hover::before { transform: scaleY(1); }
-  @media (max-width: 760px) {
-    .why-args { grid-template-columns: 1fr; }
-  }
-  .why-arg-n { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--honey); opacity: .8; margin-bottom: 6px; }
-  .why-arg h4 { font-size: 16px; font-weight: 600; color: var(--cream); margin-bottom: 7px; }
-  .why-arg p { font-size: 14px; color: rgba(250,246,236,.45); line-height: 1.68; }
-  .why-arg-icon { margin-bottom: 12px; display: flex; }
-  @keyframes bar-rise { 0%,100% { opacity:.55; transform:scaleY(1); } 50% { opacity:1; transform:scaleY(1.18); } }
-  @keyframes clock-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  @keyframes price-ping { 0%,100% { opacity:.45; transform:scale(1); } 50% { opacity:1; transform:scale(1.1); } }
-  @keyframes shield-glow { 0%,100% { opacity:.55; } 60% { opacity:1; } }
-
-  /* ── Craft tool decorations (WHY section) ── */
-  .craft-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-  .cd {
-    position: absolute;
-    color: var(--cream); opacity: .06;
-    animation: cd-drift var(--ct, 20s) ease-in-out infinite var(--cd, 0s);
-  }
-  .cd1 { width: 44px; top: 15%; right: 8%; --ct: 22s; --cd: 0s; }
-  .cd2 { width: 40px; bottom: 20%; right: 15%; --ct: 18s; --cd: -6s; }
-  .cd3 { width: 16px; top: 40%; left: 5%; --ct: 25s; --cd: -10s; }
-  .cd4 { width: 14px; bottom: 30%; left: 10%; --ct: 19s; --cd: -3s; }
-  @keyframes cd-drift {
-    0%,100% { transform: translateY(0) rotate(var(--cr0, 0deg)); }
-    33%      { transform: translateY(-12px) rotate(var(--cr1, 5deg)); }
-    66%      { transform: translateY(8px) rotate(var(--cr2, -4deg)); }
+  .pause-h em { font-style: italic; font-weight: 700; color: var(--honey); }
+  .pause-p {
+    font-size: clamp(16px, 1.55vw, 19px);
+    color: rgba(250,246,236,.62);
+    line-height: 1.65;
+    max-width: 580px;
+    margin: 0 auto;
   }
 
   /* ─────────────────────────────────────
@@ -936,7 +912,7 @@
     min-width: 380px; max-width: 380px;
     flex-shrink: 0;
     display: flex; flex-direction: column;
-    transition: border-color .25s, box-shadow .3s, transform .3s cubic-bezier(.22,1,.36,1);
+    transition: border-color .25s, box-shadow .3s, transform .42s var(--ease-snap);
     overflow: hidden;
   }
   .process-card:hover {
@@ -1058,22 +1034,148 @@
   .prices {
     padding: 108px 0; background: #fff;
     border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
   }
-  .prices-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-  .prices h2 {
+  .prices-head {
+    text-align: center; max-width: 680px; margin: 0 auto 64px;
+  }
+  .prices-head .label { display: inline-block; margin-bottom: 18px; }
+  .prices-head h2 {
     font-family: 'Super Wonder', sans-serif;
     font-size: clamp(34px,4.2vw,54px); font-weight: 700;
-    letter-spacing: -.04em; line-height: 1.05; margin-bottom: 18px;
+    letter-spacing: -.04em; line-height: 1.05; margin-bottom: 22px;
   }
-  .prices h2 em { font-style: italic; font-weight: 300; color: var(--ink-55); }
-  .prices-lead { font-size: 17px; color: var(--ink-55); line-height: 1.72; margin-bottom: 32px; }
-  .price-from { font-size: 15px; color: var(--ink-55); font-weight: 500; margin-bottom: 4px; }
-  .price-num {
-    font-family: 'Bricolage Grotesque', sans-serif; font-size: 68px; font-weight: 700;
-    letter-spacing: -.05em; color: var(--ink); line-height: 1;
-  }
-  .price-note { font-size: 14px; color: var(--ink-30); margin-top: 10px; line-height: 1.6; }
+  .prices-head h2 em { font-style: italic; font-weight: 300; color: var(--ink-55); }
+  .prices-lead { font-size: 17px; color: var(--ink-55); line-height: 1.72; max-width: 540px; margin: 0 auto; }
 
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    align-items: stretch;
+  }
+  @media (max-width: 1080px) { .tier-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; } }
+  @media (max-width: 600px)  { .tier-grid { grid-template-columns: 1fr; gap: 16px; } }
+
+  .tier-card {
+    position: relative;
+    display: flex; flex-direction: column;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-xl);
+    padding: 30px 26px 28px;
+    transition: border-color .25s ease, box-shadow .35s ease, transform .42s var(--ease-snap);
+  }
+  .tier-card:hover {
+    border-color: var(--honey);
+    box-shadow: 0 24px 60px rgba(28,26,18,.1);
+    transform: translateY(-6px);
+  }
+  .tier-card-feat {
+    background: linear-gradient(180deg, #fff 0%, var(--honey-light) 320%);
+    border-color: rgba(192,120,24,.32);
+    box-shadow: 0 18px 48px rgba(192,120,24,.14);
+  }
+  .tier-card-feat::after {
+    content: ''; position: absolute; inset: 0;
+    border-radius: inherit; pointer-events: none;
+    background: radial-gradient(circle at 70% 0%, rgba(192,120,24,.16), transparent 55%);
+  }
+  .tier-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--honey); color: #fff;
+    font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 100px;
+    box-shadow: 0 6px 18px rgba(192,120,24,.35);
+    white-space: nowrap;
+  }
+
+  .tier-head { margin-bottom: 22px; }
+  .tier-eyebrow {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--honey); display: block; margin-bottom: 10px;
+  }
+  .tier-name {
+    font-family: 'Super Wonder', sans-serif;
+    font-size: clamp(22px, 2.4vw, 28px);
+    font-weight: 700; letter-spacing: -.025em;
+    color: var(--ink); line-height: 1.05;
+    margin-bottom: 12px;
+  }
+  .tier-desc {
+    font-size: 14px; color: var(--ink-55); line-height: 1.55;
+  }
+
+  .tier-price {
+    display: flex; align-items: baseline; gap: 6px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    margin: 6px 0 22px;
+    padding-bottom: 22px;
+    border-bottom: 1.5px dashed var(--border);
+  }
+  .tier-price-from {
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px; font-weight: 600; color: var(--ink-30);
+    text-transform: lowercase;
+  }
+  .tier-price-num {
+    font-size: clamp(34px, 3.5vw, 44px);
+    font-weight: 800; letter-spacing: -.04em;
+    color: var(--ink); line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .tier-price-suffix {
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px; font-weight: 600; color: var(--ink-55);
+  }
+
+  .tier-features {
+    list-style: none; padding: 0; margin: 0 0 24px;
+    display: flex; flex-direction: column; gap: 10px;
+    flex: 1;
+  }
+  .tier-features li {
+    position: relative;
+    padding-left: 26px;
+    font-size: 14px; color: var(--ink); line-height: 1.5;
+  }
+  .tier-features li::before {
+    content: ''; position: absolute; left: 0; top: 5px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--honey-light);
+    border: 1px solid rgba(192,120,24,.3);
+    background-image:
+      linear-gradient(45deg, transparent 35%, var(--honey) 35%, var(--honey) 45%, transparent 45%),
+      linear-gradient(-45deg, transparent 50%, var(--honey) 50%, var(--honey) 60%, transparent 60%);
+    background-size: 60% 60%, 60% 60%;
+    background-position: 28% 60%, 56% 38%;
+    background-repeat: no-repeat;
+  }
+
+  .tier-cta {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  .tier-examples-link {
+    text-align: center;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink-55); text-decoration: none;
+    transition: color .2s ease;
+    display: block; padding: 4px 0;
+  }
+  .tier-examples-link:hover { color: var(--honey); }
+
+  .tier-foot {
+    margin-top: 36px;
+    text-align: center;
+    font-size: 13px; color: var(--ink-55);
+    line-height: 1.6;
+  }
+  .tier-foot strong { color: var(--honey); font-weight: 700; }
+
+  /* keep .price-card styles as legacy (unused but harmless if referenced) */
   .price-card {
     background: var(--cream); border: 1px solid var(--border);
     border-radius: var(--r-xl); padding: 34px; position: relative; overflow: hidden;
@@ -1092,169 +1194,34 @@
     font-size: 10px; font-weight: 800; color: var(--honey);
   }
 
-  /* ── Interactive price calculator ──────── */
-  .calc-card {
-    background: #fff; border: 1.5px solid var(--border);
-    border-radius: var(--r-xl); padding: 36px 34px;
-    position: relative; overflow: hidden;
-    box-shadow: 0 20px 60px rgba(28,26,18,0.05);
+  /* Odometer (used for animated tier prices on scroll-in) */
+  .odo {
+    display: inline-flex; align-items: baseline;
+    font-variant-numeric: tabular-nums;
   }
-  .calc-head {
-    display: flex; align-items: baseline; justify-content: space-between;
-    margin-bottom: 28px; gap: 16px; flex-wrap: wrap;
-  }
-  .calc-head h3 {
-    font-family: 'Super Wonder', sans-serif;
-    font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
-  }
-  .calc-live {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 10px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.14em;
-    color: var(--honey);
-  }
-  .calc-live::before {
-    content: ''; width: 6px; height: 6px; border-radius: 50%;
-    background: var(--honey); box-shadow: 0 0 8px var(--honey);
-    animation: pulse 2.5s ease-in-out infinite;
-  }
-
-  .calc-group { margin-bottom: 22px; }
-  .calc-group-label {
-    display: block;
-    font-size: 12px; font-weight: 700;
-    color: var(--ink); margin-bottom: 10px;
-    letter-spacing: -0.005em;
-  }
-  .calc-radio-group {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
-  }
-  .calc-radio {
-    position: relative; cursor: pointer;
-  }
-  .calc-radio input { position: absolute; opacity: 0; pointer-events: none; }
-  .calc-radio-pill {
-    display: block; padding: 11px 8px;
-    background: var(--cream); border: 1.5px solid var(--border);
-    border-radius: 12px;
-    text-align: center;
-    font-size: 13px; font-weight: 600; color: var(--ink-55);
-    transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.2s;
-  }
-  .calc-radio input:checked + .calc-radio-pill {
-    border-color: var(--honey); background: var(--honey-light);
-    color: var(--honey); transform: translateY(-1px);
-  }
-  .calc-radio:hover .calc-radio-pill { border-color: var(--border-mid); }
-
-  .calc-slider-wrap {
-    display: flex; align-items: center; gap: 14px;
-  }
-  .calc-slider-wrap input[type="range"] {
-    flex: 1; -webkit-appearance: none; appearance: none;
-    height: 6px; border-radius: 100px;
-    background: var(--border);
-    outline: none;
-  }
-  .calc-slider-wrap input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none; appearance: none;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--honey);
-    cursor: pointer;
-    box-shadow: 0 2px 12px rgba(192,120,24,0.35);
-    border: 3px solid #fff;
-    transition: transform 0.15s;
-  }
-  .calc-slider-wrap input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); }
-  .calc-slider-wrap input[type="range"]::-moz-range-thumb {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--honey);
-    cursor: pointer;
-    box-shadow: 0 2px 12px rgba(192,120,24,0.35);
-    border: 3px solid #fff;
-  }
-  .calc-slider-val {
-    min-width: 58px; padding: 6px 10px;
-    background: var(--cream); border-radius: 8px;
-    font-size: 13px; font-weight: 700; color: var(--ink);
+  .odo-digit {
+    display: inline-block;
+    height: 1em; line-height: 1;
+    overflow: hidden;
+    width: 1ch; /* with tabular-nums on parent, every digit is exactly 1ch */
+    vertical-align: baseline;
     text-align: center;
   }
-
-  .calc-toggle-group {
-    display: flex; flex-direction: column; gap: 8px;
+  .odo-digit-stack {
+    display: flex; flex-direction: column;
+    transition: transform .42s var(--ease-snap);
+    will-change: transform;
   }
-  .calc-toggle {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 13px 16px;
-    background: var(--cream); border: 1.5px solid var(--border);
-    border-radius: 12px; cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
+  .odo-digit-stack > span {
+    display: block; height: 1em; line-height: 1;
   }
-  .calc-toggle:hover { border-color: var(--border-mid); }
-  .calc-toggle input { position: absolute; opacity: 0; pointer-events: none; }
-  .calc-toggle-label {
-    display: flex; flex-direction: column; gap: 2px;
+  .odo-sep {
+    display: inline-block;
+    width: .28em;
+    text-align: center;
   }
-  .calc-toggle-label strong {
-    font-size: 14px; font-weight: 600; color: var(--ink);
-  }
-  .calc-toggle-label span {
-    font-size: 12px; color: var(--ink-55);
-  }
-  .calc-toggle-switch {
-    width: 36px; height: 20px; border-radius: 100px;
-    background: var(--border-mid);
-    position: relative; flex-shrink: 0;
-    transition: background 0.2s;
-  }
-  .calc-toggle-switch::after {
-    content: ''; position: absolute;
-    left: 2px; top: 2px;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: #fff;
-    transition: transform 0.2s;
-  }
-  .calc-toggle input:checked ~ .calc-toggle-switch {
-    background: var(--honey);
-  }
-  .calc-toggle input:checked ~ .calc-toggle-switch::after {
-    transform: translateX(16px);
-  }
-  .calc-toggle:has(input:checked) {
-    border-color: var(--honey); background: var(--honey-light);
-  }
-
-  .calc-result {
-    margin-top: 28px; padding-top: 24px;
-    border-top: 1.5px dashed var(--border);
-  }
-  .calc-result-label {
-    font-size: 12px; font-weight: 600;
-    color: var(--ink-55); margin-bottom: 6px;
-  }
-  .calc-result-price {
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: clamp(38px, 5vw, 56px);
-    font-weight: 800; letter-spacing: -0.04em;
-    color: var(--ink); line-height: 1;
-  }
-  .calc-result-price .calc-tilde {
-    font-size: 0.55em; color: var(--ink-30); font-weight: 500;
-    margin-right: 4px; letter-spacing: 0;
-  }
-  .calc-result-price .calc-currency {
-    font-size: 0.5em; color: var(--ink-55); font-weight: 600;
-    margin-left: 6px; letter-spacing: 0;
-  }
-  .calc-result-note {
-    font-size: 13px; color: var(--ink-55);
-    margin-top: 12px; line-height: 1.6;
-  }
-  .calc-result-note strong { color: var(--honey); font-weight: 700; }
-
-  @media (max-width: 640px) {
-    .calc-card { padding: 26px 22px; }
-    .calc-radio-group { grid-template-columns: 1fr; }
+  @media (prefers-reduced-motion: reduce) {
+    .odo-digit-stack { transition: none !important; }
   }
 
   /* ─────────────────────────────────────
@@ -1516,37 +1483,69 @@
   }
   .eksempler-head-meta strong { color: var(--ink); font-weight: 700; }
 
-  .eksempler-track-wrap {
-    padding: 0 52px; overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--honey) transparent;
+  /* Filter pill row */
+  .eks-filter {
+    max-width: 1200px; margin: 0 auto 36px;
+    padding: 0 52px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center;
   }
-  .eksempler-track-wrap::-webkit-scrollbar { height: 6px; }
-  .eksempler-track-wrap::-webkit-scrollbar-thumb {
-    background: var(--honey); border-radius: 100px;
+  .eks-pill {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink-55);
+    background: rgba(255,255,255,.6);
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: border-color .22s ease, background .22s ease, color .22s ease,
+                transform .32s var(--ease-snap);
   }
-  .eksempler-track {
-    display: flex; gap: 26px; padding-bottom: 22px;
+  .eks-pill:hover { border-color: var(--border-mid); color: var(--ink); }
+  .eks-pill.is-active {
+    background: var(--ink); color: var(--cream);
+    border-color: var(--ink);
+    transform: translateY(-1px);
   }
+  .eks-pill:focus-visible { outline: 2px solid var(--honey); outline-offset: 3px; }
+
+  /* Grid (replaces horizontal scroll) */
+  .eksempler-grid {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 52px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+  }
+  @media (max-width: 980px) { .eksempler-grid { grid-template-columns: repeat(2, 1fr); gap: 22px; } }
+  @media (max-width: 640px) { .eksempler-grid { grid-template-columns: 1fr; padding: 0 28px; } .eks-filter { padding: 0 28px; } }
+
   .eksempel-card {
-    flex-shrink: 0;
-    width: 420px; max-width: 85vw;
     border-radius: var(--r-xl);
     background: #fff;
     border: 1.5px solid var(--border);
     overflow: hidden;
-    scroll-snap-align: start;
     text-decoration: none; color: inherit;
     display: flex; flex-direction: column;
-    transition: transform .35s cubic-bezier(.22,1,.36,1),
-                box-shadow .35s, border-color .25s;
+    transition: transform .42s var(--ease-snap),
+                box-shadow .35s, border-color .25s,
+                opacity .42s var(--ease-snap);
   }
   .eksempel-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 30px 80px rgba(28,26,18,.14);
     border-color: var(--honey);
+  }
+  .eksempel-card.is-hidden {
+    opacity: 0; transform: scale(.96);
+    pointer-events: none;
+    /* Keep grid placement so siblings don't reflow harshly during fade */
+    visibility: hidden;
+    grid-row: span 0;
+    height: 0; min-height: 0;
+    margin: 0; padding: 0; border: 0;
+    transition: opacity .25s ease, transform .25s ease;
   }
   .eksempel-thumb {
     position: relative;
@@ -1662,6 +1661,49 @@
   .mock-advokat .eksempel-mock-h em { color: #8B6B2F; font-style: italic; }
   .mock-advokat .eksempel-mock-p { color: rgba(15,30,61,.55); }
   .mock-advokat .eksempel-mock-btn { background: #0F1E3D; color: #fff; }
+
+  /* New mock themes for added niches */
+  .mock-konsulent .eksempel-mock-body { background: #F2F4F7; }
+  .mock-konsulent .eksempel-mock-h { color: #1F2937; }
+  .mock-konsulent .eksempel-mock-h em { color: #475569; font-style: italic; }
+  .mock-konsulent .eksempel-mock-p { color: rgba(31,41,55,.55); }
+  .mock-konsulent .eksempel-mock-btn { background: #1F2937; color: #fff; }
+
+  .mock-coach .eksempel-mock-body { background: #FAF1E8; }
+  .mock-coach .eksempel-mock-h { color: #4B2A1F; font-family: 'Bricolage Grotesque'; }
+  .mock-coach .eksempel-mock-h em { color: #C58361; font-style: italic; }
+  .mock-coach .eksempel-mock-p { color: rgba(75,42,31,.55); }
+  .mock-coach .eksempel-mock-btn { background: #C58361; color: #FAF1E8; }
+
+  .mock-arkitekt .eksempel-mock-body { background: #15161A; }
+  .mock-arkitekt .eksempel-mock-h { color: #EDE9DF; }
+  .mock-arkitekt .eksempel-mock-h em { color: #B8B0A0; font-style: italic; }
+  .mock-arkitekt .eksempel-mock-p { color: rgba(237,233,223,.5); }
+  .mock-arkitekt .eksempel-mock-btn { background: #EDE9DF; color: #15161A; }
+
+  .mock-fysio .eksempel-mock-body { background: #EAF4F2; }
+  .mock-fysio .eksempel-mock-h { color: #0F3D3A; }
+  .mock-fysio .eksempel-mock-h em { color: #2E8074; font-style: italic; }
+  .mock-fysio .eksempel-mock-p { color: rgba(15,61,58,.55); }
+  .mock-fysio .eksempel-mock-btn { background: #2E8074; color: #fff; }
+
+  .mock-klaer .eksempel-mock-body { background: #F0EEE7; }
+  .mock-klaer .eksempel-mock-h { color: #2C3625; font-family: 'Bricolage Grotesque'; }
+  .mock-klaer .eksempel-mock-h em { color: #6B7B4F; font-style: italic; }
+  .mock-klaer .eksempel-mock-p { color: rgba(44,54,37,.55); }
+  .mock-klaer .eksempel-mock-btn { background: #2C3625; color: #F0EEE7; }
+
+  .mock-kost .eksempel-mock-body { background: #F5F2E8; }
+  .mock-kost .eksempel-mock-h { color: #2D3D2A; }
+  .mock-kost .eksempel-mock-h em { color: #7B9266; font-style: italic; }
+  .mock-kost .eksempel-mock-p { color: rgba(45,61,42,.55); }
+  .mock-kost .eksempel-mock-btn { background: #7B9266; color: #fff; }
+
+  .mock-handverk .eksempel-mock-body { background: #FAF1E1; }
+  .mock-handverk .eksempel-mock-h { color: #4D2E1A; }
+  .mock-handverk .eksempel-mock-h em { color: #C77B3B; font-style: italic; }
+  .mock-handverk .eksempel-mock-p { color: rgba(77,46,26,.55); }
+  .mock-handverk .eksempel-mock-btn { background: #C77B3B; color: #FAF1E1; }
 
   .eksempel-card.soon {
     background: repeating-linear-gradient(135deg, #fff, #fff 12px, var(--cream) 12px, var(--cream) 24px);
@@ -1844,68 +1886,6 @@
   }
 
   /* ─────────────────────────────────────
-     TESTIMONIALS
-  ───────────────────────────────────── */
-  .testimonials {
-    padding: 108px 0;
-    background: linear-gradient(180deg, var(--cream) 0%, #F7EFDC 100%);
-    border-bottom: 1px solid var(--border);
-    position: relative; overflow: hidden;
-  }
-  .testimonials-head { max-width: 600px; margin: 0 auto 56px; text-align: center; }
-  .testimonials-head h2 {
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: clamp(34px,4.2vw,54px); font-weight: 700;
-    letter-spacing: -.04em; line-height: 1.05; margin-bottom: 16px;
-  }
-  .testimonials-head h2 em { font-style: italic; font-weight: 300; color: var(--ink-55); }
-  .testimonials-head p { font-size: 17px; color: var(--ink-55); line-height: 1.72; }
-  .testimonials-deco {
-    position: absolute; top: 40px; left: 52px;
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 220px; font-weight: 800; line-height: 1;
-    color: var(--honey); opacity: .04; pointer-events: none;
-    user-select: none;
-  }
-  .testimonials-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-  }
-  .testi-card {
-    background: #fff; border: 1.5px solid var(--border);
-    border-radius: var(--r-xl); padding: 32px 28px;
-    position: relative; overflow: hidden;
-    transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s, border-color .25s;
-  }
-  .testi-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 56px rgba(28,26,18,.1);
-    border-color: var(--honey);
-  }
-  .testi-stars { display: flex; gap: 3px; margin-bottom: 18px; }
-  .testi-star { color: var(--honey); font-size: 16px; }
-  .testi-quote {
-    font-size: 15px; color: var(--ink); line-height: 1.72;
-    margin-bottom: 22px; font-weight: 400;
-    font-style: italic;
-  }
-  .testi-author { display: flex; align-items: center; gap: 12px; padding-top: 18px; border-top: 1px solid var(--border); }
-  .testi-avatar {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--honey-light); border: 1.5px solid rgba(192,120,24,.2);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 16px; font-weight: 800; color: var(--honey);
-  }
-  .testi-name { font-size: 14px; font-weight: 700; color: var(--ink); }
-  .testi-role { font-size: 12px; color: var(--ink-55); }
-  .testi-concept-note {
-    text-align: center; margin-top: 28px;
-    font-size: 12px; color: var(--ink-30);
-    font-style: italic;
-  }
-  @media (max-width: 860px) { .testimonials-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; } }
-
-  /* ─────────────────────────────────────
      WAVE SECTION DIVIDERS
   ───────────────────────────────────── */
   .wave-divider {
@@ -1973,7 +1953,7 @@
   /* ─────────────────────────────────────
      CARD TILT SHINE OVERLAY
   ───────────────────────────────────── */
-  .svc-card, .testi-card {
+  .svc-card {
     transform-style: preserve-3d;
   }
   .card-shine {
@@ -1983,7 +1963,7 @@
     opacity: 0; transition: opacity .3s;
     pointer-events: none; z-index: 1;
   }
-  .svc-card:hover .card-shine, .testi-card:hover .card-shine { opacity: 1; }
+  .svc-card:hover .card-shine { opacity: 1; }
 
   /* ─────────────────────────────────────
      FAQ UPGRADE
@@ -2027,7 +2007,6 @@
      RESPONSIVE
   ───────────────────────────────────── */
   @media (max-width: 1000px) {
-    .why-inner   { grid-template-columns: 1fr; gap: 44px; }
     .prices-inner{ grid-template-columns: 1fr; gap: 44px; }
     .contact-inner{ grid-template-columns: 1fr; gap: 44px; }
     .svc-grid    { grid-template-columns: 1fr 1fr; }
@@ -2041,7 +2020,7 @@
     .nav-links { display: none; }
     .nav-hamburger { display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .nav-cta { display: none; }
-    .services, .why, .prices, .contact, .faq, .testimonials { padding: 72px 0; }
+    .services, .pause, .prices, .contact, .faq { padding: 72px 0; }
     .process-outer  { height: auto !important; }
     .process-sticky { position: relative; height: auto; padding: 72px 0; }
     .process-head   { padding: 0 20px; flex-direction: column; align-items: flex-start; gap: 14px; }
@@ -2167,6 +2146,8 @@
 
 <!-- ─── HVA DU FÅR (slides up over welcome) ──── -->
 <section class="services" id="tjenester" data-nav-theme="light">
+  <div class="services-deco services-deco-left" aria-hidden="true"></div>
+  <div class="services-deco services-deco-right" aria-hidden="true"></div>
   <div class="container">
     <div class="services-header-row">
       <div class="sec-header r" id="intro">
@@ -2188,17 +2169,17 @@
         <div class="svc-icon-wrap">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12l2 2 4-4"/></svg>
         </div>
-        <h3>Design, innhold, lansering</h3>
-        <p>Skreddersydd design, hjelp til tekster og bilder, SEO-oppsett, domene, hosting og selve lanseringen. Alt i én fastpris — ingenting du må ordne selv senere.</p>
+        <h3>Design, innhold og lansering</h3>
+        <p>Skreddersydd design, hjelp til tekster og bilder, teknisk SEO-grunnlag, domene, hosting og selve lanseringen. Alt i én fastpris — ingenting du må ordne selv senere.</p>
       </div>
       <div class="svc-card r-scale d1" data-n="02">
         <div class="card-shine"></div>
-        <span class="svc-num">02 — Rask på alt</span>
+        <span class="svc-num">02 — Synlig på Google</span>
         <div class="svc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M11 8v3l2 2"/></svg>
         </div>
-        <h3>Lynrask på mobil og desktop</h3>
-        <p>Sidene åpner seg på under ett sekund. Perfekt på mobil, nettbrett og desktop. Optimalisert i detalj slik at Google finner deg og besøkende blir værende lenge nok til å ta kontakt.</p>
+        <h3>SEO-optimalisert fra dag én</h3>
+        <p>Bygget for å bli funnet. Ren HTML-struktur, rask Core&nbsp;Web&nbsp;Vitals, semantiske overskrifter, schema-markup, sitemap og meta-tagger som faktisk treffer søkeordene kunden din søker etter.</p>
       </div>
       <div class="svc-card r-scale d2" data-n="03">
         <div class="card-shine"></div>
@@ -2215,83 +2196,22 @@
 
 </div><!-- /overlay-pin -->
 
-<!-- Wave: services → why -->
+<!-- Wave: services → pause -->
 <svg class="wave-divider" viewBox="0 0 1440 60" preserveAspectRatio="none" fill="none" aria-hidden="true" style="background:#fff;">
   <path d="M0 60 L0 20 Q360 0 720 30 Q1080 60 1440 20 L1440 60Z" fill="#192140"/>
 </svg>
 
-<!-- ─── WHY ────────────────────────────────── -->
-<section class="why" data-nav-theme="dark">
-  <div class="craft-deco" aria-hidden="true">
-    <!-- Floating hammer -->
-    <svg class="cd cd1" viewBox="0 0 36 36" fill="none">
-      <rect x="2" y="6" width="20" height="10" rx="3" fill="currentColor"/>
-      <rect x="15" y="14" width="6" height="18" rx="2.5" fill="currentColor" opacity=".75"/>
-    </svg>
-    <!-- Floating wrench -->
-    <svg class="cd cd2" viewBox="0 0 32 32" fill="none">
-      <path d="M8 4C5 4 3 6.5 3 9s2 5 5 5c.5 0 1-.07 1.5-.2L18 22.5c-.13.5-.2 1-.2 1.5C17.8 27 20 29 23 29s5.2-2 5.2-5-2.2-5-5.2-5c-.5 0-1 .07-1.5.2L12.5 10.7C12.6 10.2 12.8 9.6 12.8 9 12.8 6 10.8 4 8 4z" fill="currentColor"/>
-    </svg>
-    <!-- Floating screwdriver -->
-    <svg class="cd cd3" viewBox="0 0 12 40" fill="none">
-      <rect x="4" y="0" width="4" height="10" rx="2" fill="currentColor"/>
-      <rect x="3" y="8" width="6" height="22" rx="1.5" fill="currentColor" opacity=".8"/>
-      <polygon points="3,30 9,30 6,40" fill="currentColor" opacity=".6"/>
-    </svg>
-    <!-- Floating nail -->
-    <svg class="cd cd4" viewBox="0 0 12 44" fill="none">
-      <rect x="0" y="0" width="12" height="6" rx="2" fill="currentColor"/>
-      <rect x="4" y="6" width="4" height="30" rx="1.5" fill="currentColor" opacity=".7"/>
-      <polygon points="4,36 8,36 6,44" fill="currentColor" opacity=".5"/>
-    </svg>
-  </div>
-  <div class="why-glow-1"></div>
-  <div class="why-glow-2"></div>
-
+<!-- ─── PAUSE (visual breath between Hva du får and Slik fungerer det) ─── -->
+<section class="pause" data-nav-theme="dark">
   <div class="container">
-    <div class="why-inner">
-      <div class="why-head">
-        <span class="label r" style="color:rgba(253,242,220,.6);">Hvorfor det betyr noe</span>
-        <h2 class="r d1">Førsteinntrykket<br /><em>avgjør alt.</em></h2>
-        <p class="why-lead r d2">
-          Folk bestemmer seg på under tre sekunder. En moderne, gjennomført nettside gir bedriften din tilliten og profesjonaliteten den fortjener — og gjør forskjellen mellom en forbipasserende og en ny kunde.
-        </p>
-      </div>
-
-      <div class="why-args r d2">
-
-        <div class="why-arg">
-          <div class="why-arg-n">01</div>
-          <h4>Moderne og tidløs</h4>
-          <p>Ingen ferdige maler og ingen trender som går ut på dato. Jeg lager sider som er moderne nå — og som fortsatt føles riktige om fem år.</p>
-        </div>
-
-        <div class="why-arg">
-          <div class="why-arg-n">02</div>
-          <h4>Tro mot bedriften din</h4>
-          <p>Designet oversetter det som gjør bedriften din spesiell — tonen, verdiene, håndverket — til et visuelt uttrykk folk kjenner igjen og stoler på.</p>
-        </div>
-
-        <div class="why-arg">
-          <div class="why-arg-n">03</div>
-          <h4>Bygget for å bli husket</h4>
-          <p>Gjennomtenkt typografi, rolig bevegelse og små detaljer. Sider som sitter igjen hos besøkende lenge etter at de har forlatt dem.</p>
-        </div>
-
-        <div class="why-arg">
-          <div class="why-arg-n">04</div>
-          <h4>Konverterer besøkende til kunder</h4>
-          <p>Et godt førsteinntrykk er ikke forfengelighet. Det er forskjellen mellom å bli valgt og bli glemt — og det er det jeg designer for.</p>
-        </div>
-
-      </div>
-    </div>
+    <h2 class="pause-h r">Førsteinntrykket <em>avgjør alt.</em></h2>
+    <p class="pause-p r d1">Folk bestemmer seg på under tre sekunder. Jeg sørger for at de bestemmer seg for deg.</p>
   </div>
 </section>
 
 <!-- ─── PROCESS ──────────────────────────────── -->
 <section class="process-outer" id="prosess" data-nav-theme="light">
-  <!-- Wave: why → process (dark-blue overlay so grid extends up to the wave) -->
+  <!-- Wave: pause → process (dark-blue overlay so grid extends up to the wave) -->
   <svg class="wave-divider-overlay" viewBox="0 0 1440 60" preserveAspectRatio="none" fill="none" aria-hidden="true">
     <path d="M0 0 L1440 0 L1440 30 Q1080 -5 720 25 Q360 60 0 20 Z" fill="#192140"/>
   </svg>
@@ -2485,260 +2405,410 @@
   </div>
 </section>
 
-<!-- ─── EKSEMPLER ─────────────────────── -->
-<section class="eksempler" id="eksempler" aria-label="Utvalgte prosjekter" data-nav-theme="light">
+<!-- ─── EKSEMPLER (filtered by category) ─────────────────────── -->
+<section class="eksempler" id="eksempler" aria-label="Utvalgte prosjekter og konsepter" data-nav-theme="light">
   <div class="eksempler-head r">
     <div>
       <span class="label">Eksempler</span>
-      <h2>Noen av sidene<br /><em>jeg har laget.</em></h2>
+      <h2>Se hva jeg kan<br /><em>bygge for deg.</em></h2>
     </div>
     <p class="eksempler-head-meta">
-      Konsept-sider for ulike bransjer. Det første kortet er klikkbart — resten er under arbeid og kommer fortløpende.
+      Ekte prosjekter og konsept-sider for ulike bransjer. Filtrér etter pakke for å se hva som passer din virksomhet.
     </p>
   </div>
 
-  <div class="eksempler-track-wrap">
-    <div class="eksempler-track">
+  <div class="eks-filter r d1" role="tablist" aria-label="Filtrer eksempler etter pakke">
+    <button class="eks-pill is-active" data-filter="all" role="tab" aria-selected="true">Alle</button>
+    <button class="eks-pill" data-filter="enkel" role="tab" aria-selected="false">Enkel landingsside</button>
+    <button class="eks-pill" data-filter="premium" role="tab" aria-selected="false">Premium landingsside</button>
+    <button class="eks-pill" data-filter="booking" role="tab" aria-selected="false">Booking</button>
+    <button class="eks-pill" data-filter="shop" role="tab" aria-selected="false">Nettbutikk</button>
+  </div>
 
-      <a class="eksempel-card r" href="konsept/handverker.html">
-        <div class="eksempel-thumb">
-          <div class="eksempel-mock mock-handverker">
-            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-            <div class="eksempel-mock-body">
-              <div class="eksempel-mock-h">Bygg &amp; Bolig <em>Snekkeri</em></div>
-              <div class="eksempel-mock-p">Håndverk, solid kvalitet og lokal forankring.</div>
-              <span class="eksempel-mock-btn">Be om tilbud →</span>
-            </div>
-          </div>
-        </div>
-        <div class="eksempel-body">
-          <span class="eksempel-tag">Håndverker</span>
-          <h3>Bygg &amp; Bolig Snekkeri</h3>
-          <p>Tillitsskapende nettside for et lokalt snekkerfirma. Tydelig referanseprosjekter, enkel kontakt, og en tone som signaliserer yrkesstolthet.</p>
-          <div class="eksempel-footer">
-            <span>Se konseptet</span>
-            <span class="arrow">→</span>
-          </div>
-        </div>
-      </a>
+  <div class="eksempler-grid" id="eksemplerGrid">
 
-      <div class="eksempel-card soon r d1">
-        <div class="eksempel-thumb">
-          <div class="eksempel-mock mock-klinikk">
-            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-            <div class="eksempel-mock-body">
-              <div class="eksempel-mock-h">Tannklinikken <em>Smilet</em></div>
-              <div class="eksempel-mock-p">Bestill time på under ett minutt — trygt og enkelt.</div>
-              <span class="eksempel-mock-btn">Bestill time →</span>
-            </div>
-          </div>
-        </div>
-        <div class="eksempel-body">
-          <span class="eksempel-tag">Klinikk</span>
-          <h3>Tannklinikken Smilet</h3>
-          <p>Ren, rolig og tillitvekkende. Booking-modul med egen kalender, priser i klartekst og tydelige forventninger til besøket.</p>
-          <div class="eksempel-footer">
-            <span>Kommer snart</span>
-            <span class="arrow" style="opacity:.3">→</span>
+    <!-- ───── ENKEL ───── -->
+    <a class="eksempel-card r" href="konsept/handverker.html" data-cat="enkel">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-handverker">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Bygg &amp; Bolig <em>Snekkeri</em></div>
+            <div class="eksempel-mock-p">Håndverk, solid kvalitet og lokal forankring.</div>
+            <span class="eksempel-mock-btn">Be om tilbud →</span>
           </div>
         </div>
       </div>
-
-      <div class="eksempel-card soon r d2">
-        <div class="eksempel-thumb">
-          <div class="eksempel-mock mock-frisor">
-            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-            <div class="eksempel-mock-body">
-              <div class="eksempel-mock-h">Salong <em>Lavendel</em></div>
-              <div class="eksempel-mock-p">Moderne klipping, tidløs stil. Book nå.</div>
-              <span class="eksempel-mock-btn">Book time →</span>
-            </div>
-          </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Håndverker</span>
+        <h3>Bygg &amp; Bolig Snekkeri</h3>
+        <p>Tillitsskapende landingsside for et lokalt snekkerfirma. Referanseprosjekter, enkel kontakt og en tone som signaliserer yrkesstolthet.</p>
+        <div class="eksempel-footer">
+          <span>Se konseptet</span>
+          <span class="arrow">→</span>
         </div>
-        <div class="eksempel-body">
-          <span class="eksempel-tag">Frisør</span>
-          <h3>Salong Lavendel</h3>
-          <p>Stemningsfull presentasjon av stylistene, galleri av arbeid og en bookingflyt som ingen gir opp halvveis.</p>
-          <div class="eksempel-footer">
-            <span>Kommer snart</span>
-            <span class="arrow" style="opacity:.3">→</span>
+      </div>
+    </a>
+
+    <div class="eksempel-card soon r" data-cat="enkel">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-konsulent">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Hagen <em>Konsulent</em></div>
+            <div class="eksempel-mock-p">Strategisk rådgivning for små og mellomstore bedrifter.</div>
+            <span class="eksempel-mock-btn">Avtal samtale →</span>
           </div>
         </div>
       </div>
-
-      <div class="eksempel-card soon r d3">
-        <div class="eksempel-thumb">
-          <div class="eksempel-mock mock-restaurant">
-            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-            <div class="eksempel-mock-body">
-              <div class="eksempel-mock-h">Bistro <em>Høst</em></div>
-              <div class="eksempel-mock-p">Sesongens råvarer. Reserver bord eller bestill take-away.</div>
-              <span class="eksempel-mock-btn">Reserver bord →</span>
-            </div>
-          </div>
-        </div>
-        <div class="eksempel-body">
-          <span class="eksempel-tag">Restaurant</span>
-          <h3>Bistro Høst</h3>
-          <p>Appetittvekkende meny, enkel bordreservasjon og en stemning som matcher opplevelsen gjestene får når de kommer.</p>
-          <div class="eksempel-footer">
-            <span>Kommer snart</span>
-            <span class="arrow" style="opacity:.3">→</span>
-          </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Konsulent</span>
+        <h3>Hagen Konsulent</h3>
+        <p>Én ren landingsside som forklarer tjenesten, viser referanser og lar potensielle kunder booke en uforpliktende samtale.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
         </div>
       </div>
-
-      <div class="eksempel-card soon r d4">
-        <div class="eksempel-thumb">
-          <div class="eksempel-mock mock-advokat">
-            <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-            <div class="eksempel-mock-body">
-              <div class="eksempel-mock-h">Berg &amp; Lund <em>Advokater</em></div>
-              <div class="eksempel-mock-p">Trygg juridisk rådgivning for private og bedrifter.</div>
-              <span class="eksempel-mock-btn">Gratis vurdering →</span>
-            </div>
-          </div>
-        </div>
-        <div class="eksempel-body">
-          <span class="eksempel-tag">Advokat</span>
-          <h3>Berg &amp; Lund Advokater</h3>
-          <p>Autoritet uten å være kald. Tydelige fagområder, presentasjon av partnerne og en kontaktflate som inngir tillit fra første sekund.</p>
-          <div class="eksempel-footer">
-            <span>Kommer snart</span>
-            <span class="arrow" style="opacity:.3">→</span>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <div class="eksempel-card soon r" data-cat="enkel">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-coach">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Maja <em>Strand</em></div>
+            <div class="eksempel-mock-p">Yoga og pust — for et roligere hverdagsliv.</div>
+            <span class="eksempel-mock-btn">Meld deg på →</span>
+          </div>
+        </div>
+      </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Personlig brand</span>
+        <h3>Maja Strand</h3>
+        <p>Personlig nettside for en yogainstruktør. Varm tone, tydelig tilbud og en enkel påmeldingsflyt — uten unødvendige steg.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── PREMIUM ───── -->
+    <div class="eksempel-card soon r" data-cat="premium">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-restaurant">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Bistro <em>Høst</em></div>
+            <div class="eksempel-mock-p">Sesongens råvarer. Reserver bord eller bestill take-away.</div>
+            <span class="eksempel-mock-btn">Reserver bord →</span>
+          </div>
+        </div>
+      </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Restaurant</span>
+        <h3>Bistro Høst</h3>
+        <p>Appetittvekkende meny som glir inn med scroll-animasjoner, reservasjonsskjema og en stemning som matcher opplevelsen i lokalet.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="eksempel-card soon r" data-cat="premium">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-advokat">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Berg &amp; Lund <em>Advokater</em></div>
+            <div class="eksempel-mock-p">Trygg juridisk rådgivning for private og bedrifter.</div>
+            <span class="eksempel-mock-btn">Gratis vurdering →</span>
+          </div>
+        </div>
+      </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Advokat</span>
+        <h3>Berg &amp; Lund Advokater</h3>
+        <p>Autoritet uten å være kald. Tydelige fagområder, partner-presentasjoner og rolige overganger som inngir tillit fra første sekund.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="eksempel-card soon r" data-cat="premium">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-arkitekt">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Studio <em>Nord</em></div>
+            <div class="eksempel-mock-p">Arkitektur som hører hjemme i landskapet.</div>
+            <span class="eksempel-mock-btn">Se prosjektene →</span>
+          </div>
+        </div>
+      </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Arkitekt</span>
+        <h3>Studio Nord</h3>
+        <p>Stort visuelt format, parallax-effekter og prosjektgalleri. SEO-optimalisert for "arkitekt" + region, så lokale byggherrer finner studioet.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── BOOKING ───── -->
+    <div class="eksempel-card soon r" data-cat="booking">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-klinikk">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Tannklinikken <em>Smilet</em></div>
+            <div class="eksempel-mock-p">Bestill time på under ett minutt — trygt og enkelt.</div>
+            <span class="eksempel-mock-btn">Bestill time →</span>
+          </div>
+        </div>
+      </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Klinikk</span>
+        <h3>Tannklinikken Smilet</h3>
+        <p>Ren, rolig og tillitvekkende. Booking-modul med egen kalender, priser i klartekst og automatisk SMS-påminnelse.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="eksempel-card soon r" data-cat="booking">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-frisor">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Salong <em>Lavendel</em></div>
+            <div class="eksempel-mock-p">Moderne klipping, tidløs stil. Book nå.</div>
+            <span class="eksempel-mock-btn">Book time →</span>
+          </div>
+        </div>
+      </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Frisør</span>
+        <h3>Salong Lavendel</h3>
+        <p>Stemningsfull presentasjon av stylistene, galleri av arbeid og en bookingflyt som faktisk fullføres — inkludert valg av tjeneste og stylist.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="eksempel-card soon r" data-cat="booking">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-fysio">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Holm <em>Fysio</em></div>
+            <div class="eksempel-mock-p">Fysioterapi og rehabilitering — book direkte hos behandleren.</div>
+            <span class="eksempel-mock-btn">Velg behandler →</span>
+          </div>
+        </div>
+      </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Fysioterapi</span>
+        <h3>Holm Fysio</h3>
+        <p>Behandlerprofiler med spesialfelt, transparent pris-tabell og booking knyttet til riktig terapeut. SEO bygget rundt "fysioterapi" + bydel.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── NETTBUTIKK ───── -->
+    <div class="eksempel-card soon r" data-cat="shop">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-klaer">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Mose &amp; <em>Bær</em></div>
+            <div class="eksempel-mock-p">Bærekraftige plagg, laget i Norden.</div>
+            <span class="eksempel-mock-btn">Handle nå →</span>
+          </div>
+        </div>
+      </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Klær</span>
+        <h3>Mose &amp; Bær</h3>
+        <p>Bærekraftig motebutikk med fokus på materialer og produksjon. Vipps-kasse, størrelsesguide, og fri retur — alt i én flyt.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="eksempel-card soon r" data-cat="shop">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-kost">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Kraft &amp; <em>Kropp</em></div>
+            <div class="eksempel-mock-p">Rene kosttilskudd, dokumentert virkning.</div>
+            <span class="eksempel-mock-btn">Se sortimentet →</span>
+          </div>
+        </div>
+      </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Kosttilskudd</span>
+        <h3>Kraft &amp; Kropp</h3>
+        <p>Produktsider med ingrediensliste, doseringsinfo og kundeanmeldelser. Abonnement-funksjon for faste leveranser hver 30. dag.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="eksempel-card soon r" data-cat="shop">
+      <div class="eksempel-thumb">
+        <div class="eksempel-mock mock-handverk">
+          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
+          <div class="eksempel-mock-body">
+            <div class="eksempel-mock-h">Tre &amp; <em>Tråd</em></div>
+            <div class="eksempel-mock-p">Lokalprodusert kunsthåndverk, små opplag.</div>
+            <span class="eksempel-mock-btn">Til butikken →</span>
+          </div>
+        </div>
+      </div>
+      <div class="eksempel-body">
+        <span class="eksempel-tag">Kunsthåndverk</span>
+        <h3>Tre &amp; Tråd</h3>
+        <p>Liten butikk med håndlagde varer. Begrenset opplag-funksjon, fortelling om hver produsent og enkel utsjekking via Vipps.</p>
+        <div class="eksempel-footer">
+          <span>Kommer snart</span>
+          <span class="arrow" style="opacity:.3">→</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<!-- ─── TESTIMONIALS ──────────────────────────── -->
-<section class="testimonials" data-nav-theme="light">
-  <div class="testimonials-deco" aria-hidden="true">"</div>
+<!-- ─── PRICES (pakkepriser) ──────────────────── -->
+<section class="prices" id="priser" aria-label="Pakkepriser" data-nav-theme="light">
   <div class="container">
-    <div class="testimonials-head r">
-      <span class="label">Hva folk sier</span>
-      <h2>Tilbakemeldinger <em>som varmer.</em></h2>
-      <p>Fornøyde kunder er den beste reklamen — her er noen av dem.</p>
+    <div class="prices-head r">
+      <span class="label">Pakkepriser</span>
+      <h2>Fastpris fra<br /><em>første samtale.</em></h2>
+      <p class="prices-lead">Du betaler én gang og eier alt. Velg pakken som passer — eller blande og matche, jeg tilpasser etter behov.</p>
     </div>
 
-    <div class="testimonials-grid">
-      <div class="testi-card r-blur">
-        <div class="card-shine"></div>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">«Vi fikk en nettside som faktisk ser ut som bedriften vår. Kunder ringer og sier de valgte oss på grunn av nettsiden. Det har aldri skjedd før.»</p>
-        <div class="testi-author">
-          <div class="testi-avatar">KL</div>
-          <div><div class="testi-name">Kari Larsen</div><div class="testi-role">Daglig leder, Bygg & Bolig Snekkeri</div></div>
-        </div>
-      </div>
+    <div class="tier-grid">
 
-      <div class="testi-card r-blur d1">
-        <div class="card-shine"></div>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">«Lynrask levering, null stress. Jeg sendte tekst og bilder, og fikk en ferdig side som var bedre enn jeg hadde forestilt meg. Prisen var helt riktig også.»</p>
-        <div class="testi-author">
-          <div class="testi-avatar">TH</div>
-          <div><div class="testi-name">Thomas Hansen</div><div class="testi-role">Eier, Salong Lavendel</div></div>
+      <!-- Tier 1: Enkel landingsside -->
+      <article class="tier-card r" data-tier="enkel" data-cat-link="enkel">
+        <div class="tier-head">
+          <span class="tier-eyebrow">For å komme i gang</span>
+          <h3 class="tier-name">Enkel<br>landingsside</h3>
+          <p class="tier-desc">Én fokusert side som forklarer hva du gjør og får folk til å ta kontakt.</p>
         </div>
-      </div>
+        <div class="tier-price">
+          <span class="tier-price-from">fra</span>
+          <span class="tier-price-num"><span class="odo" data-odo="4990">4 990</span></span>
+          <span class="tier-price-suffix">kr</span>
+        </div>
+        <ul class="tier-features">
+          <li>1 side, mobiltilpasset</li>
+          <li>Skreddersydd design</li>
+          <li>Kontaktskjema</li>
+          <li>Teknisk SEO-grunnlag</li>
+          <li>Domene + hosting første år</li>
+          <li>Lansering inkludert</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-outline tier-cta">Be om tilbud →</a>
+        <a href="#eksempler" class="tier-examples-link" data-cat-jump="enkel">Se eksempler ↓</a>
+      </article>
 
-      <div class="testi-card r-blur d2">
-        <div class="card-shine"></div>
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">«Endelig en utvikler som forstår at det handler om tillit. Pasientene våre sier bookingen er enkel, og vi har fått merkbart flere timer via nettsiden.»</p>
-        <div class="testi-author">
-          <div class="testi-avatar">MJ</div>
-          <div><div class="testi-name">Maria Johansen</div><div class="testi-role">Tannlege, Tannklinikken Smilet</div></div>
+      <!-- Tier 2: Premium landingsside (most popular) -->
+      <article class="tier-card tier-card-feat r d1" data-tier="premium" data-cat-link="premium">
+        <span class="tier-badge">Mest populær</span>
+        <div class="tier-head">
+          <span class="tier-eyebrow">Med liv og særpreg</span>
+          <h3 class="tier-name">Premium<br>landingsside</h3>
+          <p class="tier-desc">Levende design med animasjoner og scroll-effekter — og avansert SEO som faktisk rangerer.</p>
         </div>
-      </div>
+        <div class="tier-price">
+          <span class="tier-price-from">fra</span>
+          <span class="tier-price-num"><span class="odo" data-odo="11990">11 990</span></span>
+          <span class="tier-price-suffix">kr</span>
+        </div>
+        <ul class="tier-features">
+          <li>Alt i Enkel</li>
+          <li>3–5 undersider</li>
+          <li>Scroll- og hover-animasjoner</li>
+          <li>Avansert SEO + schema-markup</li>
+          <li>Performance-tuning (Core Web Vitals)</li>
+          <li>Egne illustrasjoner/video etter behov</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-dark tier-cta">Be om tilbud →</a>
+        <a href="#eksempler" class="tier-examples-link" data-cat-jump="premium">Se eksempler ↓</a>
+      </article>
+
+      <!-- Tier 3: Booking -->
+      <article class="tier-card r d2" data-tier="booking" data-cat-link="booking">
+        <div class="tier-head">
+          <span class="tier-eyebrow">For tjenestebedrifter</span>
+          <h3 class="tier-name">Booking<br>løsning</h3>
+          <p class="tier-desc">Kunder kan bestille time selv — for tannleger, frisører, klinikker og terapeuter.</p>
+        </div>
+        <div class="tier-price">
+          <span class="tier-price-from">fra</span>
+          <span class="tier-price-num"><span class="odo" data-odo="16990">16 990</span></span>
+          <span class="tier-price-suffix">kr</span>
+        </div>
+        <ul class="tier-features">
+          <li>Alt i Premium</li>
+          <li>Online booking-system</li>
+          <li>Kalender-synk (Google/iCal)</li>
+          <li>Påminnelse på SMS/e-post</li>
+          <li>Admin-panel for timer</li>
+          <li>Vipps eller kortbetaling (valgfritt)</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-outline tier-cta">Be om tilbud →</a>
+        <a href="#eksempler" class="tier-examples-link" data-cat-jump="booking">Se eksempler ↓</a>
+      </article>
+
+      <!-- Tier 4: Nettbutikk -->
+      <article class="tier-card r d3" data-tier="shop" data-cat-link="shop">
+        <div class="tier-head">
+          <span class="tier-eyebrow">For å selge på nett</span>
+          <h3 class="tier-name">Nettbutikk</h3>
+          <p class="tier-desc">Full butikk med Vipps, kortbetaling, lager og kundepanel — bygget for å konvertere.</p>
+        </div>
+        <div class="tier-price">
+          <span class="tier-price-from">fra</span>
+          <span class="tier-price-num"><span class="odo" data-odo="27990">27 990</span></span>
+          <span class="tier-price-suffix">kr</span>
+        </div>
+        <ul class="tier-features">
+          <li>Alt i Premium</li>
+          <li>Produktkatalog + kategorier</li>
+          <li>Vipps + kortbetaling</li>
+          <li>Lager- og ordrehåndtering</li>
+          <li>Kundepanel og ordresporing</li>
+          <li>Faktura, frakt og rabattkoder</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-outline tier-cta">Be om tilbud →</a>
+        <a href="#eksempler" class="tier-examples-link" data-cat-jump="shop">Se eksempler ↓</a>
+      </article>
+
     </div>
 
-    <p class="testi-concept-note r d3">Konseptuelle eksempler — ekte anmeldelser kommer snart.</p>
-  </div>
-</section>
-
-<!-- ─── PRICES (with interactive calculator) ─── -->
-<section class="prices" id="priser" aria-label="Priser og kalkulator" data-nav-theme="light">
-  <div class="container">
-    <div class="prices-inner">
-      <div>
-        <span class="label r">Priser</span>
-        <h2 class="r d1">Enkelt og<br /><em>forutsigbart.</em></h2>
-        <p class="prices-lead r d2">Ingen abonnementer til meg. Ingen skjulte kostnader. Du betaler én gang og eier alt. Flytt reglene i kalkulatoren for å se hva ditt prosjekt kan koste.</p>
-        <div class="r d2">
-          <p class="price-from">Nettsider fra</p>
-          <div class="price-num">9.900,-</div>
-          <p class="price-note">Alltid inkludert: skreddersydd design, mobiltilpasning, SEO-grunnlag, lynraske lastetider, kontaktskjema, revisjoner til du er fornøyd, og full eierskap av kode og domene.</p>
-        </div>
-        <div style="margin-top:32px" class="r d3">
-          <a href="#kontakt" class="btn btn-dark">Få et gratis tilbud →</a>
-        </div>
-      </div>
-
-      <!-- Interactive price calculator -->
-      <div class="calc-card r d1" aria-label="Interaktiv priskalkulator">
-        <div class="calc-head">
-          <h3>Estimér din pris</h3>
-          <span class="calc-live">Live</span>
-        </div>
-
-        <div class="calc-group">
-          <label class="calc-group-label">Type nettside</label>
-          <div class="calc-radio-group">
-            <label class="calc-radio">
-              <input type="radio" name="calcType" value="landing" checked>
-              <span class="calc-radio-pill">Landingsside</span>
-            </label>
-            <label class="calc-radio">
-              <input type="radio" name="calcType" value="booking">
-              <span class="calc-radio-pill">Booking</span>
-            </label>
-            <label class="calc-radio">
-              <input type="radio" name="calcType" value="shop">
-              <span class="calc-radio-pill">Nettbutikk</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="calc-group">
-          <label class="calc-group-label" for="calcPages">Antall undersider: <span id="calcPagesVal" style="color:var(--honey);">5</span></label>
-          <div class="calc-slider-wrap">
-            <input type="range" id="calcPages" min="1" max="12" value="5" step="1" aria-label="Antall undersider">
-            <div class="calc-slider-val"><span id="calcPagesDisplay">5</span> stk</div>
-          </div>
-        </div>
-
-        <div class="calc-group">
-          <label class="calc-group-label">Ekstra</label>
-          <div class="calc-toggle-group">
-            <label class="calc-toggle">
-              <input type="checkbox" id="calcCms">
-              <span class="calc-toggle-label"><strong>Enkelt CMS</strong><span>Oppdater tekster og bilder selv</span></span>
-              <span class="calc-toggle-switch" aria-hidden="true"></span>
-            </label>
-            <label class="calc-toggle">
-              <input type="checkbox" id="calcLang">
-              <span class="calc-toggle-label"><strong>Flerspråklig</strong><span>Norsk + engelsk (eller annet)</span></span>
-              <span class="calc-toggle-switch" aria-hidden="true"></span>
-            </label>
-            <label class="calc-toggle">
-              <input type="checkbox" id="calcBlog">
-              <span class="calc-toggle-label"><strong>Blogg-modul</strong><span>Del nyheter og artikler</span></span>
-              <span class="calc-toggle-switch" aria-hidden="true"></span>
-            </label>
-          </div>
-        </div>
-
-        <div class="calc-result" aria-live="polite">
-          <div class="calc-result-label">Estimat</div>
-          <div class="calc-result-price"><span class="calc-tilde">~</span><span id="calcPrice">15 000</span><span class="calc-currency">kr</span></div>
-          <p class="calc-result-note">Fastpris avtales etter en kort samtale. Domene ~99 kr/år · hosting ~499 kr/år. <strong>Ingen skjulte gebyrer.</strong></p>
-        </div>
-      </div>
-    </div>
+    <p class="tier-foot r d3">Domene ~99 kr/år · hosting ~499 kr/år. <strong>Ingen skjulte gebyrer.</strong> Trenger du noe imellom? Vi tilpasser pakken.</p>
   </div>
 </section>
 
@@ -2862,51 +2932,163 @@ const revealObs = new IntersectionObserver(entries => {
 }, { threshold: 0.07 });
 document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').forEach(el => revealObs.observe(el));
 
-/* ── Price calculator ──────────────── */
+/* ── Eksempler: filter cards by category ───────────────────────── */
 (function() {
-  const form = {
-    type:  document.querySelectorAll('input[name="calcType"]'),
-    pages: document.getElementById('calcPages'),
-    cms:   document.getElementById('calcCms'),
-    lang:  document.getElementById('calcLang'),
-    blog:  document.getElementById('calcBlog')
-  };
-  const priceEl = document.getElementById('calcPrice');
-  const pagesValEl = document.getElementById('calcPagesVal');
-  const pagesDispEl = document.getElementById('calcPagesDisplay');
-  if (!priceEl || !form.pages) return;
+  const pills = document.querySelectorAll('.eks-pill');
+  const cards = document.querySelectorAll('.eksempler-grid .eksempel-card');
+  if (!pills.length || !cards.length) return;
 
-  const BASE = { landing: 9900, booking: 18000, shop: 26000 };
-  const PER_PAGE = 1500;
-
-  function getType() {
-    for (const r of form.type) if (r.checked) return r.value;
-    return 'landing';
+  function applyFilter(cat) {
+    cards.forEach(card => {
+      const match = (cat === 'all') || (card.dataset.cat === cat);
+      card.classList.toggle('is-hidden', !match);
+    });
+    pills.forEach(p => {
+      const active = p.dataset.filter === cat;
+      p.classList.toggle('is-active', active);
+      p.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
   }
 
-  function calc() {
-    const type = getType();
-    let p = BASE[type] || BASE.landing;
-    const pages = parseInt(form.pages.value, 10) || 1;
-    // First page included in base, each extra adds PER_PAGE
-    p += Math.max(0, pages - 1) * PER_PAGE;
-    if (form.cms && form.cms.checked)  p += 3500;
-    if (form.lang && form.lang.checked) p += 4500;
-    if (form.blog && form.blog.checked) p += 2800;
-    // Round to nearest 100
-    p = Math.round(p / 100) * 100;
-    // Format as "15 000"
-    priceEl.textContent = p.toLocaleString('nb-NO').replace(/\u00A0/g, ' ');
-    if (pagesValEl) pagesValEl.textContent = pages;
-    if (pagesDispEl) pagesDispEl.textContent = pages;
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => applyFilter(pill.dataset.filter));
+  });
+
+  // "Se eksempler ↓" links from tier cards: jump + filter
+  document.querySelectorAll('[data-cat-jump]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const cat = link.dataset.catJump;
+      if (cat) applyFilter(cat);
+      // The href="#eksempler" handles scroll natively; no preventDefault.
+    });
+  });
+})();
+
+/* ── Odometer prices: roll up to target value when scrolled into view ── */
+(function() {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const odos = document.querySelectorAll('.odo[data-odo]');
+  if (!odos.length) return;
+
+  function fmt(n) {
+    return n.toLocaleString('nb-NO').replace(/ /g, ' ');
   }
 
-  form.type.forEach(r => r.addEventListener('change', calc));
-  form.pages.addEventListener('input', calc);
-  if (form.cms)  form.cms.addEventListener('change', calc);
-  if (form.lang) form.lang.addEventListener('change', calc);
-  if (form.blog) form.blog.addEventListener('change', calc);
-  calc();
+  /* Render targetStr into el as digit-stack columns. Reuses nodes so the
+     slide animation actually plays on subsequent calls. */
+  function renderOdo(el, targetStr) {
+    const chars = Array.from(targetStr);
+    const existing = Array.from(el.children);
+    chars.forEach((ch, i) => {
+      const isDigit = ch >= '0' && ch <= '9';
+      const wantClass = isDigit ? 'odo-digit' : 'odo-sep';
+      let node = existing[i];
+      if (!node || node.className !== wantClass) {
+        const fresh = document.createElement('span');
+        fresh.className = wantClass;
+        if (isDigit) {
+          const stack = document.createElement('span');
+          stack.className = 'odo-digit-stack';
+          for (let d = 0; d <= 9; d++) {
+            const s = document.createElement('span');
+            s.textContent = d;
+            stack.appendChild(s);
+          }
+          fresh.appendChild(stack);
+        } else {
+          fresh.textContent = ch;
+        }
+        if (node) el.replaceChild(fresh, node);
+        else el.appendChild(fresh);
+        node = fresh;
+      }
+      if (isDigit) {
+        const stack = node.firstChild;
+        const digit = parseInt(ch, 10);
+        const ty = -digit * 100;
+        stack.style.transform = 'translateY(' + ty + '%)';
+      } else {
+        node.textContent = ch;
+      }
+    });
+    while (el.children.length > chars.length) el.removeChild(el.lastChild);
+    el.setAttribute('aria-label', targetStr);
+  }
+
+  // Initialize each price at its zero-padded form so it rolls UP to target.
+  odos.forEach(el => {
+    const target = parseInt(el.dataset.odo, 10) || 0;
+    const zeros = fmt(target).replace(/\d/g, '0');
+    el.textContent = '';
+    renderOdo(el, zeros);
+    void el.offsetHeight;
+  });
+
+  if (reduceMotion) {
+    odos.forEach(el => renderOdo(el, fmt(parseInt(el.dataset.odo, 10) || 0)));
+    return;
+  }
+
+  const seen = new WeakSet();
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting || seen.has(entry.target)) return;
+      seen.add(entry.target);
+      const el = entry.target;
+      const target = parseInt(el.dataset.odo, 10) || 0;
+      const idx = Array.from(odos).indexOf(el);
+      setTimeout(() => renderOdo(el, fmt(target)), idx * 90);
+    });
+  }, { threshold: 0.5 });
+  odos.forEach(el => obs.observe(el));
+})();
+
+/* ── Magnetic CTAs (pointer/hover only) ─────────────────────────── */
+(function() {
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const STRENGTH = 0.22;
+  const PAD_X = 24, PAD_Y = 16;
+  const targets = document.querySelectorAll('.btn-dark, .nav-cta, .form-submit');
+  targets.forEach(el => {
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf = null, inZone = false;
+    const tick = () => {
+      tx += (cx - tx) * 0.22;
+      ty += (cy - ty) * 0.22;
+      const settled = Math.abs(cx - tx) < 0.05 && Math.abs(cy - ty) < 0.05;
+      if (settled) {
+        tx = cx; ty = cy;
+        if (cx === 0 && cy === 0) {
+          // Hand back to CSS — restore transition so :hover lift is smooth.
+          el.style.transition = '';
+          el.style.transform = '';
+          raf = null;
+          return;
+        }
+      }
+      el.style.transition = 'none';
+      el.style.transform = 'translate(' + tx.toFixed(2) + 'px, ' + ty.toFixed(2) + 'px)';
+      raf = settled ? null : requestAnimationFrame(tick);
+    };
+    const startTick = () => { if (raf === null) raf = requestAnimationFrame(tick); };
+    window.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const within = e.clientX >= r.left - PAD_X && e.clientX <= r.right + PAD_X
+                  && e.clientY >= r.top - PAD_Y && e.clientY <= r.bottom + PAD_Y;
+      if (within) {
+        inZone = true;
+        const mx = r.left + r.width / 2;
+        const my = r.top + r.height / 2;
+        cx = (e.clientX - mx) * STRENGTH;
+        cy = (e.clientY - my) * STRENGTH;
+        startTick();
+      } else if (inZone) {
+        inZone = false;
+        cx = 0; cy = 0;
+        startTick();
+      }
+    }, { passive: true });
+  });
 })();
 
 /* ── Intro splash — plays on every refresh ──────────────────────── */
@@ -3131,7 +3313,7 @@ form.addEventListener('submit', async e => {
 /* ── Card tilt + shine effect ──────── */
 (function() {
   if (!matchMedia('(hover: hover)').matches) return;
-  document.querySelectorAll('.svc-card, .testi-card').forEach(card => {
+  document.querySelectorAll('.svc-card').forEach(card => {
     card.addEventListener('mousemove', e => {
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width;
