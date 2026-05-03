@@ -637,92 +637,6 @@
     .welcome-cta { font-size: clamp(15px, 4vw, 22px); bottom: clamp(16px, 4vh, 36px); }
   }
 
-  /* ─────────────────────────────────────
-     WELCOME CTA ARROW + SCROLL HINT
-     - CTA arrow: hand-drawn curve pointing at the CTA, fades in after the
-       CTA is done typing so it doesn't compete with the typewriter effect.
-     - Scroll hint: appears only if the user has been on the welcome screen
-       for 10s without scrolling. Bouncing chevron in the bottom-right.
-  ───────────────────────────────────── */
-  .welcome-cta-arrow {
-    position: absolute;
-    width: clamp(72px, 7vw, 110px);
-    height: clamp(72px, 7vw, 110px);
-    bottom: clamp(72px, 11vh, 130px);   /* stacked just above the CTA */
-    left: 50%;
-    margin-left: clamp(60px, 9vw, 150px); /* offset right of the centered CTA */
-    z-index: 6;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 1s ease;
-    overflow: visible;
-  }
-  .welcome-cta-arrow.in { opacity: .85; }
-  .welcome-cta-arrow path {
-    fill: none;
-    stroke: var(--ink);
-    stroke-width: 2.4;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    vector-effect: non-scaling-stroke;
-  }
-  .welcome-cta-arrow-line {
-    stroke-dasharray: 220;
-    stroke-dashoffset: 220;
-    transition: stroke-dashoffset 1.2s cubic-bezier(.5,.05,.4,1);
-  }
-  .welcome-cta-arrow-head {
-    stroke-dasharray: 60;
-    stroke-dashoffset: 60;
-    transition: stroke-dashoffset .35s ease 1s;
-  }
-  .welcome-cta-arrow.in .welcome-cta-arrow-line,
-  .welcome-cta-arrow.in .welcome-cta-arrow-head {
-    stroke-dashoffset: 0;
-  }
-
-  .welcome-scroll-hint {
-    position: absolute;
-    bottom: clamp(20px, 4vh, 44px);
-    right: clamp(24px, 4vw, 56px);
-    z-index: 6;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--ink-55);
-    opacity: 0;
-    transition: opacity .8s ease;
-    pointer-events: none;
-  }
-  .welcome-scroll-hint.in { opacity: .85; }
-  .welcome-scroll-hint svg {
-    width: 22px; height: 22px;
-    stroke: currentColor;
-    stroke-width: 2.2;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    animation: welcome-scroll-bounce 1.7s ease-in-out infinite;
-  }
-  @keyframes welcome-scroll-bounce {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(7px); }
-  }
-  @media (max-width: 820px) {
-    /* On mobile, fold the CTA arrow up smaller and pull it closer to the CTA */
-    .welcome-cta-arrow {
-      width: 60px; height: 60px;
-      bottom: clamp(56px, 9vh, 100px);
-      margin-left: clamp(40px, 22vw, 110px);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .welcome-scroll-hint svg { animation: none; }
-    .welcome-cta-arrow-line, .welcome-cta-arrow-head { transition: none; }
-  }
 
   /* ─────────────────────────────────────
      SERVICES (Hva jeg gjør) — STICKY STACK
@@ -1105,10 +1019,30 @@
   .pause-inner {
     display: grid;
     grid-template-columns: 1.4fr 1fr;
-    gap: clamp(40px, 6vw, 80px);
-    align-items: center;
+    grid-template-areas:
+      "head  video"
+      "sw    sw"
+      "tail  tail"
+      "aside aside";
+    column-gap: clamp(40px, 6vw, 80px);
+    row-gap: clamp(36px, 4.5vw, 64px);
+    align-items: start;
   }
-  .pause-text { text-align: left; }
+  .pause-head  { grid-area: head;  text-align: left; align-self: center; }
+  .pause-video-wrap { grid-area: video; }
+  .pause-tail  { grid-area: tail;  text-align: left; }
+  .pause-aside { grid-area: aside; }
+  @media (max-width: 760px) {
+    .pause-inner {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "head"
+        "video"
+        "sw"
+        "tail"
+        "aside";
+    }
+  }
   .pause-h {
     font-family: 'Super Wonder', sans-serif;
     font-size: clamp(40px, 6.4vw, 84px);
@@ -1137,18 +1071,60 @@
   /* Body paragraph in Super Wonder — same display face as the headline,
      softened by a lighter weight so it reads as supporting copy. */
   .pause-sw {
+    grid-area: sw;
     font-family: 'Super Wonder', sans-serif;
     font-weight: 500;
     font-size: clamp(20px, 2.2vw, 30px);
-    line-height: 1.2;
+    line-height: 1.25;
     letter-spacing: -.01em;
     color: var(--cream);
     max-width: none;
+    margin: 0;                  /* override .pause-p margin */
+    text-align: center;         /* centers the inline-block .pause-sw-box across the FULL section */
   }
   /* Force the closing clause to live on a single unbroken line. */
   .pause-sw-line { white-space: nowrap; }
   /* Honey-colored highlight on the "førsteinntrykket den fortjener" tail. */
   .pause-sw-hi { color: var(--honey); }
+  /* Pulsating frame that contains the SuperWonder body line. Modern, lively —
+     a slow breath on border + glow + tiny lift, plus an animated subtle conic
+     accent that rotates around the perimeter. */
+  .pause-sw-box {
+    display: inline-block;
+    width: max-content;             /* hug the longest line — both lines share equal padding on each side */
+    max-width: 100%;                /* fall back to parent width on narrow viewports */
+    position: relative;
+    padding: clamp(20px, 2.4vw, 32px) clamp(26px, 3vw, 44px);
+    text-align: left;
+    border-radius: 18px;
+    background: linear-gradient(135deg,
+      rgba(192, 120, 24, .05),
+      rgba(36, 51, 86, .25));
+    border: 1.5px solid rgba(192, 120, 24, .28);
+    isolation: isolate;
+    animation: pause-sw-breathe 3.8s ease-in-out infinite;
+  }
+  @keyframes pause-sw-breathe {
+    0%, 100% {
+      border-color: rgba(192, 120, 24, .25);
+      box-shadow:
+        0 12px 36px rgba(0, 0, 0, .25),
+        0 0 0 0 rgba(192, 120, 24, 0),
+        0 0 60px rgba(192, 120, 24, .04);
+      transform: translateY(0);
+    }
+    50% {
+      border-color: rgba(192, 120, 24, .58);
+      box-shadow:
+        0 18px 50px rgba(0, 0, 0, .32),
+        0 0 0 5px rgba(192, 120, 24, .07),
+        0 0 110px rgba(192, 120, 24, .18);
+      transform: translateY(-3px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pause-sw-box { animation: none; transform: none; }
+  }
   /* Underline the "flere kunder inn døra" tail. Drawn as a single solid bar via
      background-image so it's continuous under descenders (p, g, ø) instead of
      being broken by skip-ink. */
@@ -1159,19 +1135,21 @@
     background-size: 100% .08em;
     padding-bottom: .14em;
   }
-  /* Neon-green highlighter sweep under the lede, revealed left-to-right when the
-     paragraph enters view. Drawn as a band behind the text. */
+  /* Honey-toned highlighter sweep under the lede, drawn left-to-right when
+     the paragraph enters view. A subtle band behind the text — matches the
+     section's cream/honey palette so it reads as part of the page rather
+     than a foreign neon accent. */
   .lede-mark {
     background-image: linear-gradient(
-      transparent 55%,
-      rgba(80, 255, 120, .55) 55%,
-      rgba(80, 255, 120, .55) 92%,
-      transparent 92%
+      transparent 60%,
+      rgba(192, 120, 24, .58) 60%,
+      rgba(192, 120, 24, .58) 95%,
+      transparent 95%
     );
     background-repeat: no-repeat;
     background-position: 0 0;
     background-size: 0% 100%;
-    transition: background-size 1.5s cubic-bezier(.55,.06,.3,1) .9s;
+    transition: background-size 1.4s cubic-bezier(.55,.06,.3,1) .85s;
     padding: 0 .12em;
     margin: 0 -.12em;
     border-radius: 2px;
@@ -1195,6 +1173,10 @@
     margin-top: clamp(56px, 6.5vw, 88px) !important;
     letter-spacing: 0;
     line-height: 1.2 !important;
+    white-space: nowrap;        /* keep on a single line */
+  }
+  @media (max-width: 760px) {
+    .pause-punch { white-space: normal; }   /* allow wrapping on narrow screens */
   }
   /* Tusj reveal: an inner span is clipped from right to left, animated open
      when the parent (with .r class) gets .in from the reveal observer.
@@ -1204,9 +1186,55 @@
     clip-path: inset(0 100% 0 0);
     will-change: clip-path;
   }
-  .pause-punch.in .tusj-mask,
+  /* Tusj is now JS-orchestrated: fires only when .is-tusjed is added (after the
+     hourglass + arrow sequence completes). The .r reveal still fades the
+     paragraph in, but the strike-through doesn't auto-fire on .in. */
   .pause-punch.is-tusjed .tusj-mask {
-    animation: pause-tusj 2.2s linear 4s forwards;
+    animation: pause-tusj 2.2s linear forwards;
+  }
+
+  /* Reflective aside under the punch — handwritten feel, words fade in with a
+     staggered blur-clearance so it reads like someone jotting a thought. JS
+     wraps each word in <span class="pa-w"> and adds .in when the door video
+     starts (i.e., right at the heart of the moment). */
+  .pause-aside {
+    margin: clamp(20px, 2.6vw, 40px) 0 0;     /* extra breath between door and the closing thought */
+    font-family: 'Caveat', 'Marous', cursive;
+    font-size: clamp(18px, 1.7vw, 22px);
+    line-height: 1.45;
+    color: rgba(250, 246, 236, .68);
+    max-width: none;
+    font-style: normal;
+    letter-spacing: .005em;
+  }
+  /* Each sentence sits on its own line. */
+  .pause-aside .pa-line {
+    display: block;
+  }
+  .pause-aside .pa-line + .pa-line {
+    margin-top: clamp(8px, 1vw, 14px);
+  }
+  .pause-aside em {
+    color: var(--honey);
+    font-style: italic;
+    font-weight: 600;
+  }
+  .pause-aside .pa-w {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(6px);
+    filter: blur(6px);
+    transition: opacity .55s cubic-bezier(.4,.05,.3,1),
+                transform .55s cubic-bezier(.4,.05,.3,1),
+                filter .55s cubic-bezier(.4,.05,.3,1);
+  }
+  .pause-aside.in .pa-w {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pause-aside .pa-w { transition: none; opacity: 1; transform: none; filter: none; }
   }
   @keyframes pause-tusj {
     0%   { clip-path: inset(0 100% 0 0); }
@@ -1265,11 +1293,12 @@
             mask-image: radial-gradient(ellipse 42% 58% at center, #000 60%, transparent 92%);
   }
   @media (max-width: 760px) {
-    .pause-inner { grid-template-columns: 1fr; gap: 32px; }
-    .pause-text { text-align: center; }
+    .pause-inner { gap: 32px; }
+    .pause-head, .pause-tail { text-align: center; }
     .pause-h { margin-left: auto; margin-right: auto; }
     .pause-p  { margin-left: auto; margin-right: auto; }
-    .pause-video-wrap { max-width: 280px; }
+    .pause-video-wrap { max-width: 280px; margin-left: auto; margin-right: auto; }
+    .pause-aside { margin-left: auto; margin-right: auto; max-width: 48ch; }
   }
 
   /* ─────────────────────────────────────
@@ -2359,16 +2388,6 @@
       <video class="welcome-avatar" src="media/avatar-2.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
     </div>
     <a class="welcome-cta" id="welcomeCta" href="#kontakt"></a>
-    <!-- Hand-drawn arrow pointing AT the CTA — fades in once typing finishes -->
-    <svg class="welcome-cta-arrow" id="welcomeCtaArrow" viewBox="0 0 100 100" aria-hidden="true">
-      <path class="welcome-cta-arrow-line" d="M 92 8 C 102 32, 92 65, 24 86"/>
-      <path class="welcome-cta-arrow-head" d="M 24 86 L 38 82 M 24 86 L 32 73"/>
-    </svg>
-    <!-- Scroll-down hint — appears after 10s idle on welcome -->
-    <div class="welcome-scroll-hint" id="welcomeScrollHint" aria-hidden="true">
-      <span>scroll</span>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-    </div>
   </div>
 </section>
 
@@ -2484,7 +2503,7 @@
           </svg>
         </div>
         <h3>Live på maks 10 dager</h3>
-        <p>Du tar kontakt i dag, jeg starter i morgen, og siden er live på under to uker.</p>
+        <p>Du tar kontakt i dag, jeg starter i morgen, og siden er live på <strong>under to uker</strong>.</p>
       </div>
 
     </div>
@@ -2502,22 +2521,37 @@
 <!-- ─── PAUSE (visual breath between Hva du får and Slik fungerer det) ─── -->
 <section class="pause" data-nav-theme="dark">
   <div class="container pause-inner">
-    <div class="pause-text">
+    <!-- Top row: title + lede on the left, hourglass + reflective aside stacked on the right -->
+    <div class="pause-head">
       <h2 class="pause-h r">Førsteinntrykket <em>avgjør alt.</em></h2>
       <p class="pause-p pause-lede r d1"><span class="lede-mark">Folk bestemmer seg på tre sekunder.</span></p>
-      <p class="pause-p pause-sw r d2">Jeg bygger en moderne, interaktiv nettside til deg, <span class="pause-sw-line">for å gi bedriften din <span class="pause-sw-hi">førsteinntrykket den fortjener</span>.</span></p>
-      <p class="pause-p pause-punch r d3" id="pausePunch"><span class="tusj-mask">Det betyr <span class="pause-punch-u">flere kunder inn døra.</span></span></p>
-      <div class="pause-door-wrap" aria-hidden="true">
-        <video class="pause-door" id="pauseDoor" muted playsinline preload="metadata">
-          <source src="media/door.mp4" type="video/mp4">
-        </video>
-      </div>
     </div>
     <div class="pause-video-wrap r d2" aria-hidden="true">
       <video class="pause-video" id="pauseVideo" muted playsinline preload="metadata">
         <source src="media/hourglass.mp4" type="video/mp4">
       </video>
     </div>
+
+    <!-- Centered framed sentence — spans both columns so it sits in the section's true horizontal middle. -->
+    <p class="pause-p pause-sw r d2">
+      <span class="pause-sw-box">Jeg bygger nettsider som fanger oppmerksomhet,<br>bygger tillit, og <span class="pause-sw-hi">selger</span>...</span>
+    </p>
+
+    <!-- Bottom row: punch line + door video, spanning both columns so the punch fits on a single line -->
+    <div class="pause-tail">
+      <p class="pause-p pause-punch r d3" id="pausePunch"><span class="tusj-mask">Og det betyr <span class="pause-punch-u">flere kunder inn døra</span>!</span></p>
+      <div class="pause-door-wrap" aria-hidden="true">
+        <video class="pause-door" id="pauseDoor" muted playsinline preload="metadata">
+          <source src="media/door.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- Reflective afterthought — sits at the very bottom of the section, full-width below everything else. -->
+    <p class="pause-aside" id="pauseAside" aria-label="Det er lett å undervurdere effekten av en god nettside. Kanskje er det lettere for deg å relatere til den negative effekten av en dårlig nettside…">
+      <span class="pa-line">— Det er lett å undervurdere effekten av en god nettside.</span>
+      <span class="pa-line">Kanskje er det lettere for deg å relatere til den <em>negative</em> effekten av en dårlig nettside…</span>
+    </p>
   </div>
 </section>
 
@@ -2947,39 +2981,107 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
   }, CTA_START + CTA_TYPE_MS + POST_CTA_BREATH);
 })();
 
-/* ── Pause punchline tusj reveal + sync door video ──────────────────── */
+/* ── Pause section choreography: hourglass → arrow → punch tusj → door ─
+   Sequence triggered when the punch line enters view:
+     1. Wait for hourglass video to finish (or fall back to its duration + 0.5s)
+     2. Brief breath, then the marker arrow draws in (~1.5s)
+     3. Punch line tusj fires (.is-tusjed → 2.2s strike)
+     4. At end of tusj, door video plays (customers walk in)
+   On exit, all timers are cancelled and door is paused. On re-entry, we reset
+   classes and run the sequence again. ── */
 (function() {
   const punch = document.getElementById('pausePunch');
   const door  = document.getElementById('pauseDoor');
+  const aside = document.getElementById('pauseAside');
+  const hourglass = document.getElementById('pauseVideo');
   if (!punch || !door) return;
 
+  // One-time word-split for the aside so each word can stagger-fade in.
+  // Recurses into .pa-line wrappers so each sentence on its own line still gets
+  // per-word stagger; inline children (e.g. <em>negative</em>) are kept as a
+  // single .pa-w unit so their own styling is preserved.
+  if (aside && !aside.dataset.split) {
+    const splitInto = (parent) => {
+      const sourceNodes = Array.from(parent.childNodes);
+      const out = [];
+      sourceNodes.forEach(node => {
+        if (node.nodeType === 3) {
+          node.textContent.split(/(\s+)/).forEach(part => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) {
+              out.push(document.createTextNode(part));
+            } else {
+              const span = document.createElement('span');
+              span.className = 'pa-w';
+              span.textContent = part;
+              out.push(span);
+            }
+          });
+        } else if (node.nodeType === 1) {
+          if (node.classList.contains('pa-line')) {
+            splitInto(node);          // recurse, keep the line wrapper
+            out.push(node);
+          } else {
+            node.classList.add('pa-w');  // treat inline elements (e.g. <em>) as one word
+            out.push(node);
+          }
+        }
+      });
+      parent.innerHTML = '';
+      out.forEach(n => parent.appendChild(n));
+    };
+    splitInto(aside);
+    aside.querySelectorAll('.pa-w').forEach((w, i) => {
+      w.style.transitionDelay = (i * 0.045) + 's';
+    });
+    aside.dataset.split = '1';
+  }
+
+  // One-shot text reveal: punch tusj + aside word-stagger fire on the first
+  // intersection and then stay locked in their final state for the session.
+  // The door video, however, replays each time the section re-enters view.
   let triggered = false;
-  let doorTimer = null;
+  let doorArmed = false;
+
   function fire() {
+    if (triggered) return;
     triggered = true;
-    // Restart tusj animation by toggling the class with a reflow between.
-    punch.classList.remove('is-tusjed');
-    void punch.offsetWidth;
-    punch.classList.add('is-tusjed');
-    // Customers walk in — held back to match tusj animation-delay (4s)
-    if (doorTimer) clearTimeout(doorTimer);
-    try { door.pause(); door.currentTime = 0; } catch (err) {}
-    doorTimer = setTimeout(() => {
-      const p = door.play();
-      if (p && typeof p.catch === 'function') p.catch(() => {});
-    }, 4000);
+
+    setTimeout(() => {
+      void punch.offsetWidth;
+      punch.classList.add('is-tusjed');
+      // Door plays at the END of the tusj strike (2.2s). After this initial
+      // play, the door observer below takes over and replays on re-entry.
+      setTimeout(() => {
+        const p = door.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+        doorArmed = true;
+        if (aside) setTimeout(() => aside.classList.add('in'), 600);
+      }, 2200);
+    }, 600);
   }
 
   const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) fire(); });
+  }, { threshold: 0 });
+  obs.observe(punch);
+
+  // Door re-trigger: once the initial sequence has played the door once,
+  // every subsequent re-entry rewinds and plays it again. Stays paused
+  // when the door is off-screen so it doesn't drift through frames invisibly.
+  const doorObs = new IntersectionObserver((entries) => {
+    if (!doorArmed) return;
     entries.forEach(e => {
-      if (e.isIntersecting) fire();
-      else if (triggered) {
-        if (doorTimer) clearTimeout(doorTimer);
-        door.pause();
+      if (e.isIntersecting) {
+        try { door.currentTime = 0; } catch (err) {}
+        const p = door.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+      } else {
+        try { door.pause(); } catch (err) {}
       }
     });
-  }, { threshold: 0 });   // any intersection — maximum reliability
-  obs.observe(punch);
+  }, { threshold: 0.4 });
+  doorObs.observe(door);
 })();
 
 /* ── Pause-section hourglass video: replay on every scroll into view ─── */
@@ -3174,34 +3276,6 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
   }, 5800);
 })();
 
-/* ── Welcome CTA arrow + scroll-down hint ──
-   Arrow draws in shortly after the CTA finishes typing (synced with that
-   sequence). Scroll hint surfaces only if the user has lingered ≥10s on
-   the welcome view without scrolling. Both fade out as soon as scrolling
-   starts. ── */
-(function() {
-  const arrow = document.getElementById('welcomeCtaArrow');
-  const hint  = document.getElementById('welcomeScrollHint');
-
-  // CTA finishes typing at ~5800 + 70*21 ≈ 7270ms
-  if (arrow) setTimeout(() => arrow.classList.add('in'), 7400);
-
-  let hintTimer = null;
-  if (hint) {
-    hintTimer = setTimeout(() => {
-      if (window.scrollY < 100) hint.classList.add('in');
-    }, 10000);
-  }
-
-  function hideOnScroll() {
-    if (window.scrollY <= 50) return;
-    if (hintTimer) clearTimeout(hintTimer);
-    if (arrow) arrow.classList.remove('in');
-    if (hint)  hint.classList.remove('in');
-    window.removeEventListener('scroll', hideOnScroll);
-  }
-  window.addEventListener('scroll', hideOnScroll, { passive: true });
-})();
 
 /* ── Nav scroll: hide over welcome, show as soon as Hva du får covers the screen ─ */
 (function() {
