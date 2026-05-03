@@ -212,11 +212,11 @@
           </p>
 
           <div class="contact-methods">
-            <a href="mailto:hei@nettsnekkeren.no" class="contact-method">
+            <a href="mailto:post@nettsnekkeren.no" class="contact-method">
               <div class="contact-method-icon" aria-hidden="true">✉</div>
               <div class="contact-method-text">
                 <div class="contact-method-label">E-post</div>
-                <div class="contact-method-val">hei@nettsnekkeren.no</div>
+                <div class="contact-method-val">post@nettsnekkeren.no</div>
               </div>
               <span class="contact-method-arrow" aria-hidden="true">↗</span>
             </a>
@@ -310,7 +310,7 @@
     </a>
     <a href="portefolje.html">Eksempler</a>
     <a href="kontakt.html">Kontakt</a>
-    <a href="mailto:hei@nettsnekkeren.no">hei@nettsnekkeren.no</a>
+    <a href="mailto:post@nettsnekkeren.no">post@nettsnekkeren.no</a>
     <a href="tel:+4746783148">+47 467 83 148</a>
   </div>
   <p>© 2026 Nettsnekkeren</p>
@@ -368,7 +368,7 @@
     const subject = encodeURIComponent('Henvendelse fra ' + fname);
     const body    = encodeURIComponent(msg + '\n\n--\nFra: ' + fname + ' <' + email + '>');
     // Open mailto as a working fallback while Formspree TODO is pending
-    window.location.href = 'mailto:hei@nettsnekkeren.no?subject=' + subject + '&body=' + body;
+    window.location.href = 'mailto:post@nettsnekkeren.no?subject=' + subject + '&body=' + body;
 
     setTimeout(() => {
       document.getElementById('form-area').style.display = 'none';

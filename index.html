@@ -28,7 +28,7 @@
     "name": "Nettsnekkeren",
     "description": "Solo-webdesigner som bygger håndlagde, skreddersydde nettsider for norske bedrifter, klinikker og håndverkere.",
     "url": "https://nettsnekkeren.no/",
-    "email": "hei@nettsnekkeren.no",
+    "email": "post@nettsnekkeren.no",
     "telephone": "+4746783148",
     "priceRange": "9900-45000 NOK",
     "areaServed": {
@@ -646,14 +646,21 @@
     z-index: 2;
     border-radius: 28px 28px 0 0;
     box-shadow: 0 -40px 70px -20px rgba(28,26,18,.18);
-    /* Hole in top-left for the winch hook. Welcome bg shows through. */
+    /* Holes in top-left AND top-right for two winch hooks. Welcome bg shows through.
+       Section is "lifted" from both sides. Two radial gradients composited via
+       mask-composite so the union is transparent (both holes punch through). */
     --winch-x: clamp(80px, 7vw, 120px);
+    --winch-x-r: calc(100% - clamp(80px, 7vw, 120px));
     --winch-y: 36px;
     --hole-r: 22px;
     -webkit-mask-image:
-      radial-gradient(circle var(--hole-r) at var(--winch-x) var(--winch-y), transparent 86%, #000 96%);
+      radial-gradient(circle var(--hole-r) at var(--winch-x) var(--winch-y), transparent 86%, #000 96%),
+      radial-gradient(circle var(--hole-r) at var(--winch-x-r) var(--winch-y), transparent 86%, #000 96%);
             mask-image:
-      radial-gradient(circle var(--hole-r) at var(--winch-x) var(--winch-y), transparent 86%, #000 96%);
+      radial-gradient(circle var(--hole-r) at var(--winch-x) var(--winch-y), transparent 86%, #000 96%),
+      radial-gradient(circle var(--hole-r) at var(--winch-x-r) var(--winch-y), transparent 86%, #000 96%);
+    -webkit-mask-composite: source-in;
+            mask-composite: intersect;
   }
   /* ── Winch rig (spool + bracket + rope): fixed at the top of the viewport,
      BEHIND services so the page covers the wheel as it rises. The nav (at .985
@@ -670,6 +677,13 @@
     opacity: 0;
     transition: opacity .55s ease;
   }
+  .winch-rig-right {
+    left: auto;
+    right: calc(clamp(80px, 7vw, 120px) - 50px);
+  }
+  /* Mirror the spool so the crank handle sticks out the OPPOSITE side
+     (a second winch on the right would naturally face inward). */
+  .winch-rig-right .winch-spool { transform: scaleX(-1); }
   .winch-rig.is-entered { opacity: 1; }
   .winch-bracket {
     position: absolute;
@@ -716,6 +730,10 @@
     opacity: 0;
     filter: drop-shadow(0 2px 3px rgba(28,26,18,.25));
     transition: opacity .35s ease, top .6s cubic-bezier(.45,0,.35,1);
+  }
+  .winch-hook-right {
+    left: auto;
+    right: calc(clamp(80px, 7vw, 120px) - 16px);
   }
   .winch-hook.is-entered { opacity: 1; }
   .winch-hook.is-snappy { transition: opacity .35s ease; }
@@ -848,6 +866,46 @@
     font-style: normal;
     font-weight: 700;
   }
+
+  /* Intro claim — two paragraphs grouped inside a hand-drawn marker oval that
+     animates in (drawn left-to-right via stroke-dashoffset) when the section
+     enters view. Strong tags here are black/bold (overrides the honey above). */
+  .intro-claim {
+    position: relative;
+    display: inline-block;
+    padding: 18px 44px 20px;
+    margin-top: 6px;
+  }
+  .intro-claim p { margin: 0; }
+  .intro-claim p + p { margin-top: 6px; }
+  .intro-claim p strong {
+    color: var(--ink);
+    font-style: normal;
+    font-weight: 800;
+  }
+  .intro-claim-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .intro-claim-ring path {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: .82;
+    vector-effect: non-scaling-stroke;
+    /* dasharray + dashoffset are set by JS using getTotalLength() so the draw-in
+       reveals the full closed path even with non-uniform SVG stretching. */
+    transition: stroke-dashoffset 1.5s cubic-bezier(.6,.05,.3,1) 1.05s;
+  }
+  .intro-claim.in .intro-claim-ring path { stroke-dashoffset: 0 !important; }
+  @media (prefers-reduced-motion: reduce) {
+    .intro-claim-ring path { transition: none; stroke-dashoffset: 0 !important; }
+  }
   .svc-card p strong {
     color: var(--honey);
     font-weight: 700;
@@ -977,7 +1035,7 @@
     font-weight: 700; line-height: 1.05;
     letter-spacing: -.04em;
     color: var(--cream);
-    margin: 0 0 26px;
+    margin: 0 0 clamp(48px, 6vw, 80px);
     max-width: 14ch;
   }
   .pause-h em { font-style: italic; font-weight: 700; color: var(--honey); }
@@ -989,7 +1047,62 @@
     max-width: 540px;
     margin: 0;
   }
-  .pause-p + .pause-p { margin-top: 14px; }
+  .pause-p + .pause-p { margin-top: clamp(20px, 2vw, 30px); }
+  /* Lede line — bigger and heavier than the body paragraph below it. */
+  .pause-lede {
+    font-size: clamp(20px, 2.1vw, 28px);
+    font-weight: 700;
+    color: var(--cream);
+  }
+  /* Body paragraph in Super Wonder — same display face as the headline,
+     softened by a lighter weight so it reads as supporting copy. */
+  .pause-sw {
+    font-family: 'Super Wonder', sans-serif;
+    font-weight: 500;
+    font-size: clamp(20px, 2.2vw, 30px);
+    line-height: 1.2;
+    letter-spacing: -.01em;
+    color: var(--cream);
+    max-width: none;
+  }
+  /* Force the closing clause to live on a single unbroken line. */
+  .pause-sw-line { white-space: nowrap; }
+  /* Honey-colored highlight on the "førsteinntrykket den fortjener" tail. */
+  .pause-sw-hi { color: var(--honey); }
+  /* Underline the "flere kunder inn døra" tail. Drawn as a single solid bar via
+     background-image so it's continuous under descenders (p, g, ø) instead of
+     being broken by skip-ink. */
+  .pause-punch-u {
+    background-image: linear-gradient(var(--honey), var(--honey));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% .08em;
+    padding-bottom: .14em;
+  }
+  /* Neon-green highlighter sweep under the lede, revealed left-to-right when the
+     paragraph enters view. Drawn as a band behind the text. */
+  .lede-mark {
+    background-image: linear-gradient(
+      transparent 55%,
+      rgba(80, 255, 120, .55) 55%,
+      rgba(80, 255, 120, .55) 92%,
+      transparent 92%
+    );
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 0% 100%;
+    transition: background-size 1.5s cubic-bezier(.55,.06,.3,1) .9s;
+    padding: 0 .12em;
+    margin: 0 -.12em;
+    border-radius: 2px;
+  }
+  .pause-lede.in .lede-mark {
+    background-size: 100% 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lede-mark { transition: none; }
+    .pause-lede.in .lede-mark { background-size: 100% 100%; }
+  }
   .pause-p strong {
     color: var(--honey);
     font-weight: 700;
@@ -999,7 +1112,7 @@
     font-size: clamp(22px, 2.6vw, 32px) !important;
     color: var(--cream) !important;
     font-weight: 400;
-    margin-top: 28px !important;
+    margin-top: clamp(56px, 6.5vw, 88px) !important;
     letter-spacing: 0;
     line-height: 1.2 !important;
   }
@@ -1030,7 +1143,7 @@
     width: 100%;
     max-width: 260px;
     aspect-ratio: 1 / 1;        /* square — fits door+characters at the doorway */
-    margin-top: 22px;
+    margin-top: clamp(48px, 6vw, 80px);
     position: relative;
     overflow: hidden;
   }
@@ -1185,8 +1298,18 @@
     min-width: 480px; max-width: 480px;
     flex-shrink: 0;
     display: flex; flex-direction: column;
-    transition: border-color .25s, box-shadow .3s, transform .42s var(--ease-snap);
+    transition: opacity .5s ease, filter .5s ease,
+                border-color .25s, box-shadow .3s, transform .42s var(--ease-snap);
     overflow: hidden;
+    /* Inactive default — dimmed and slightly washed out so the active card pops */
+    opacity: .28;
+    filter: saturate(.55);
+  }
+  .process-card.is-active {
+    opacity: 1;
+    filter: none;
+    border-color: var(--honey);
+    box-shadow: 0 16px 48px rgba(28,26,18,.12);
   }
   .process-card:hover {
     border-color: var(--honey);
@@ -1905,7 +2028,7 @@
   ───────────────────────────────────── */
   .wave-divider {
     display: block; width: 100%; height: auto;
-    margin-bottom: -2px; /* overlap seam */
+    margin-bottom: -4px; /* overlap seam — kill subpixel hairline */
     position: relative; z-index: 2;
   }
   .wave-divider-bottom {
@@ -2038,6 +2161,8 @@
     .services, .pause, .prices, .contact, .faq { padding: 72px 0; }
     .process-outer  { height: auto !important; }
     .process-sticky { position: relative; height: auto; padding: 72px 0; }
+    /* On mobile the cards stack/wrap — show them all at full clarity. */
+    .process-card   { opacity: 1; filter: none; }
     .process-head   { padding: 0 20px; flex-direction: column; align-items: flex-start; gap: 14px; }
     .process-head-note { text-align: left; }
     .process-track-wrap{ padding: 0 20px; overflow-x: auto; padding-bottom: 16px; -webkit-overflow-scrolling: touch; }
@@ -2182,6 +2307,28 @@
         stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 
+<!-- Mirror rig + hook on the right edge — section is winched up from BOTH sides. -->
+<div class="winch-rig winch-rig-right" aria-hidden="true">
+  <div class="winch-bracket"></div>
+  <svg class="winch-spool" viewBox="0 0 100 100">
+    <g class="winch-spool-rotor">
+      <circle cx="50" cy="50" r="38" fill="#243356"/>
+      <circle cx="50" cy="50" r="28" fill="#192140"/>
+      <line x1="50" y1="22" x2="50" y2="78" stroke="#314475" stroke-width="3.5"/>
+      <line x1="22" y1="50" x2="78" y2="50" stroke="#314475" stroke-width="3.5"/>
+      <circle cx="50" cy="50" r="5" fill="#C07818"/>
+      <line x1="50" y1="50" x2="92" y2="50" stroke="#192140" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="92" cy="50" r="7" fill="#C07818"/>
+    </g>
+  </svg>
+  <div class="winch-rope"></div>
+</div>
+<svg class="winch-hook winch-hook-right" viewBox="0 0 32 56" aria-hidden="true">
+  <path d="M16 0 L16 24 M16 24 q-12 0 -12 14 q0 10 11 10 q9 0 9 -9"
+        fill="none" stroke="#192140" stroke-width="3.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
 <section class="services" id="tjenester" data-nav-theme="light">
   <div class="services-deco services-deco-right" aria-hidden="true"></div>
   <div class="services-deco services-deco-2 services-deco-left" aria-hidden="true"></div>
@@ -2189,8 +2336,13 @@
     <div class="services-header-row">
       <div class="sec-header" id="intro">
         <h2 class="r">Bedre. Billigere.<br /><em>Raskere.</em></h2>
-        <p class="r d1">Skreddersydd nettside, ferdig på <strong>noen dager</strong>.</p>
-        <p class="r d2">Du betaler <strong>én gang</strong> og eier alt.</p>
+        <div class="intro-claim r">
+          <svg class="intro-claim-ring" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M 100 4 C 158 2, 197 13, 194 30 C 197 51, 144 58, 96 56 C 42 57, 4 46, 7 29 C 5 10, 54 3, 100 4 Z"/>
+          </svg>
+          <p class="r d1">Skreddersydd nettside, ferdig på noen <strong>dager</strong>.</p>
+          <p class="r d2">Du betaler <strong>én gang</strong> og eier alt.</p>
+        </div>
       </div>
       <div class="services-hammer-wrap" aria-hidden="true">
         <video class="services-hammer" autoplay muted loop playsinline preload="metadata"
@@ -2254,7 +2406,7 @@
 
 <!-- Wave: services → pause -->
 <svg class="wave-divider" viewBox="0 0 1440 60" preserveAspectRatio="none" fill="none" aria-hidden="true" style="background:#fff;">
-  <path d="M0 60 L0 20 Q360 0 720 30 Q1080 60 1440 20 L1440 60Z" fill="#192140"/>
+  <path d="M0 62 L0 20 Q360 0 720 30 Q1080 60 1440 20 L1440 62Z" fill="#192140"/>
 </svg>
 
 <!-- ─── PAUSE (visual breath between Hva du får and Slik fungerer det) ─── -->
@@ -2262,9 +2414,9 @@
   <div class="container pause-inner">
     <div class="pause-text">
       <h2 class="pause-h r">Førsteinntrykket <em>avgjør alt.</em></h2>
-      <p class="pause-p r d1">Folk bestemmer seg på tre sekunder.</p>
-      <p class="pause-p r d2">Jeg bygger en moderne, interaktiv nettside til deg, for å gi bedriften din førsteinntrykket den fortjener.</p>
-      <p class="pause-p pause-punch r d3" id="pausePunch"><span class="tusj-mask">Det betyr flere kunder inn døra.</span></p>
+      <p class="pause-p pause-lede r d1"><span class="lede-mark">Folk bestemmer seg på tre sekunder.</span></p>
+      <p class="pause-p pause-sw r d2">Jeg bygger en moderne, interaktiv nettside til deg, <span class="pause-sw-line">for å gi bedriften din <span class="pause-sw-hi">førsteinntrykket den fortjener</span>.</span></p>
+      <p class="pause-p pause-punch r d3" id="pausePunch"><span class="tusj-mask">Det betyr <span class="pause-punch-u">flere kunder inn døra.</span></span></p>
       <div class="pause-door-wrap" aria-hidden="true">
         <video class="pause-door" id="pauseDoor" muted playsinline preload="metadata">
           <source src="media/door.mp4" type="video/mp4">
@@ -2288,7 +2440,7 @@
   <div class="process-sticky">
     <div class="process-head">
       <div>
-        <h2>Fra første kontakt<br /><em>til ferdig nettside.</em></h2>
+        <h2>Fra første kontakt<br /><em>til ferdig nettside:</em></h2>
       </div>
       <div class="process-head-note">
         <div class="phone-card">
@@ -2301,7 +2453,7 @@
                       fill="none" stroke="#1C1A12" stroke-width="2.2" stroke-linecap="round" opacity="0.75"/>
               </svg>
             </span>
-            <a href="mailto:hei@nettsnekkeren.no">hei@nettsnekkeren.no</a>
+            <a href="mailto:post@nettsnekkeren.no">post@nettsnekkeren.no</a>
             <a href="tel:+4746783148">+47 467 83 148</a>
           </div>
         </div>
@@ -2516,7 +2668,7 @@
             <div class="cd-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
             </div>
-            <a href="mailto:hei@nettsnekkeren.no">hei@nettsnekkeren.no</a>
+            <a href="mailto:post@nettsnekkeren.no">post@nettsnekkeren.no</a>
           </div>
           <div class="contact-detail">
             <div class="cd-icon" aria-hidden="true">
@@ -2591,7 +2743,7 @@
   <div class="footer-left">
     <div class="footer-brand">Nett<span>snekkeren</span></div>
     <div class="footer-meta">
-      <a href="mailto:hei@nettsnekkeren.no">hei@nettsnekkeren.no</a> ·
+      <a href="mailto:post@nettsnekkeren.no">post@nettsnekkeren.no</a> ·
       <a href="tel:+4746783148">+47 467 83 148</a> ·
       <a href="/personvern" style="font-size:13px;color:rgba(250,246,236,.4);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--cream)'" onmouseout="this.style.color='rgba(250,246,236,.4)'">Personvernerklæring</a>
     </div>
@@ -2615,6 +2767,14 @@ const revealObs = new IntersectionObserver(entries => {
 }, { threshold: 0.07 });
 document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').forEach(el => revealObs.observe(el));
 
+/* ── Intro-claim ring: prime stroke-dasharray to actual path length so the
+   draw-in covers the full oval regardless of SVG stretch. ── */
+document.querySelectorAll('.intro-claim-ring path').forEach(p => {
+  const len = p.getTotalLength();
+  p.style.strokeDasharray = len;
+  p.style.strokeDashoffset = len;
+});
+
 /* ── Winch-rig: scroll-driven crank that "winches up" Hva du får ─────
    Layering:
      • spool + bracket + rope: BEHIND services (z-1 vs z-2) → page covers wheel
@@ -2624,10 +2784,10 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
    the rig fades in, then the rope+hook drop into place. Once the drop
    transition finishes we switch to .is-snappy for 1:1 scroll updates. ── */
 (function() {
-  const rig = document.querySelector('.winch-rig');
-  const hook = document.querySelector('.winch-hook');
+  const rigs  = document.querySelectorAll('.winch-rig');
+  const hooks = document.querySelectorAll('.winch-hook');
   const services = document.getElementById('tjenester');
-  if (!rig || !hook || !services) return;
+  if (!rigs.length || !hooks.length || !services) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const WINCH_Y = 36;            // matches --winch-y on .services
@@ -2643,40 +2803,36 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
   let entered = false;
   let ticking = false;
 
-  function compute() {
-    const r = services.getBoundingClientRect();
-    const winH = window.innerHeight;
-    return { r, winH, active: !(r.top > winH + 100 || r.bottom < 60) };
-  }
-
   function update() {
     if (!entered) return;
     const r = services.getBoundingClientRect();
     const winH = window.innerHeight;
 
-    // Hide rig + hook once the section's TOP edge has scrolled past viewport top.
-    // After that point the section is past its "rising" phase and the rig has
-    // no business being visible further down the page.
     const hidden = r.top > winH + 100 || r.top < 0;
     if (hidden) {
-      rig.style.opacity = '0';
-      hook.style.opacity = '0';
-      rig.style.setProperty('--rope-len', '0px');
+      rigs.forEach(rig => {
+        rig.style.opacity = '0';
+        rig.style.setProperty('--rope-len', '0px');
+      });
+      hooks.forEach(hook => { hook.style.opacity = '0'; });
       return;
     }
-    rig.style.opacity = '';
-    hook.style.opacity = '';
+    rigs.forEach(rig => { rig.style.opacity = ''; });
+    hooks.forEach(hook => { hook.style.opacity = ''; });
 
     const holeY = r.top + WINCH_Y;
     const hookY = holeY + HOOK_TOP_OFFSET;
     const ropeLen = Math.max(0, hookY - ROPE_START_Y);
 
-    rig.style.setProperty('--rope-len', ropeLen + 'px');
-    hook.style.setProperty('--hook-y', hookY + 'px');
-
     const maxRope = winH;
     const wound = Math.max(0, Math.min(1, 1 - ropeLen / maxRope));
-    rig.style.setProperty('--rot', (wound * 1080) + 'deg');
+    const rot = (wound * 1080) + 'deg';
+
+    rigs.forEach(rig => {
+      rig.style.setProperty('--rope-len', ropeLen + 'px');
+      rig.style.setProperty('--rot', rot);
+    });
+    hooks.forEach(hook => { hook.style.setProperty('--hook-y', hookY + 'px'); });
   }
 
   function onScroll() {
@@ -2690,23 +2846,20 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
 
   // Entrance sequence (synced with welcome CTA typewriter)
   const CTA_START = 5800;
-  const CTA_TYPE_MS = 70 * 21;   // 21 chars at 70ms each
+  const CTA_TYPE_MS = 70 * 21;
   const POST_CTA_BREATH = 350;
   const SPOOL_FADE = 550;
   const ROPE_DROP = 600;
 
   setTimeout(() => {
-    // Phase 1: wheel + bracket fade in
-    rig.classList.add('is-entered');
+    rigs.forEach(rig => rig.classList.add('is-entered'));
     setTimeout(() => {
-      // Phase 2: rope + hook drop into place (CSS transitions handle the descent)
       entered = true;
-      hook.classList.add('is-entered');
+      hooks.forEach(hook => hook.classList.add('is-entered'));
       update();
-      // Phase 3: switch to snappy mode after the drop transition completes
       setTimeout(() => {
-        rig.classList.add('is-snappy');
-        hook.classList.add('is-snappy');
+        rigs.forEach(rig => rig.classList.add('is-snappy'));
+        hooks.forEach(hook => hook.classList.add('is-snappy'));
       }, ROPE_DROP + 60);
     }, SPOOL_FADE);
   }, CTA_START + CTA_TYPE_MS + POST_CTA_BREATH);
@@ -2964,15 +3117,39 @@ document.querySelectorAll('.btn, .nav-cta').forEach(btn => {
   btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
 });
 
-/* ── Horizontal process scroll ─────────── */
+/* ── Horizontal process scroll ───────────
+   Scroll-driven horizontal track with snap behavior: progress is mapped through
+   a stepped easing so the track dwells at each card-aligned stop and transitions
+   quickly between them. Single-tick scrolls feel like discrete "click into next
+   card", and only the active card is rendered at full opacity. */
 const procOuter = document.querySelector('.process-outer');
 const procTrack = document.getElementById('processTrack');
+const procCards = procTrack ? procTrack.querySelectorAll('.process-card') : [];
 const procDots  = document.querySelectorAll('.proc-dot');
 const NSTEPS    = 5;
 
 function initProc() {
   if (window.innerWidth <= 768) return;
-  procOuter.style.height = (window.innerHeight + (NSTEPS - 1) * window.innerHeight * 0.52) + 'px';
+  // More vertical scroll per step so each "stop" gets enough dwell room
+  procOuter.style.height = (window.innerHeight + (NSTEPS - 1) * window.innerHeight * 0.85) + 'px';
+}
+
+// Snap easing: 0..1 → 0..1, with a long dwell + a sharp transition between stops.
+// p = progress * (N-1) lives on N stops [0..N-1]. Within each step (idx, idx+1)
+// the local fraction f is eased so f<DWELL holds at idx and f>DWELL races to idx+1.
+function snapEase(progress, N) {
+  const p = progress * (N - 1);
+  const idx = Math.min(N - 2, Math.max(0, Math.floor(p)));
+  const f = Math.max(0, Math.min(1, p - idx));
+  const DWELL = 0.55;
+  let eased;
+  if (f <= DWELL) {
+    eased = 0;
+  } else {
+    const t = (f - DWELL) / (1 - DWELL);          // 0..1 over the transition window
+    eased = t * t * (3 - 2 * t);                  // smoothstep
+  }
+  return (idx + eased) / (N - 1);
 }
 
 function tickProc() {
@@ -2981,12 +3158,20 @@ function tickProc() {
   const total    = procOuter.offsetHeight - window.innerHeight;
   const progress = Math.max(0, Math.min(1, -rect.top / total));
   const maxX     = Math.max(0, procTrack.scrollWidth - window.innerWidth + 104);
-  procTrack.style.transform = `translateX(${-progress * maxX}px)`;
-  const idx = Math.min(Math.floor(progress * NSTEPS), NSTEPS - 1);
+
+  const eased = snapEase(progress, NSTEPS);
+  procTrack.style.transform = `translateX(${-eased * maxX}px)`;
+
+  // Active card = stop closest to the *raw* progress (so the highlight switches
+  // at the midpoint of each step, not after the snap completes).
+  const idx = Math.max(0, Math.min(NSTEPS - 1, Math.round(progress * (NSTEPS - 1))));
   procDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  procCards.forEach((c, i) => c.classList.toggle('is-active', i === idx));
 }
 
 initProc();
+// First card active before any scroll
+if (procCards[0]) procCards[0].classList.add('is-active');
 window.addEventListener('scroll', tickProc, { passive: true });
 window.addEventListener('resize', () => { initProc(); tickProc(); });
 
@@ -3015,7 +3200,7 @@ form.addEventListener('submit', async e => {
     const msg   = (form.querySelector('#message')||{}).value || '';
     const subject = encodeURIComponent('Henvendelse fra ' + name);
     const body    = encodeURIComponent(msg + '\n\n--\nFra: ' + name + ' <' + email + '>');
-    window.location.href = 'mailto:hei@nettsnekkeren.no?subject=' + subject + '&body=' + body;
+    window.location.href = 'mailto:post@nettsnekkeren.no?subject=' + subject + '&body=' + body;
     setTimeout(() => {
       form.style.display='none';
       document.getElementById('formSuccess').style.display='block';
