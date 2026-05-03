@@ -165,7 +165,7 @@
     border-bottom: 1px solid transparent;
   }
   nav.scrolled {
-    background: rgba(250,246,236,.92);
+    background: rgba(250,246,236,.985);   /* near-solid so the wheel never bleeds through */
     backdrop-filter: blur(22px) saturate(1.5);
     border-color: var(--border);
   }
@@ -646,6 +646,92 @@
     z-index: 2;
     border-radius: 28px 28px 0 0;
     box-shadow: 0 -40px 70px -20px rgba(28,26,18,.18);
+    /* Hole in top-left for the winch hook. Welcome bg shows through. */
+    --winch-x: clamp(80px, 7vw, 120px);
+    --winch-y: 36px;
+    --hole-r: 22px;
+    -webkit-mask-image:
+      radial-gradient(circle var(--hole-r) at var(--winch-x) var(--winch-y), transparent 86%, #000 96%);
+            mask-image:
+      radial-gradient(circle var(--hole-r) at var(--winch-x) var(--winch-y), transparent 86%, #000 96%);
+  }
+  /* ── Winch rig (spool + bracket + rope): fixed at the top of the viewport,
+     BEHIND services so the page covers the wheel as it rises. The nav (at .985
+     alpha when scrolled) covers the wheel's top portion when scrolled, and JS
+     hides the rig entirely once the section has scrolled past. ── */
+  .winch-rig {
+    position: fixed;
+    top: 0;
+    left: calc(clamp(80px, 7vw, 120px) - 50px);
+    width: 100px;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .55s ease;
+  }
+  .winch-rig.is-entered { opacity: 1; }
+  .winch-bracket {
+    position: absolute;
+    top: 0; left: 50%;
+    width: 8px; height: 22px;
+    margin-left: -4px;
+    background: var(--dark);
+    border-radius: 0 0 3px 3px;
+  }
+  .winch-spool {
+    position: absolute;
+    top: 18px; left: 0;
+    width: 100px; height: 100px;
+    filter: drop-shadow(0 4px 6px rgba(28,26,18,.18));
+  }
+  .winch-spool-rotor {
+    transform-origin: 50px 50px;
+    transform: rotate(var(--rot, 0deg));
+  }
+  .winch-rope {
+    position: absolute;
+    top: 110px; left: 50%;
+    margin-left: -1.5px;
+    width: 3px;
+    height: var(--rope-len, 0px);
+    background-image: repeating-linear-gradient(0deg,
+      #2a2010 0px, #2a2010 3px,
+      #4a3820 3px, #4a3820 6px);
+    border-radius: 1px;
+    transition: height .6s cubic-bezier(.45,0,.35,1);  /* fast initial drop */
+  }
+  /* After entrance the JS adds .is-snappy → 1:1 scroll updates */
+  .winch-rig.is-snappy .winch-rope { transition: none; }
+
+  /* Hook: separate element, IN FRONT of the section so it's actually visible. */
+  .winch-hook {
+    position: fixed;
+    top: var(--hook-y, 110px);
+    left: calc(clamp(80px, 7vw, 120px) - 16px);  /* center 32px-wide hook on hole */
+    width: 32px;
+    height: 56px;
+    z-index: 4;                 /* above .services (z 2) */
+    pointer-events: none;
+    opacity: 0;
+    filter: drop-shadow(0 2px 3px rgba(28,26,18,.25));
+    transition: opacity .35s ease, top .6s cubic-bezier(.45,0,.35,1);
+  }
+  .winch-hook.is-entered { opacity: 1; }
+  .winch-hook.is-snappy { transition: opacity .35s ease; }
+  @media (max-width: 760px) {
+    .winch-rig, .winch-hook { display: none; }
+    .services {
+      -webkit-mask-image: none;
+              mask-image: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .winch-rig, .winch-hook { display: none; }
+    .services {
+      -webkit-mask-image: none;
+              mask-image: none;
+    }
   }
   /* Watercolor split: same image on both edges, positioned to show left/right half. */
   .services-deco {
@@ -747,9 +833,24 @@
     letter-spacing: -.025em; line-height: 1.08; margin-bottom: 16px;
   }
   .sec-header p {
-    font-family: 'Caveat', cursive;
-    font-size: 22px; font-weight: 600;
-    color: var(--ink-55); max-width: 400px; margin: 0 auto; line-height: 1.5;
+    font-family: 'Bricolage Grotesque', 'Outfit', sans-serif;
+    font-style: italic;
+    font-size: clamp(17px, 1.6vw, 21px);
+    font-weight: 400;
+    color: var(--ink-55);
+    max-width: 580px;
+    margin: 6px auto 0;
+    line-height: 1.5;
+  }
+  .sec-header p:first-of-type { margin-top: 4px; }
+  .sec-header p strong {
+    color: var(--honey);
+    font-style: normal;
+    font-weight: 700;
+  }
+  .svc-card p strong {
+    color: var(--honey);
+    font-weight: 700;
   }
 
   .svc-grid {
@@ -786,7 +887,7 @@
   .svc-card:nth-child(1)::before { color: var(--honey); }
   .svc-card:nth-child(1) .svc-num { color: var(--honey); }
   .svc-card:nth-child(1) h3 { color: var(--cream); }
-  .svc-card:nth-child(1) p { color: rgba(250,246,236,.72); }
+  .svc-card:nth-child(1) p { color: rgba(250,246,236,.86); }
   .svc-card:nth-child(1) .svc-icon-wrap {
     background: rgba(192,120,24,.22);
   }
@@ -811,6 +912,7 @@
   .svc-card:nth-child(3)::before { color: var(--honey); }
 
   .svc-card:hover { box-shadow: 0 32px 80px rgba(28,26,18,.12); border-color: var(--honey); }
+
   .svc-card:hover .svc-icon-wrap svg { stroke: var(--honey); }
 
   .svc-icon-wrap {
@@ -825,7 +927,14 @@
     font-family: 'Super Wonder', sans-serif; font-size: clamp(22px, 2.6vw, 30px); font-weight: 700;
     letter-spacing: -.03em; margin-bottom: 12px; line-height: 1.15;
   }
-  .svc-card p { font-size: 15.5px; line-height: 1.65; max-width: 52ch; }
+  .svc-card p {
+    font-family: 'Bricolage Grotesque', 'Outfit', sans-serif;
+    font-size: clamp(16.5px, 1.25vw, 19px);
+    font-weight: 500;
+    line-height: 1.55;
+    letter-spacing: -.005em;
+    max-width: 52ch;
+  }
   .svc-num { font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--honey); display: block; margin-bottom: 20px; }
 
   /* ── Svc-icon hover wiggle ── */
@@ -873,18 +982,82 @@
   }
   .pause-h em { font-style: italic; font-weight: 700; color: var(--honey); }
   .pause-p {
-    font-size: clamp(16px, 1.55vw, 19px);
-    color: rgba(250,246,236,.62);
-    line-height: 1.65;
+    font-size: clamp(16px, 1.6vw, 20px);
+    color: rgba(250,246,236,.92);
+    font-weight: 500;
+    line-height: 1.55;
     max-width: 540px;
     margin: 0;
+  }
+  .pause-p + .pause-p { margin-top: 14px; }
+  .pause-p strong {
+    color: var(--honey);
+    font-weight: 700;
+  }
+  .pause-punch {
+    font-family: 'Marous', 'Bricolage Grotesque', sans-serif !important;
+    font-size: clamp(22px, 2.6vw, 32px) !important;
+    color: var(--cream) !important;
+    font-weight: 400;
+    margin-top: 28px !important;
+    letter-spacing: 0;
+    line-height: 1.2 !important;
+  }
+  /* Tusj reveal: an inner span is clipped from right to left, animated open
+     when the parent (with .r class) gets .in from the reveal observer.
+     This is cleanly isolated from .r's fade-up — no !important stack. */
+  .tusj-mask {
+    display: inline-block;
+    clip-path: inset(0 100% 0 0);
+    will-change: clip-path;
+  }
+  .pause-punch.in .tusj-mask,
+  .pause-punch.is-tusjed .tusj-mask {
+    animation: pause-tusj 2.2s linear 1.4s forwards;
+  }
+  @keyframes pause-tusj {
+    0%   { clip-path: inset(0 100% 0 0); }
+    100% { clip-path: inset(0 -2% 0 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tusj-mask { clip-path: none; }
+    .pause-punch.in .tusj-mask,
+    .pause-punch.is-tusjed .tusj-mask { animation: none; }
+  }
+
+  /* Door video — wider crop to capture the full door + characters entering */
+  .pause-door-wrap {
+    width: 100%;
+    max-width: 260px;
+    aspect-ratio: 1 / 1;        /* square — fits door+characters at the doorway */
+    margin-top: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .pause-door {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: 47% center; /* center the door+characters composition */
+    display: block;
+    /* Lighten blend keeps only pixels brighter than the section bg, so the
+       slightly-darker video navy disappears entirely. Filter pushes anything
+       remaining toward black for clean blending. */
+    mix-blend-mode: lighten;
+    filter: brightness(.95) contrast(1.25);
+    -webkit-mask-image: radial-gradient(ellipse 80% 88% at center, #000 75%, transparent 98%);
+            mask-image: radial-gradient(ellipse 80% 88% at center, #000 75%, transparent 98%);
+  }
+  @media (max-width: 760px) {
+    .pause-door-wrap { margin-left: auto; margin-right: auto; }
   }
   .pause-video-wrap {
     position: relative;
     width: 100%;
-    max-width: 420px;
+    max-width: 280px;
     aspect-ratio: 1 / 1;
     justify-self: center;
+    align-self: start;          /* lift hourglass up — was vertically centered */
+    margin-top: -16px;
   }
   .pause-video {
     width: 100%; height: 100%;
@@ -933,20 +1106,83 @@
     letter-spacing: -.04em; line-height: 1.08;
   }
   .process-head h2 em { font-style: italic; font-weight: 300; color: var(--ink-55); }
-  .process-head-note { font-size: 14px; color: var(--ink-55); max-width: 240px; text-align: right; line-height: 1.6; }
-  .process-head-note a { color: var(--honey); text-decoration: none; font-weight: 600; }
-  .process-head-note a:hover { text-decoration: underline; }
+  .process-head-note { font-size: 14px; color: var(--ink-55); max-width: 240px; line-height: 1.6; }
+
+  .phone-card {
+    display: flex; flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    width: 220px;
+    text-align: left;
+    margin-left: auto;            /* keep right-aligned within process-head */
+    box-shadow: 0 10px 30px rgba(28,26,18,.07);
+    transition: transform .42s var(--ease-snap), box-shadow .3s;
+  }
+  .phone-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 44px rgba(28,26,18,.11);
+  }
+  .phone-card-img {
+    width: 100%;
+    height: 156px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .phone-card-body {
+    padding: 14px 18px 18px;
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  .phone-card-label {
+    position: relative;
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 10.5px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-55);
+    padding: 6px 14px 8px;
+    margin-bottom: 4px;
+  }
+  .phone-card-circle {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .phone-card-body a {
+    font-size: 14px;
+    color: var(--honey);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color .18s;
+  }
+  .phone-card-body a:hover { text-decoration: underline; }
+
+  /* Process illustration as image (overrides svg-default container) */
+  .proc-illus-img {
+    padding: 0;
+  }
+  .proc-illus-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
 
   .process-track-wrap { padding-left: 52px; overflow: visible; }
-  .process-track { display: flex; gap: 22px; will-change: transform; }
+  .process-track { display: flex; gap: 28px; will-change: transform; }
 
   /* ── New process card style ── */
   .process-card {
     background: #fff;
     border: 1.5px solid var(--border);
     border-radius: 28px;
-    padding: 32px 28px 0;
-    min-width: 380px; max-width: 380px;
+    padding: 40px 36px 0;
+    min-width: 480px; max-width: 480px;
     flex-shrink: 0;
     display: flex; flex-direction: column;
     transition: border-color .25s, box-shadow .3s, transform .42s var(--ease-snap);
@@ -960,40 +1196,40 @@
   .process-card::after { display: none; }
 
   .proc-top {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 24px;
   }
   .proc-badge {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 38px; height: 38px; border-radius: 10px;
+    width: 44px; height: 44px; border-radius: 12px;
     background: var(--dark);
     font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 18px; font-weight: 800; font-style: italic;
+    font-size: 20px; font-weight: 800; font-style: italic;
     color: var(--honey);
     flex-shrink: 0;
   }
   .proc-day {
-    font-size: 10px; font-weight: 700;
+    font-size: 11px; font-weight: 700;
     letter-spacing: .14em; text-transform: uppercase;
     color: var(--honey);
-    padding: 5px 10px; border-radius: 100px;
+    padding: 6px 12px; border-radius: 100px;
     background: var(--honey-light);
     border: 1px solid rgba(192,120,24,.22);
   }
-  .proc-text { flex: 1; padding-bottom: 20px; }
+  .proc-text { flex: 1; padding-bottom: 26px; }
   .proc-text h3 {
     font-family: 'Super Wonder', sans-serif;
-    font-size: 22px; font-weight: 700; letter-spacing: -.03em;
-    color: var(--ink); margin-bottom: 10px; line-height: 1.2;
+    font-size: 26px; font-weight: 700; letter-spacing: -.03em;
+    color: var(--ink); margin-bottom: 12px; line-height: 1.18;
   }
-  .proc-text p { font-size: 14px; color: var(--ink-55); line-height: 1.7; }
+  .proc-text p { font-size: 15.5px; color: var(--ink-55); line-height: 1.65; }
 
   .proc-illus {
     background: var(--honey-light);
-    border-radius: 16px 16px 0 0;
-    height: 160px;
+    border-radius: 18px 18px 0 0;
+    height: 200px;
     display: flex; align-items: center; justify-content: center;
-    margin: 0 -28px;
+    margin: 0 -36px;
     overflow: hidden;
     position: relative;
   }
@@ -1492,263 +1728,6 @@
   }
 
 
-  /* ─────────────────────────────────────
-     LEVENDE EKSEMPLER (concept gallery)
-  ───────────────────────────────────── */
-  .eksempler {
-    padding: 108px 0 118px;
-    background: linear-gradient(180deg, var(--cream) 0%, #F7F1E1 100%);
-    border-bottom: 1px solid var(--border);
-    position: relative; overflow: hidden;
-  }
-  .eksempler-head {
-    max-width: 1100px; margin: 0 auto 52px;
-    padding: 0 52px;
-    display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;
-    flex-wrap: wrap;
-  }
-  .eksempler-head h2 {
-    font-family: 'Super Wonder', sans-serif;
-    font-size: clamp(34px, 4.4vw, 58px); font-weight: 800;
-    letter-spacing: -.035em; line-height: 1.04;
-    max-width: 560px;
-  }
-  .eksempler-head h2 em { font-style: italic; font-weight: 800; color: var(--honey); }
-  .eksempler-head-meta {
-    max-width: 340px; font-size: 14px;
-    color: var(--ink-55); line-height: 1.65;
-  }
-  .eksempler-head-meta strong { color: var(--ink); font-weight: 700; }
-
-  /* Filter pill row */
-  .eks-filter {
-    max-width: 1200px; margin: 0 auto 36px;
-    padding: 0 52px;
-    display: flex; flex-wrap: wrap; gap: 8px;
-    justify-content: center;
-  }
-  .eks-pill {
-    font-family: 'Outfit', sans-serif;
-    font-size: 13px; font-weight: 600;
-    color: var(--ink-55);
-    background: rgba(255,255,255,.6);
-    border: 1.5px solid var(--border);
-    border-radius: 100px;
-    padding: 9px 18px;
-    cursor: pointer;
-    transition: border-color .22s ease, background .22s ease, color .22s ease,
-                transform .32s var(--ease-snap);
-  }
-  .eks-pill:hover { border-color: var(--border-mid); color: var(--ink); }
-  .eks-pill.is-active {
-    background: var(--ink); color: var(--cream);
-    border-color: var(--ink);
-    transform: translateY(-1px);
-  }
-  .eks-pill:focus-visible { outline: 2px solid var(--honey); outline-offset: 3px; }
-
-  /* Grid (replaces horizontal scroll) */
-  .eksempler-grid {
-    max-width: 1200px; margin: 0 auto;
-    padding: 0 52px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 26px;
-  }
-  @media (max-width: 980px) { .eksempler-grid { grid-template-columns: repeat(2, 1fr); gap: 22px; } }
-  @media (max-width: 640px) { .eksempler-grid { grid-template-columns: 1fr; padding: 0 28px; } .eks-filter { padding: 0 28px; } }
-
-  .eksempel-card {
-    border-radius: var(--r-xl);
-    background: #fff;
-    border: 1.5px solid var(--border);
-    overflow: hidden;
-    text-decoration: none; color: inherit;
-    display: flex; flex-direction: column;
-    transition: transform .42s var(--ease-snap),
-                box-shadow .35s, border-color .25s,
-                opacity .42s var(--ease-snap);
-  }
-  .eksempel-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 30px 80px rgba(28,26,18,.14);
-    border-color: var(--honey);
-  }
-  .eksempel-card.is-hidden {
-    opacity: 0; transform: scale(.96);
-    pointer-events: none;
-    /* Keep grid placement so siblings don't reflow harshly during fade */
-    visibility: hidden;
-    grid-row: span 0;
-    height: 0; min-height: 0;
-    margin: 0; padding: 0; border: 0;
-    transition: opacity .25s ease, transform .25s ease;
-  }
-  .eksempel-thumb {
-    position: relative;
-    height: 260px;
-    background: var(--cream-mid);
-    overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .eksempel-thumb::before {
-    content: ''; position: absolute; inset: 0;
-    background-image: radial-gradient(circle, rgba(28,26,18,.06) 1px, transparent 1px);
-    background-size: 20px 20px;
-  }
-  .eksempel-mock {
-    position: relative; z-index: 1;
-    width: 85%; border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 18px 50px rgba(28,26,18,.18);
-    transform: perspective(1000px) rotateX(6deg) rotateY(-2deg);
-    transition: transform .4s cubic-bezier(.22,1,.36,1);
-    overflow: hidden;
-  }
-  .eksempel-card:hover .eksempel-mock {
-    transform: perspective(1000px) rotateX(2deg) rotateY(0) translateY(-6px);
-  }
-  .eksempel-mock-bar {
-    display: flex; gap: 4px; padding: 8px 10px;
-    background: #f5f5f5; border-bottom: 1px solid rgba(0,0,0,.06);
-  }
-  .eksempel-mock-bar span {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: rgba(0,0,0,.15);
-  }
-  .eksempel-mock-body {
-    padding: 18px 16px 22px;
-    min-height: 140px;
-    display: flex; flex-direction: column; justify-content: center;
-  }
-  .eksempel-mock-h {
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 19px; font-weight: 800;
-    letter-spacing: -.025em; line-height: 1.1;
-    margin-bottom: 8px;
-  }
-  .eksempel-mock-p {
-    font-size: 10.5px; color: rgba(0,0,0,.5);
-    line-height: 1.5; margin-bottom: 10px;
-  }
-  .eksempel-mock-btn {
-    display: inline-block;
-    padding: 6px 12px; border-radius: 100px;
-    font-size: 10px; font-weight: 600;
-  }
-  .eksempel-body {
-    padding: 24px 26px 26px;
-    display: flex; flex-direction: column; flex: 1;
-  }
-  .eksempel-tag {
-    display: inline-block;
-    font-size: 10px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .13em;
-    color: var(--honey);
-    margin-bottom: 10px;
-  }
-  .eksempel-card h3 {
-    font-family: 'Super Wonder', sans-serif;
-    font-size: 22px; font-weight: 700;
-    letter-spacing: -.03em; line-height: 1.2;
-    margin-bottom: 8px;
-  }
-  .eksempel-card p {
-    font-size: 14px; color: var(--ink-55); line-height: 1.6;
-    margin-bottom: 18px; flex: 1;
-  }
-  .eksempel-footer {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-top: 14px; border-top: 1px solid var(--border);
-    font-size: 13px; font-weight: 600; color: var(--ink);
-  }
-  .eksempel-footer .arrow {
-    font-size: 18px; color: var(--honey);
-    transition: transform .25s;
-  }
-  .eksempel-card:hover .eksempel-footer .arrow { transform: translateX(4px); }
-
-  /* Mock color themes */
-  .mock-handverker .eksempel-mock-body { background: #1E3A2F; }
-  .mock-handverker .eksempel-mock-h { color: #F4F0E4; }
-  .mock-handverker .eksempel-mock-h em { color: #E8B547; font-style: italic; }
-  .mock-handverker .eksempel-mock-p { color: rgba(244,240,228,.55); }
-  .mock-handverker .eksempel-mock-btn { background: #E8B547; color: #1E3A2F; }
-
-  .mock-klinikk .eksempel-mock-body { background: #F7F9FB; }
-  .mock-klinikk .eksempel-mock-h { color: #1A3A4A; }
-  .mock-klinikk .eksempel-mock-h em { color: #3A8C9E; font-style: italic; }
-  .mock-klinikk .eksempel-mock-p { color: rgba(26,58,74,.55); }
-  .mock-klinikk .eksempel-mock-btn { background: #3A8C9E; color: #fff; }
-
-  .mock-frisor .eksempel-mock-body { background: #F5F1EA; }
-  .mock-frisor .eksempel-mock-h { color: #2A1B3D; }
-  .mock-frisor .eksempel-mock-h em { color: #B85450; font-style: italic; }
-  .mock-frisor .eksempel-mock-p { color: rgba(42,27,61,.55); }
-  .mock-frisor .eksempel-mock-btn { background: #2A1B3D; color: #F5F1EA; }
-
-  .mock-restaurant .eksempel-mock-body { background: #1C1A12; }
-  .mock-restaurant .eksempel-mock-h { color: #F5F1E8; font-family: 'Bricolage Grotesque'; }
-  .mock-restaurant .eksempel-mock-h em { color: #D4A574; font-style: italic; }
-  .mock-restaurant .eksempel-mock-p { color: rgba(245,241,232,.55); }
-  .mock-restaurant .eksempel-mock-btn { background: #D4A574; color: #1C1A12; }
-
-  .mock-advokat .eksempel-mock-body { background: #FAFAF7; }
-  .mock-advokat .eksempel-mock-h { color: #0F1E3D; }
-  .mock-advokat .eksempel-mock-h em { color: #8B6B2F; font-style: italic; }
-  .mock-advokat .eksempel-mock-p { color: rgba(15,30,61,.55); }
-  .mock-advokat .eksempel-mock-btn { background: #0F1E3D; color: #fff; }
-
-  /* New mock themes for added niches */
-  .mock-konsulent .eksempel-mock-body { background: #F2F4F7; }
-  .mock-konsulent .eksempel-mock-h { color: #1F2937; }
-  .mock-konsulent .eksempel-mock-h em { color: #475569; font-style: italic; }
-  .mock-konsulent .eksempel-mock-p { color: rgba(31,41,55,.55); }
-  .mock-konsulent .eksempel-mock-btn { background: #1F2937; color: #fff; }
-
-  .mock-coach .eksempel-mock-body { background: #FAF1E8; }
-  .mock-coach .eksempel-mock-h { color: #4B2A1F; font-family: 'Bricolage Grotesque'; }
-  .mock-coach .eksempel-mock-h em { color: #C58361; font-style: italic; }
-  .mock-coach .eksempel-mock-p { color: rgba(75,42,31,.55); }
-  .mock-coach .eksempel-mock-btn { background: #C58361; color: #FAF1E8; }
-
-  .mock-arkitekt .eksempel-mock-body { background: #15161A; }
-  .mock-arkitekt .eksempel-mock-h { color: #EDE9DF; }
-  .mock-arkitekt .eksempel-mock-h em { color: #B8B0A0; font-style: italic; }
-  .mock-arkitekt .eksempel-mock-p { color: rgba(237,233,223,.5); }
-  .mock-arkitekt .eksempel-mock-btn { background: #EDE9DF; color: #15161A; }
-
-  .mock-fysio .eksempel-mock-body { background: #EAF4F2; }
-  .mock-fysio .eksempel-mock-h { color: #0F3D3A; }
-  .mock-fysio .eksempel-mock-h em { color: #2E8074; font-style: italic; }
-  .mock-fysio .eksempel-mock-p { color: rgba(15,61,58,.55); }
-  .mock-fysio .eksempel-mock-btn { background: #2E8074; color: #fff; }
-
-  .mock-klaer .eksempel-mock-body { background: #F0EEE7; }
-  .mock-klaer .eksempel-mock-h { color: #2C3625; font-family: 'Bricolage Grotesque'; }
-  .mock-klaer .eksempel-mock-h em { color: #6B7B4F; font-style: italic; }
-  .mock-klaer .eksempel-mock-p { color: rgba(44,54,37,.55); }
-  .mock-klaer .eksempel-mock-btn { background: #2C3625; color: #F0EEE7; }
-
-  .mock-kost .eksempel-mock-body { background: #F5F2E8; }
-  .mock-kost .eksempel-mock-h { color: #2D3D2A; }
-  .mock-kost .eksempel-mock-h em { color: #7B9266; font-style: italic; }
-  .mock-kost .eksempel-mock-p { color: rgba(45,61,42,.55); }
-  .mock-kost .eksempel-mock-btn { background: #7B9266; color: #fff; }
-
-  .mock-handverk .eksempel-mock-body { background: #FAF1E1; }
-  .mock-handverk .eksempel-mock-h { color: #4D2E1A; }
-  .mock-handverk .eksempel-mock-h em { color: #C77B3B; font-style: italic; }
-  .mock-handverk .eksempel-mock-p { color: rgba(77,46,26,.55); }
-  .mock-handverk .eksempel-mock-btn { background: #C77B3B; color: #FAF1E1; }
-
-  .eksempel-card.soon {
-    background: repeating-linear-gradient(135deg, #fff, #fff 12px, var(--cream) 12px, var(--cream) 24px);
-    border-style: dashed;
-  }
-  .eksempel-card.soon .eksempel-thumb { background: var(--cream); }
-  .eksempel-card.soon .eksempel-mock { opacity: .55; }
-
 
   /* ─────────────────────────────────────
      REVEAL VARIANTS
@@ -1787,7 +1766,6 @@
   /* ─────────────────────────────────────
      SECTION ACCENT SHIFTS (subtle warmth)
   ───────────────────────────────────── */
-  .eksempler { background: linear-gradient(180deg, var(--cream) 0%, #F7EFDC 100%); }
   .services { background: #FFFFFF; }
   .process-outer { background-color: #FBF7EC; }
   .prices { background: #FBF8F1; }
@@ -2119,7 +2097,6 @@
   <div class="nav-links">
     <a href="#tjenester">Hva du får</a>
     <a href="#prosess">Slik fungerer det</a>
-    <a href="#eksempler">Eksempler</a>
     <a href="#priser">Priser</a>
     <a href="#kontakt">Kontakt</a>
   </div>
@@ -2134,7 +2111,6 @@
 <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true">
   <a href="#tjenester">Hva du får</a>
   <a href="#prosess">Slik fungerer det</a>
-  <a href="#eksempler">Eksempler</a>
   <a href="#priser">Priser</a>
   <a href="#kontakt" class="mob-cta">Ta kontakt →</a>
 </div>
@@ -2182,17 +2158,39 @@
 </section>
 
 <!-- ─── HVA DU FÅR (slides up over welcome) ──── -->
+<!-- Winch rig (spool + rope) lives BEHIND the section; hook lives IN FRONT
+     so it's actually visible at the hole. Entrance is timed to the welcome CTA. -->
+<div class="winch-rig" aria-hidden="true">
+  <div class="winch-bracket"></div>
+  <svg class="winch-spool" viewBox="0 0 100 100">
+    <g class="winch-spool-rotor">
+      <circle cx="50" cy="50" r="38" fill="#243356"/>
+      <circle cx="50" cy="50" r="28" fill="#192140"/>
+      <line x1="50" y1="22" x2="50" y2="78" stroke="#314475" stroke-width="3.5"/>
+      <line x1="22" y1="50" x2="78" y2="50" stroke="#314475" stroke-width="3.5"/>
+      <circle cx="50" cy="50" r="5" fill="#C07818"/>
+      <!-- Crank handle sticks out the side -->
+      <line x1="50" y1="50" x2="92" y2="50" stroke="#192140" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="92" cy="50" r="7" fill="#C07818"/>
+    </g>
+  </svg>
+  <div class="winch-rope"></div>
+</div>
+<svg class="winch-hook" viewBox="0 0 32 56" aria-hidden="true">
+  <path d="M16 0 L16 24 M16 24 q-12 0 -12 14 q0 10 11 10 q9 0 9 -9"
+        fill="none" stroke="#192140" stroke-width="3.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
 <section class="services" id="tjenester" data-nav-theme="light">
-  <div class="services-deco services-deco-left" aria-hidden="true"></div>
   <div class="services-deco services-deco-right" aria-hidden="true"></div>
   <div class="services-deco services-deco-2 services-deco-left" aria-hidden="true"></div>
-  <div class="services-deco services-deco-2 services-deco-right" aria-hidden="true"></div>
   <div class="container">
     <div class="services-header-row">
-      <div class="sec-header r" id="intro">
-        <span class="label">Hva du får</span>
-        <h2>Én fastpris.<br /><em>Alt inkludert.</em></h2>
-        <p>Du forteller meg om bedriften. Jeg tar resten — fra første skisse til live lansering.</p>
+      <div class="sec-header" id="intro">
+        <h2 class="r">Bedre. Billigere.<br /><em>Raskere.</em></h2>
+        <p class="r d1">Skreddersydd nettside, ferdig på <strong>noen dager</strong>.</p>
+        <p class="r d2">Du betaler <strong>én gang</strong> og eier alt.</p>
       </div>
       <div class="services-hammer-wrap" aria-hidden="true">
         <video class="services-hammer" autoplay muted loop playsinline preload="metadata"
@@ -2202,34 +2200,53 @@
       </div>
     </div>
     <div class="svc-grid">
+
       <div class="svc-card r-scale" data-n="01">
         <div class="card-shine"></div>
-        <span class="svc-num">01 — Helhetlig</span>
+        <span class="svc-num">01 — Pris</span>
         <div class="svc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12l2 2 4-4"/></svg>
+          <!-- Price tag -->
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0l-7.17-7.17A2 2 0 0 1 3 11.99V5a2 2 0 0 1 2-2h6.99a2 2 0 0 1 1.42.59l7.18 7.18a2 2 0 0 1 0 2.64Z"/>
+            <line x1="7" y1="7" x2="7.01" y2="7"/>
+          </svg>
         </div>
-        <h3>Design, innhold og lansering</h3>
-        <p>Skreddersydd design, hjelp til tekster og bilder, teknisk SEO-grunnlag, domene, hosting og selve lanseringen. Alt i én fastpris — ingenting du må ordne selv senere.</p>
+        <h3>Pris fra kun 4&nbsp;990</h3>
+        <p>Bygges av Nettsnekkeren, ikke et stort byrå. Jeg garanterer et resultat som blir minst like bra — bare mye billigere.</p>
       </div>
+
       <div class="svc-card r-scale d1" data-n="02">
         <div class="card-shine"></div>
-        <span class="svc-num">02 — Synlig på Google</span>
+        <span class="svc-num">02 — Kvalitet</span>
         <div class="svc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M11 8v3l2 2"/></svg>
+          <!-- Sparkles -->
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+            <path d="M20 3v4"/>
+            <path d="M22 5h-4"/>
+            <path d="M4 17v2"/>
+            <path d="M5 18H3"/>
+          </svg>
         </div>
-        <h3>SEO-optimalisert fra dag én</h3>
-        <p>Bygget for å bli funnet. Ren HTML-struktur, rask Core&nbsp;Web&nbsp;Vitals, semantiske overskrifter, schema-markup, sitemap og meta-tagger som faktisk treffer søkeordene kunden din søker etter.</p>
+        <h3>Skreddersydd<br>for DIN bedrift</h3>
+        <p>Vi former noe unikt for nettopp deg. Sparrer ideer, tar imot innspill, og jobber frem og tilbake — til du er <strong>stolt</strong> av sluttresultatet.</p>
       </div>
+
       <div class="svc-card r-scale d2" data-n="03">
         <div class="card-shine"></div>
-        <span class="svc-num">03 — Uten binding</span>
+        <span class="svc-num">03 — Tid</span>
         <div class="svc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+          <!-- Lightning bolt -->
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
         </div>
-        <h3>Du eier alt</h3>
-        <p>Ingen månedlige abonnementer til meg, ingen plattform-lås og ingen dyre "vedlikeholdsavtaler". Du betaler én gang og eier kode, domene og innhold for alltid.</p>
+        <h3>Live på maks 10 dager</h3>
+        <p>Du tar kontakt i dag, jeg starter i morgen, og siden er live på under to uker.</p>
       </div>
+
     </div>
+
   </div>
 </section>
 
@@ -2245,7 +2262,14 @@
   <div class="container pause-inner">
     <div class="pause-text">
       <h2 class="pause-h r">Førsteinntrykket <em>avgjør alt.</em></h2>
-      <p class="pause-p r d1">Folk bestemmer seg på under tre sekunder. Jeg sørger for at de bestemmer seg for deg.</p>
+      <p class="pause-p r d1">Folk bestemmer seg på tre sekunder.</p>
+      <p class="pause-p r d2">Jeg bygger en moderne, interaktiv nettside til deg, for å gi bedriften din førsteinntrykket den fortjener.</p>
+      <p class="pause-p pause-punch r d3" id="pausePunch"><span class="tusj-mask">Det betyr flere kunder inn døra.</span></p>
+      <div class="pause-door-wrap" aria-hidden="true">
+        <video class="pause-door" id="pauseDoor" muted playsinline preload="metadata">
+          <source src="media/door.mp4" type="video/mp4">
+        </video>
+      </div>
     </div>
     <div class="pause-video-wrap r d2" aria-hidden="true">
       <video class="pause-video" id="pauseVideo" muted playsinline preload="metadata">
@@ -2264,13 +2288,23 @@
   <div class="process-sticky">
     <div class="process-head">
       <div>
-        <span class="label">Slik fungerer det</span>
         <h2>Fra første kontakt<br /><em>til ferdig nettside.</em></h2>
       </div>
       <div class="process-head-note">
-        Ta kontakt direkte:<br />
-        <a href="mailto:hei@nettsnekkeren.no">hei@nettsnekkeren.no</a><br />
-        <a href="tel:+4746783148">+47 467 83 148</a>
+        <div class="phone-card">
+          <img class="phone-card-img" src="media/watercolor-phone.jpg" alt="" loading="lazy" />
+          <div class="phone-card-body">
+            <span class="phone-card-label">
+              Ta kontakt direkte
+              <svg class="phone-card-circle" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M 10 32 C 10 14, 60 6, 102 8 C 156 4, 194 14, 192 30 C 190 50, 144 56, 96 53 C 44 52, 6 44, 12 28"
+                      fill="none" stroke="#1C1A12" stroke-width="2.2" stroke-linecap="round" opacity="0.75"/>
+              </svg>
+            </span>
+            <a href="mailto:hei@nettsnekkeren.no">hei@nettsnekkeren.no</a>
+            <a href="tel:+4746783148">+47 467 83 148</a>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2279,162 +2313,61 @@
 
         <!-- Card 1: Vi snakker sammen -->
         <div class="process-card">
-          <div class="proc-top"><div class="proc-badge">1.</div><span class="proc-day">Dag 0</span></div>
+          <div class="proc-top"><div class="proc-badge">1.</div></div>
           <div class="proc-text">
             <h3>Ta kontakt</h3>
             <p>Send meg en melding eller ring. Fortell kort om bedriften og hva du trenger — så svarer jeg innen 24 timer med et uforpliktende tilbud.</p>
           </div>
-          <div class="proc-illus">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <!-- Person body (circle head + simple body) -->
-              <circle cx="60" cy="45" r="18" fill="var(--dark)" opacity=".12"/>
-              <circle cx="60" cy="45" r="14" fill="var(--dark)" opacity=".18"/>
-              <!-- Simple smiling face -->
-              <circle cx="55" cy="43" r="2" fill="var(--ink)" opacity=".4"/>
-              <circle cx="65" cy="43" r="2" fill="var(--ink)" opacity=".4"/>
-              <path d="M55 49 Q60 53 65 49" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" opacity=".4" fill="none"/>
-              <!-- Speech bubble 1 (animated float) -->
-              <g style="animation: illus-float1 2.8s ease-in-out infinite">
-                <rect x="72" y="20" width="36" height="22" rx="8" fill="var(--honey)" opacity=".85"/>
-                <path d="M80 42 L76 48 L86 42" fill="var(--honey)" opacity=".85"/>
-                <line x1="78" y1="28" x2="100" y2="28" stroke="white" stroke-width="2" stroke-linecap="round" opacity=".7"/>
-                <line x1="78" y1="34" x2="96" y2="34" stroke="white" stroke-width="2" stroke-linecap="round" opacity=".5"/>
-              </g>
-              <!-- Speech bubble 2 (secondary, offset animation) -->
-              <g style="animation: illus-float2 2.8s ease-in-out infinite 0.6s">
-                <rect x="12" y="28" width="28" height="18" rx="7" fill="var(--dark)" opacity=".2"/>
-                <line x1="18" y1="34" x2="34" y2="34" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" opacity=".4"/>
-                <line x1="18" y1="40" x2="30" y2="40" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" opacity=".3"/>
-              </g>
-            </svg>
+          <div class="proc-illus proc-illus-img">
+            <img src="media/watercolor-smartphone.jpg" alt="" loading="lazy" />
           </div>
         </div>
 
         <!-- Card 2: Du får et tilbud -->
         <div class="process-card">
-          <div class="proc-top"><div class="proc-badge">2.</div><span class="proc-day">Dag 1</span></div>
+          <div class="proc-top"><div class="proc-badge">2.</div></div>
           <div class="proc-text">
             <h3>Tilbud på bordet</h3>
             <p>Fastpris, klart omfang og konkret leveringstid. Svart på hvitt. Du bestemmer om vi kjører i gang — ingen press.</p>
           </div>
-          <div class="proc-illus">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <!-- Document -->
-              <rect x="30" y="15" width="60" height="75" rx="8" fill="white" stroke="var(--dark)" stroke-width="1.5" opacity=".3"/>
-              <rect x="30" y="15" width="60" height="75" rx="8" fill="var(--dark)" opacity=".08"/>
-              <!-- Lines on document (text lines) -->
-              <line x1="42" y1="35" x2="78" y2="35" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" opacity=".25"/>
-              <line x1="42" y1="45" x2="72" y2="45" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" opacity=".2"/>
-              <line x1="42" y1="55" x2="76" y2="55" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" opacity=".2"/>
-              <!-- Price highlight -->
-              <rect x="42" y="63" width="36" height="14" rx="4" fill="var(--honey)" opacity=".25"/>
-              <line x1="47" y1="70" x2="72" y2="70" stroke="var(--honey)" stroke-width="2" stroke-linecap="round" opacity=".7"/>
-              <!-- Animated pen/pencil -->
-              <g style="animation: pen-write 2.4s ease-in-out infinite; transform-origin: 85px 85px">
-                <line x1="75" y1="75" x2="95" y2="95" stroke="var(--dark)" stroke-width="3" stroke-linecap="round" opacity=".5"/>
-                <polygon points="73,77 77,73 79,79" fill="var(--honey)" opacity=".8"/>
-              </g>
-            </svg>
+          <div class="proc-illus proc-illus-img">
+            <img src="media/watercolor-contract.jpg" alt="" loading="lazy" />
           </div>
         </div>
 
         <!-- Card 3: Jeg bygger -->
         <div class="process-card">
-          <div class="proc-top"><div class="proc-badge">3.</div><span class="proc-day">Dag 2–8</span></div>
+          <div class="proc-top"><div class="proc-badge">3.</div></div>
           <div class="proc-text">
             <h3>Jeg bygger</h3>
             <p>Du leverer tekster og bilder (jeg hjelper til hvis du trenger det). Jeg designer, koder og tester. Du følger fremdriften underveis.</p>
           </div>
-          <div class="proc-illus">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <!-- Wood surface -->
-              <rect x="10" y="86" width="100" height="12" rx="4" fill="var(--dark)" opacity=".12"/>
-              <!-- Nail shaft -->
-              <rect x="62" y="68" width="5" height="18" rx="2" fill="var(--dark)" opacity=".4"/>
-              <!-- Nail head — top at y=62, center x=64 -->
-              <rect x="55" y="62" width="18" height="7" rx="3" fill="var(--dark)" opacity=".55"/>
-              <!--
-                Hammer swings horizontally around grip at SVG (20, 52).
-                transform-box:view-box + transform-origin in SVG px = exact pixel pivot, cross-browser reliable.
-                At rotate(0°) the head (x=60-76, y=42-62) bottom=y=62 hits the nail. ✓
-                At rotate(-55°) the head is raised to upper portion of SVG.
-              -->
-              <g style="transform-box:view-box; transform-origin:20px 52px; animation:proc-hammer-swing 1.8s ease-in-out infinite;">
-                <!-- Handle: grip end at x=20, extends right to x=64 -->
-                <rect x="20" y="49" width="44" height="6" rx="3" fill="var(--honey)" opacity=".85"/>
-                <!-- Head: at striking end, bottom at y=62 = nail top when rotate(0) -->
-                <rect x="60" y="42" width="16" height="20" rx="4" fill="var(--dark)" opacity=".75"/>
-              </g>
-              <!-- Sparks at nail head (x≈64, y=62) — timed to hammer impact ~63% of 1.8s -->
-              <g style="animation: sparks 1.8s ease-in-out infinite 0.45s; opacity: 0">
-                <line x1="52" y1="60" x2="44" y2="52" stroke="var(--honey)" stroke-width="2" stroke-linecap="round"/>
-                <line x1="76" y1="60" x2="84" y2="52" stroke="var(--honey)" stroke-width="2" stroke-linecap="round"/>
-                <line x1="64" y1="57" x2="64" y2="48" stroke="var(--honey)" stroke-width="2" stroke-linecap="round"/>
-              </g>
-            </svg>
+          <div class="proc-illus proc-illus-img">
+            <img src="media/watercolor-build.jpg" alt="" loading="lazy" />
           </div>
         </div>
 
         <!-- Card 4: Du gir tilbakemelding -->
         <div class="process-card">
-          <div class="proc-top"><div class="proc-badge">4.</div><span class="proc-day">Dag 9</span></div>
+          <div class="proc-top"><div class="proc-badge">4.</div></div>
           <div class="proc-text">
             <h3>Du gir tilbakemelding</h3>
             <p>Du får nettsiden live i en testlenke. To revisjonsrunder inkludert — vi lander detaljene sammen.</p>
           </div>
-          <div class="proc-illus">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <!-- Browser/screen mockup -->
-              <rect x="20" y="25" width="80" height="55" rx="8" fill="var(--dark)" opacity=".1" stroke="var(--dark)" stroke-width="1.5"/>
-              <line x1="20" y1="38" x2="100" y2="38" stroke="var(--dark)" stroke-width="1" opacity=".15"/>
-              <circle cx="30" cy="32" r="3" fill="var(--dark)" opacity=".2"/>
-              <circle cx="40" cy="32" r="3" fill="var(--dark)" opacity=".2"/>
-              <circle cx="50" cy="32" r="3" fill="var(--dark)" opacity=".2"/>
-              <!-- Animated checkmark drawing -->
-              <g style="animation: draw-check 2s ease-in-out infinite">
-                <circle cx="60" cy="62" r="18" stroke="var(--green,#2A9452)" stroke-width="2.5" fill="none" opacity=".3"
-                  stroke-dasharray="113" stroke-dashoffset="0"/>
-                <polyline points="51,62 58,69 70,54" stroke="var(--green,#2A9452)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"
-                  stroke-dasharray="30" stroke-dashoffset="0" opacity=".8"/>
-              </g>
-              <!-- Floating revision dot -->
-              <circle cx="90" cy="35" r="8" fill="var(--honey)" opacity=".6" style="animation: illus-float1 2s ease-in-out infinite"/>
-              <text x="90" y="39" text-anchor="middle" font-size="10" font-weight="700" fill="white" opacity=".9">2</text>
-            </svg>
+          <div class="proc-illus proc-illus-img">
+            <img src="media/watercolor-feedback.jpg" alt="" loading="lazy" />
           </div>
         </div>
 
         <!-- Card 5: Vi lanserer -->
         <div class="process-card">
-          <div class="proc-top"><div class="proc-badge">5.</div><span class="proc-day">Dag 10</span></div>
+          <div class="proc-top"><div class="proc-badge">5.</div></div>
           <div class="proc-text">
             <h3>Vi lanserer</h3>
             <p>Siden går live på ditt domene. Jeg er tilgjengelig etterpå for spørsmål, små justeringer og alt du måtte lure på.</p>
           </div>
-          <div class="proc-illus">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <!-- Stars -->
-              <circle cx="30" cy="30" r="2" fill="var(--honey)" opacity=".5" style="animation: twinkle 2s ease-in-out infinite"/>
-              <circle cx="90" cy="25" r="1.5" fill="var(--honey)" opacity=".4" style="animation: twinkle 2s ease-in-out infinite 0.5s"/>
-              <circle cx="20" cy="60" r="1.5" fill="var(--honey)" opacity=".3" style="animation: twinkle 2s ease-in-out infinite 1s"/>
-              <circle cx="95" cy="55" r="2" fill="var(--dark)" opacity=".2" style="animation: twinkle 2s ease-in-out infinite 0.3s"/>
-              <!-- Rocket (animated float upward) -->
-              <g style="animation: rocket-launch 2.2s ease-in-out infinite; transform-origin: 60px 60px">
-                <!-- Body -->
-                <ellipse cx="60" cy="58" rx="10" ry="18" fill="var(--dark)" opacity=".7"/>
-                <!-- Nose -->
-                <path d="M50 44 Q60 28 70 44" fill="var(--honey)" opacity=".9"/>
-                <!-- Fins -->
-                <path d="M50 68 L42 80 L52 74" fill="var(--dark)" opacity=".5"/>
-                <path d="M70 68 L78 80 L68 74" fill="var(--dark)" opacity=".5"/>
-                <!-- Window -->
-                <circle cx="60" cy="54" r="5" fill="white" opacity=".6"/>
-                <circle cx="60" cy="54" r="3" fill="var(--honey)" opacity=".5"/>
-                <!-- Flame -->
-                <ellipse cx="60" cy="80" rx="5" ry="8" fill="var(--honey)" opacity=".7"/>
-                <ellipse cx="60" cy="82" rx="3" ry="5" fill="white" opacity=".5"/>
-              </g>
-            </svg>
+          <div class="proc-illus proc-illus-img">
+            <img src="media/watercolor-launch.jpg" alt="" loading="lazy" />
           </div>
         </div>
 
@@ -2451,298 +2384,6 @@
   </div>
 </section>
 
-<!-- ─── EKSEMPLER (filtered by category) ─────────────────────── -->
-<section class="eksempler" id="eksempler" aria-label="Utvalgte prosjekter og konsepter" data-nav-theme="light">
-  <div class="eksempler-head r">
-    <div>
-      <span class="label">Eksempler</span>
-      <h2>Se hva jeg kan<br /><em>bygge for deg.</em></h2>
-    </div>
-    <p class="eksempler-head-meta">
-      Ekte prosjekter og konsept-sider for ulike bransjer. Filtrér etter pakke for å se hva som passer din virksomhet.
-    </p>
-  </div>
-
-  <div class="eks-filter r d1" role="tablist" aria-label="Filtrer eksempler etter pakke">
-    <button class="eks-pill is-active" data-filter="all" role="tab" aria-selected="true">Alle</button>
-    <button class="eks-pill" data-filter="enkel" role="tab" aria-selected="false">Enkel landingsside</button>
-    <button class="eks-pill" data-filter="premium" role="tab" aria-selected="false">Premium landingsside</button>
-    <button class="eks-pill" data-filter="booking" role="tab" aria-selected="false">Booking</button>
-    <button class="eks-pill" data-filter="shop" role="tab" aria-selected="false">Nettbutikk</button>
-  </div>
-
-  <div class="eksempler-grid" id="eksemplerGrid">
-
-    <!-- ───── ENKEL ───── -->
-    <a class="eksempel-card r" href="konsept/handverker.html" data-cat="enkel">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-handverker">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Bygg &amp; Bolig <em>Snekkeri</em></div>
-            <div class="eksempel-mock-p">Håndverk, solid kvalitet og lokal forankring.</div>
-            <span class="eksempel-mock-btn">Be om tilbud →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Håndverker</span>
-        <h3>Bygg &amp; Bolig Snekkeri</h3>
-        <p>Tillitsskapende landingsside for et lokalt snekkerfirma. Referanseprosjekter, enkel kontakt og en tone som signaliserer yrkesstolthet.</p>
-        <div class="eksempel-footer">
-          <span>Se konseptet</span>
-          <span class="arrow">→</span>
-        </div>
-      </div>
-    </a>
-
-    <div class="eksempel-card soon r" data-cat="enkel">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-konsulent">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Hagen <em>Konsulent</em></div>
-            <div class="eksempel-mock-p">Strategisk rådgivning for små og mellomstore bedrifter.</div>
-            <span class="eksempel-mock-btn">Avtal samtale →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Konsulent</span>
-        <h3>Hagen Konsulent</h3>
-        <p>Én ren landingsside som forklarer tjenesten, viser referanser og lar potensielle kunder booke en uforpliktende samtale.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="eksempel-card soon r" data-cat="enkel">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-coach">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Maja <em>Strand</em></div>
-            <div class="eksempel-mock-p">Yoga og pust — for et roligere hverdagsliv.</div>
-            <span class="eksempel-mock-btn">Meld deg på →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Personlig brand</span>
-        <h3>Maja Strand</h3>
-        <p>Personlig nettside for en yogainstruktør. Varm tone, tydelig tilbud og en enkel påmeldingsflyt — uten unødvendige steg.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ───── PREMIUM ───── -->
-    <div class="eksempel-card soon r" data-cat="premium">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-restaurant">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Bistro <em>Høst</em></div>
-            <div class="eksempel-mock-p">Sesongens råvarer. Reserver bord eller bestill take-away.</div>
-            <span class="eksempel-mock-btn">Reserver bord →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Restaurant</span>
-        <h3>Bistro Høst</h3>
-        <p>Appetittvekkende meny som glir inn med scroll-animasjoner, reservasjonsskjema og en stemning som matcher opplevelsen i lokalet.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="eksempel-card soon r" data-cat="premium">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-advokat">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Berg &amp; Lund <em>Advokater</em></div>
-            <div class="eksempel-mock-p">Trygg juridisk rådgivning for private og bedrifter.</div>
-            <span class="eksempel-mock-btn">Gratis vurdering →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Advokat</span>
-        <h3>Berg &amp; Lund Advokater</h3>
-        <p>Autoritet uten å være kald. Tydelige fagområder, partner-presentasjoner og rolige overganger som inngir tillit fra første sekund.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="eksempel-card soon r" data-cat="premium">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-arkitekt">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Studio <em>Nord</em></div>
-            <div class="eksempel-mock-p">Arkitektur som hører hjemme i landskapet.</div>
-            <span class="eksempel-mock-btn">Se prosjektene →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Arkitekt</span>
-        <h3>Studio Nord</h3>
-        <p>Stort visuelt format, parallax-effekter og prosjektgalleri. SEO-optimalisert for "arkitekt" + region, så lokale byggherrer finner studioet.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ───── BOOKING ───── -->
-    <div class="eksempel-card soon r" data-cat="booking">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-klinikk">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Tannklinikken <em>Smilet</em></div>
-            <div class="eksempel-mock-p">Bestill time på under ett minutt — trygt og enkelt.</div>
-            <span class="eksempel-mock-btn">Bestill time →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Klinikk</span>
-        <h3>Tannklinikken Smilet</h3>
-        <p>Ren, rolig og tillitvekkende. Booking-modul med egen kalender, priser i klartekst og automatisk SMS-påminnelse.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="eksempel-card soon r" data-cat="booking">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-frisor">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Salong <em>Lavendel</em></div>
-            <div class="eksempel-mock-p">Moderne klipping, tidløs stil. Book nå.</div>
-            <span class="eksempel-mock-btn">Book time →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Frisør</span>
-        <h3>Salong Lavendel</h3>
-        <p>Stemningsfull presentasjon av stylistene, galleri av arbeid og en bookingflyt som faktisk fullføres — inkludert valg av tjeneste og stylist.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="eksempel-card soon r" data-cat="booking">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-fysio">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Holm <em>Fysio</em></div>
-            <div class="eksempel-mock-p">Fysioterapi og rehabilitering — book direkte hos behandleren.</div>
-            <span class="eksempel-mock-btn">Velg behandler →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Fysioterapi</span>
-        <h3>Holm Fysio</h3>
-        <p>Behandlerprofiler med spesialfelt, transparent pris-tabell og booking knyttet til riktig terapeut. SEO bygget rundt "fysioterapi" + bydel.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ───── NETTBUTIKK ───── -->
-    <div class="eksempel-card soon r" data-cat="shop">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-klaer">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Mose &amp; <em>Bær</em></div>
-            <div class="eksempel-mock-p">Bærekraftige plagg, laget i Norden.</div>
-            <span class="eksempel-mock-btn">Handle nå →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Klær</span>
-        <h3>Mose &amp; Bær</h3>
-        <p>Bærekraftig motebutikk med fokus på materialer og produksjon. Vipps-kasse, størrelsesguide, og fri retur — alt i én flyt.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="eksempel-card soon r" data-cat="shop">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-kost">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Kraft &amp; <em>Kropp</em></div>
-            <div class="eksempel-mock-p">Rene kosttilskudd, dokumentert virkning.</div>
-            <span class="eksempel-mock-btn">Se sortimentet →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Kosttilskudd</span>
-        <h3>Kraft &amp; Kropp</h3>
-        <p>Produktsider med ingrediensliste, doseringsinfo og kundeanmeldelser. Abonnement-funksjon for faste leveranser hver 30. dag.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="eksempel-card soon r" data-cat="shop">
-      <div class="eksempel-thumb">
-        <div class="eksempel-mock mock-handverk">
-          <div class="eksempel-mock-bar"><span></span><span></span><span></span></div>
-          <div class="eksempel-mock-body">
-            <div class="eksempel-mock-h">Tre &amp; <em>Tråd</em></div>
-            <div class="eksempel-mock-p">Lokalprodusert kunsthåndverk, små opplag.</div>
-            <span class="eksempel-mock-btn">Til butikken →</span>
-          </div>
-        </div>
-      </div>
-      <div class="eksempel-body">
-        <span class="eksempel-tag">Kunsthåndverk</span>
-        <h3>Tre &amp; Tråd</h3>
-        <p>Liten butikk med håndlagde varer. Begrenset opplag-funksjon, fortelling om hver produsent og enkel utsjekking via Vipps.</p>
-        <div class="eksempel-footer">
-          <span>Kommer snart</span>
-          <span class="arrow" style="opacity:.3">→</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
 
 <!-- ─── PRICES (pakkepriser) ──────────────────── -->
 <section class="prices" id="priser" aria-label="Pakkepriser" data-nav-theme="light">
@@ -2776,7 +2417,6 @@
           <li>Lansering inkludert</li>
         </ul>
         <a href="#kontakt" class="btn btn-outline tier-cta">Be om tilbud →</a>
-        <a href="#eksempler" class="tier-examples-link" data-cat-jump="enkel">Se eksempler ↓</a>
       </article>
 
       <!-- Tier 2: Premium landingsside (most popular) -->
@@ -2801,7 +2441,6 @@
           <li>Egne illustrasjoner/video etter behov</li>
         </ul>
         <a href="#kontakt" class="btn btn-dark tier-cta">Be om tilbud →</a>
-        <a href="#eksempler" class="tier-examples-link" data-cat-jump="premium">Se eksempler ↓</a>
       </article>
 
       <!-- Tier 3: Booking -->
@@ -2825,7 +2464,6 @@
           <li>Vipps eller kortbetaling (valgfritt)</li>
         </ul>
         <a href="#kontakt" class="btn btn-outline tier-cta">Be om tilbud →</a>
-        <a href="#eksempler" class="tier-examples-link" data-cat-jump="booking">Se eksempler ↓</a>
       </article>
 
       <!-- Tier 4: Nettbutikk -->
@@ -2849,7 +2487,6 @@
           <li>Faktura, frakt og rabattkoder</li>
         </ul>
         <a href="#kontakt" class="btn btn-outline tier-cta">Be om tilbud →</a>
-        <a href="#eksempler" class="tier-examples-link" data-cat-jump="shop">Se eksempler ↓</a>
       </article>
 
     </div>
@@ -2978,6 +2615,138 @@ const revealObs = new IntersectionObserver(entries => {
 }, { threshold: 0.07 });
 document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').forEach(el => revealObs.observe(el));
 
+/* ── Winch-rig: scroll-driven crank that "winches up" Hva du får ─────
+   Layering:
+     • spool + bracket + rope: BEHIND services (z-1 vs z-2) → page covers wheel
+     • hook: IN FRONT of services (z-4) at the hole, always visible
+   Entrance: held until the welcome CTA "La oss komme i gang!" finishes typing
+   (CTA starts at 5800ms with ~70ms × 21 chars typing → ~7300ms). After that
+   the rig fades in, then the rope+hook drop into place. Once the drop
+   transition finishes we switch to .is-snappy for 1:1 scroll updates. ── */
+(function() {
+  const rig = document.querySelector('.winch-rig');
+  const hook = document.querySelector('.winch-hook');
+  const services = document.getElementById('tjenester');
+  if (!rig || !hook || !services) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const WINCH_Y = 36;            // matches --winch-y on .services
+  const RIG_TOP = 0;             // matches .winch-rig top
+  const ROPE_START_Y = RIG_TOP + 110;  // rope exits the spool ~110px into the rig
+  const HOLE_R = 22;             // matches --hole-r
+  // The J-curve bottoms out at y≈48 in the SVG. Offset so the bottom of J
+  // sits a few pixels INSIDE the hole's upper portion — properly hooked.
+  const J_BOTTOM_Y = 48;
+  const J_DIP_INTO_HOLE = 10;    // px the J extends below the upper rim
+  const HOOK_TOP_OFFSET = -HOLE_R - J_BOTTOM_Y + J_DIP_INTO_HOLE;  // = -60
+
+  let entered = false;
+  let ticking = false;
+
+  function compute() {
+    const r = services.getBoundingClientRect();
+    const winH = window.innerHeight;
+    return { r, winH, active: !(r.top > winH + 100 || r.bottom < 60) };
+  }
+
+  function update() {
+    if (!entered) return;
+    const r = services.getBoundingClientRect();
+    const winH = window.innerHeight;
+
+    // Hide rig + hook once the section's TOP edge has scrolled past viewport top.
+    // After that point the section is past its "rising" phase and the rig has
+    // no business being visible further down the page.
+    const hidden = r.top > winH + 100 || r.top < 0;
+    if (hidden) {
+      rig.style.opacity = '0';
+      hook.style.opacity = '0';
+      rig.style.setProperty('--rope-len', '0px');
+      return;
+    }
+    rig.style.opacity = '';
+    hook.style.opacity = '';
+
+    const holeY = r.top + WINCH_Y;
+    const hookY = holeY + HOOK_TOP_OFFSET;
+    const ropeLen = Math.max(0, hookY - ROPE_START_Y);
+
+    rig.style.setProperty('--rope-len', ropeLen + 'px');
+    hook.style.setProperty('--hook-y', hookY + 'px');
+
+    const maxRope = winH;
+    const wound = Math.max(0, Math.min(1, 1 - ropeLen / maxRope));
+    rig.style.setProperty('--rot', (wound * 1080) + 'deg');
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(() => { update(); ticking = false; });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+
+  // Entrance sequence (synced with welcome CTA typewriter)
+  const CTA_START = 5800;
+  const CTA_TYPE_MS = 70 * 21;   // 21 chars at 70ms each
+  const POST_CTA_BREATH = 350;
+  const SPOOL_FADE = 550;
+  const ROPE_DROP = 600;
+
+  setTimeout(() => {
+    // Phase 1: wheel + bracket fade in
+    rig.classList.add('is-entered');
+    setTimeout(() => {
+      // Phase 2: rope + hook drop into place (CSS transitions handle the descent)
+      entered = true;
+      hook.classList.add('is-entered');
+      update();
+      // Phase 3: switch to snappy mode after the drop transition completes
+      setTimeout(() => {
+        rig.classList.add('is-snappy');
+        hook.classList.add('is-snappy');
+      }, ROPE_DROP + 60);
+    }, SPOOL_FADE);
+  }, CTA_START + CTA_TYPE_MS + POST_CTA_BREATH);
+})();
+
+/* ── Pause punchline tusj reveal + sync door video ──────────────────── */
+(function() {
+  const punch = document.getElementById('pausePunch');
+  const door  = document.getElementById('pauseDoor');
+  if (!punch || !door) return;
+
+  let triggered = false;
+  let doorTimer = null;
+  function fire() {
+    triggered = true;
+    // Restart tusj animation by toggling the class with a reflow between.
+    punch.classList.remove('is-tusjed');
+    void punch.offsetWidth;
+    punch.classList.add('is-tusjed');
+    // Customers walk in — held back to match tusj animation-delay (1.4s)
+    if (doorTimer) clearTimeout(doorTimer);
+    try { door.pause(); door.currentTime = 0; } catch (err) {}
+    doorTimer = setTimeout(() => {
+      const p = door.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    }, 1400);
+  }
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) fire();
+      else if (triggered) {
+        if (doorTimer) clearTimeout(doorTimer);
+        door.pause();
+      }
+    });
+  }, { threshold: 0 });   // any intersection — maximum reliability
+  obs.observe(punch);
+})();
+
 /* ── Pause-section hourglass video: replay on every scroll into view ─── */
 (function() {
   const video = document.getElementById('pauseVideo');
@@ -2996,38 +2765,6 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
     });
   }, { threshold: 0.4 });
   obs.observe(video);
-})();
-
-/* ── Eksempler: filter cards by category ───────────────────────── */
-(function() {
-  const pills = document.querySelectorAll('.eks-pill');
-  const cards = document.querySelectorAll('.eksempler-grid .eksempel-card');
-  if (!pills.length || !cards.length) return;
-
-  function applyFilter(cat) {
-    cards.forEach(card => {
-      const match = (cat === 'all') || (card.dataset.cat === cat);
-      card.classList.toggle('is-hidden', !match);
-    });
-    pills.forEach(p => {
-      const active = p.dataset.filter === cat;
-      p.classList.toggle('is-active', active);
-      p.setAttribute('aria-selected', active ? 'true' : 'false');
-    });
-  }
-
-  pills.forEach(pill => {
-    pill.addEventListener('click', () => applyFilter(pill.dataset.filter));
-  });
-
-  // "Se eksempler ↓" links from tier cards: jump + filter
-  document.querySelectorAll('[data-cat-jump]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      const cat = link.dataset.catJump;
-      if (cat) applyFilter(cat);
-      // The href="#eksempler" handles scroll natively; no preventDefault.
-    });
-  });
 })();
 
 /* ── Odometer prices: roll up to target value when scrolled into view ── */
@@ -3202,15 +2939,16 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
   }, 5800);
 })();
 
-/* ── Nav scroll: hide over welcome, show on intro ────────────────────────── */
+/* ── Nav scroll: hide over welcome, show as soon as Hva du får covers the screen ─ */
 (function() {
   const nav = document.getElementById('nav');
-  const welcome = document.querySelector('.welcome');
+  const services = document.getElementById('tjenester');
   function update() {
-    const welcomeBottom = welcome ? welcome.getBoundingClientRect().bottom : 0;
-    const overWelcome = welcomeBottom > 80;
-    nav.classList.toggle('nav-hidden-welcome', overWelcome);
-    nav.classList.toggle('scrolled', scrollY > 20 && !overWelcome);
+    // Services section's top has reached viewport top → it fills the screen.
+    const sTop = services ? services.getBoundingClientRect().top : 0;
+    const fullyCovered = sTop <= 0;
+    nav.classList.toggle('nav-hidden-welcome', !fullyCovered);
+    nav.classList.toggle('scrolled', fullyCovered);
   }
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);
