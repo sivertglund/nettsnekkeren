@@ -1135,31 +1135,68 @@
     background-size: 100% .08em;
     padding-bottom: .14em;
   }
-  /* Honey-toned highlighter sweep under the lede, drawn left-to-right when
-     the paragraph enters view. A subtle band behind the text — matches the
-     section's cream/honey palette so it reads as part of the page rather
-     than a foreign neon accent. */
-  .lede-mark {
-    background-image: linear-gradient(
-      transparent 60%,
-      rgba(192, 120, 24, .58) 60%,
-      rgba(192, 120, 24, .58) 95%,
-      transparent 95%
-    );
-    background-repeat: no-repeat;
-    background-position: 0 0;
-    background-size: 0% 100%;
-    transition: background-size 1.4s cubic-bezier(.55,.06,.3,1) .85s;
-    padding: 0 .12em;
-    margin: 0 -.12em;
-    border-radius: 2px;
+  /* Sawing mascot to the left of the lede + saw-cut effect on the lede text.
+     The mascot's blue background is keyed out via the #saw-bg-key SVG filter;
+     mix-blend-mode acts as a fallback finisher for any residual color. */
+  /* The lede sits in a "card" whose background extends the same blue as the
+     video — making the rectangular video bg look like the natural backdrop of
+     the whole panel rather than a hard cut-out. Tweak --saw-bg to match the
+     exact video color if it drifts. */
+  .lede-row {
+    --saw-bg: #15294a;
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 1.6vw, 26px);
+    background: var(--saw-bg);
+    padding: clamp(18px, 2vw, 28px) clamp(20px, 2.4vw, 36px) clamp(18px, 2vw, 28px) 0;
+    border-radius: 18px;
+    overflow: hidden;
   }
-  .pause-lede.in .lede-mark {
-    background-size: 100% 100%;
+  .saw-video-wrap {
+    flex-shrink: 0;
+    width: clamp(130px, 15vw, 210px);
+    aspect-ratio: 1 / 1;
+    position: relative;
+    /* No padding/margin — video edges butt right up against the card edge so
+       the video bg flows seamlessly into the .lede-row bg. */
+    margin-left: 0;
+  }
+  .saw-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;        /* show the whole mascot — head and all */
+    display: block;
+  }
+  /* Saw-cut: two stacked copies of the lede, each clipped to a horizontal
+     half. When .is-cut is added, the halves drift apart at slight angles —
+     synchronized with the mascot's saw motion. */
+  .saw-cut {
+    position: relative;
+    display: inline-block;
+  }
+  .saw-cut-half {
+    display: inline-block;
+    transition: transform 1.4s cubic-bezier(.35,.05,.35,1);
+    will-change: transform;
+  }
+  .saw-cut-top { -webkit-clip-path: inset(0 0 50% 0); clip-path: inset(0 0 50% 0); }
+  .saw-cut-bot {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    -webkit-clip-path: inset(50% 0 0 0); clip-path: inset(50% 0 0 0);
+  }
+  .saw-cut.is-cut .saw-cut-top {
+    transform: translate(-3px, -10px) rotate(-1.6deg);
+  }
+  .saw-cut.is-cut .saw-cut-bot {
+    transform: translate(3px, 12px) rotate(1.6deg);
   }
   @media (prefers-reduced-motion: reduce) {
-    .lede-mark { transition: none; }
-    .pause-lede.in .lede-mark { background-size: 100% 100%; }
+    .saw-cut-half { transition: none; }
+  }
+  @media (max-width: 760px) {
+    .lede-row { flex-direction: column; align-items: flex-start; }
+    .saw-video-wrap { width: 140px; }
   }
   .pause-p strong {
     color: var(--honey);
@@ -1198,11 +1235,12 @@
      wraps each word in <span class="pa-w"> and adds .in when the door video
      starts (i.e., right at the heart of the moment). */
   .pause-aside {
-    margin: clamp(20px, 2.6vw, 40px) 0 0;     /* extra breath between door and the closing thought */
+    margin: clamp(20px, 2.6vw, 40px) 0 0;
     font-family: 'Caveat', 'Marous', cursive;
-    font-size: clamp(18px, 1.7vw, 22px);
-    line-height: 1.45;
-    color: rgba(250, 246, 236, .68);
+    font-size: clamp(22px, 2.2vw, 30px);     /* larger so it actually reads */
+    font-weight: 600;                        /* heavier stroke */
+    line-height: 1.4;
+    color: rgba(250, 246, 236, .85);         /* a touch more present */
     max-width: none;
     font-style: normal;
     letter-spacing: .005em;
@@ -1559,8 +1597,15 @@
     gap: 20px;
     align-items: stretch;
   }
-  @media (max-width: 1080px) { .tier-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; } }
-  @media (max-width: 600px)  { .tier-grid { grid-template-columns: 1fr; gap: 16px; } }
+  .tier-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 1080px) {
+    .tier-grid   { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .tier-grid-3 { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  }
+  @media (max-width: 600px)  {
+    .tier-grid   { grid-template-columns: 1fr; gap: 16px; }
+    .tier-grid-3 { grid-template-columns: 1fr; gap: 16px; }
+  }
 
   .tier-card {
     position: relative;
@@ -2518,13 +2563,41 @@
   <path d="M0 62 L0 20 Q360 0 720 30 Q1080 60 1440 20 L1440 62Z" fill="#192140"/>
 </svg>
 
+<!-- SVG filter for chroma-keying the blue background out of the saw mascot video.
+     Last row of the matrix maps Alpha = 2R + 2G − 3B − 0.3 — pure blue → 0, bright
+     character pixels → 1. Tweak constants if the bg still bleeds through. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="saw-bg-key" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        2 2 -3 0 -0.3
+      "/>
+    </filter>
+  </defs>
+</svg>
+
 <!-- ─── PAUSE (visual breath between Hva du får and Slik fungerer det) ─── -->
 <section class="pause" data-nav-theme="dark">
   <div class="container pause-inner">
-    <!-- Top row: title + lede on the left, hourglass + reflective aside stacked on the right -->
+    <!-- Top row: title + lede with sawing mascot on the left, hourglass on the right -->
     <div class="pause-head">
       <h2 class="pause-h r">Førsteinntrykket <em>avgjør alt.</em></h2>
-      <p class="pause-p pause-lede r d1"><span class="lede-mark">Folk bestemmer seg på tre sekunder.</span></p>
+      <div class="lede-row r d1">
+        <div class="saw-video-wrap" aria-hidden="true">
+          <video class="saw-video" id="sawVideo" muted playsinline preload="metadata">
+            <source src="media/saw.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="pause-p pause-lede">
+          <span class="saw-cut" id="sawCut">
+            <span class="saw-cut-half saw-cut-top">Kutt ut den treige, kjedelige nettsiden. Den taper deg potensielle kunder!</span>
+            <span class="saw-cut-half saw-cut-bot" aria-hidden="true">Kutt ut den treige, kjedelige nettsiden. Den taper deg potensielle kunder!</span>
+          </span>
+        </p>
+      </div>
     </div>
     <div class="pause-video-wrap r d2" aria-hidden="true">
       <video class="pause-video" id="pauseVideo" muted playsinline preload="metadata">
@@ -2548,9 +2621,9 @@
     </div>
 
     <!-- Reflective afterthought — sits at the very bottom of the section, full-width below everything else. -->
-    <p class="pause-aside" id="pauseAside" aria-label="Det er lett å undervurdere effekten av en god nettside. Kanskje er det lettere for deg å relatere til den negative effekten av en dårlig nettside…">
-      <span class="pa-line">— Det er lett å undervurdere effekten av en god nettside.</span>
-      <span class="pa-line">Kanskje er det lettere for deg å relatere til den <em>negative</em> effekten av en dårlig nettside…</span>
+    <p class="pause-aside" id="pauseAside" aria-label="Det er lett å undervurdere effekten av en god nettside... Men kanskje er det lettere å relatere til den negative effekten av en dårlig nettside…">
+      <span class="pa-line">— Det er lett å undervurdere effekten av en god nettside...</span>
+      <span class="pa-line">Men kanskje er det lettere å relatere til den <em>negative</em> effekten av en dårlig nettside…</span>
     </p>
   </div>
 </section>
@@ -2667,17 +2740,17 @@
     <div class="prices-head r">
       <span class="label">Pakkepriser</span>
       <h2>Fastpris fra<br /><em>første samtale.</em></h2>
-      <p class="prices-lead">Du betaler én gang og eier alt. Velg pakken som passer — eller blande og matche, jeg tilpasser etter behov.</p>
+      <p class="prices-lead">Du betaler én gang og eier alt. Velg pakken som passer — eller noe imellom. Jeg er opptatt av å finne en god løsning sammen, det er aldri enten eller.</p>
     </div>
 
-    <div class="tier-grid">
+    <div class="tier-grid tier-grid-3">
 
-      <!-- Tier 1: Enkel landingsside -->
-      <article class="tier-card r" data-tier="enkel" data-cat-link="enkel">
+      <!-- Tier 1: Moderne, interaktiv landingsside -->
+      <article class="tier-card r" data-tier="moderne" data-cat-link="enkel">
         <div class="tier-head">
           <span class="tier-eyebrow">For å komme i gang</span>
-          <h3 class="tier-name">Enkel<br>landingsside</h3>
-          <p class="tier-desc">Én fokusert side som forklarer hva du gjør og får folk til å ta kontakt.</p>
+          <h3 class="tier-name">Moderne,<br>interaktiv<br>landingsside</h3>
+          <p class="tier-desc">En levende, godt designet nettside som forklarer hva du gjør og får folk til å ta kontakt — eller bestille direkte.</p>
         </div>
         <div class="tier-price">
           <span class="tier-price-from">fra</span>
@@ -2685,12 +2758,12 @@
           <span class="tier-price-suffix">kr</span>
         </div>
         <ul class="tier-features">
-          <li>1 side, mobiltilpasset</li>
-          <li>Skreddersydd design</li>
+          <li>Skreddersydd, mobiltilpasset design</li>
+          <li>Så mange sider du vil</li>
+          <li>Bookingskjema på e-post — lavere terskel for å bestille time</li>
           <li>Kontaktskjema</li>
           <li>Teknisk SEO-grunnlag</li>
           <li>Domene + hosting første år</li>
-          <li>Lansering inkludert</li>
         </ul>
         <a href="#kontakt" class="btn btn-outline tier-cta">Be om tilbud →</a>
       </article>
@@ -2701,17 +2774,17 @@
         <div class="tier-head">
           <span class="tier-eyebrow">Med liv og særpreg</span>
           <h3 class="tier-name">Premium<br>landingsside</h3>
-          <p class="tier-desc">Levende design med animasjoner og scroll-effekter — og avansert SEO som faktisk rangerer.</p>
+          <p class="tier-desc">Levende design med avanserte animasjoner og scroll-effekter — og SEO som faktisk rangerer. Pris avhenger av omfang.</p>
         </div>
         <div class="tier-price">
           <span class="tier-price-from">fra</span>
-          <span class="tier-price-num"><span class="odo" data-odo="11990">11 990</span></span>
+          <span class="tier-price-num"><span class="odo" data-odo="12600">12 600</span></span>
           <span class="tier-price-suffix">kr</span>
         </div>
         <ul class="tier-features">
-          <li>Alt i Enkel</li>
-          <li>3–5 undersider</li>
-          <li>Scroll- og hover-animasjoner</li>
+          <li>Alt i Moderne, interaktiv</li>
+          <li>Så mange sider du vil</li>
+          <li>Avanserte scroll- og hover-animasjoner</li>
           <li>Avansert SEO + schema-markup</li>
           <li>Performance-tuning (Core Web Vitals)</li>
           <li>Egne illustrasjoner/video etter behov</li>
@@ -2719,43 +2792,20 @@
         <a href="#kontakt" class="btn btn-dark tier-cta">Be om tilbud →</a>
       </article>
 
-      <!-- Tier 3: Booking -->
-      <article class="tier-card r d2" data-tier="booking" data-cat-link="booking">
-        <div class="tier-head">
-          <span class="tier-eyebrow">For tjenestebedrifter</span>
-          <h3 class="tier-name">Booking<br>løsning</h3>
-          <p class="tier-desc">Kunder kan bestille time selv — for tannleger, frisører, klinikker og terapeuter.</p>
-        </div>
-        <div class="tier-price">
-          <span class="tier-price-from">fra</span>
-          <span class="tier-price-num"><span class="odo" data-odo="16990">16 990</span></span>
-          <span class="tier-price-suffix">kr</span>
-        </div>
-        <ul class="tier-features">
-          <li>Alt i Premium</li>
-          <li>Online booking-system</li>
-          <li>Kalender-synk (Google/iCal)</li>
-          <li>Påminnelse på SMS/e-post</li>
-          <li>Admin-panel for timer</li>
-          <li>Vipps eller kortbetaling (valgfritt)</li>
-        </ul>
-        <a href="#kontakt" class="btn btn-outline tier-cta">Be om tilbud →</a>
-      </article>
-
-      <!-- Tier 4: Nettbutikk -->
-      <article class="tier-card r d3" data-tier="shop" data-cat-link="shop">
+      <!-- Tier 3: Nettbutikk -->
+      <article class="tier-card r d2" data-tier="shop" data-cat-link="shop">
         <div class="tier-head">
           <span class="tier-eyebrow">For å selge på nett</span>
           <h3 class="tier-name">Nettbutikk</h3>
-          <p class="tier-desc">Full butikk med Vipps, kortbetaling, lager og kundepanel — bygget for å konvertere.</p>
+          <p class="tier-desc">Full butikk med Vipps, kortbetaling, lager og kundepanel — bygget for å konvertere. Pris avhenger av omfang.</p>
         </div>
         <div class="tier-price">
           <span class="tier-price-from">fra</span>
-          <span class="tier-price-num"><span class="odo" data-odo="27990">27 990</span></span>
+          <span class="tier-price-num"><span class="odo" data-odo="24000">24 000</span></span>
           <span class="tier-price-suffix">kr</span>
         </div>
         <ul class="tier-features">
-          <li>Alt i Premium</li>
+          <li>Skreddersydd, mobiltilpasset design</li>
           <li>Produktkatalog + kategorier</li>
           <li>Vipps + kortbetaling</li>
           <li>Lager- og ordrehåndtering</li>
@@ -2767,7 +2817,7 @@
 
     </div>
 
-    <p class="tier-foot r d3">Domene ~99 kr/år · hosting ~499 kr/år. <strong>Ingen skjulte gebyrer.</strong> Trenger du noe imellom? Vi tilpasser pakken.</p>
+    <p class="tier-foot r d3">Prisene er <strong>uavhengig av antall sider</strong> — ha så mange du trenger. Domene ~99 kr/år · hosting ~499 kr/år. <strong>Ingen skjulte gebyrer.</strong> Trenger du noe imellom? Vi finner en løsning sammen.</p>
   </div>
 </section>
 
@@ -3084,6 +3134,39 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
   doorObs.observe(door);
 })();
 
+/* ── Pause-section saw mascot: video plays + lede text gets cut in half ──
+   The video's first ~1s is intro before the bg turns blue, so we skip past it
+   on each play. When the mascot's saw lands, the lede splits into a top and
+   bottom half that drift apart (replays on every re-entry). ── */
+(function() {
+  const video  = document.getElementById('sawVideo');
+  const sawCut = document.getElementById('sawCut');
+  if (!video || !sawCut) return;
+
+  const SKIP_INTRO_TO = 1.0;     // start playing AFTER the bg turns blue (tweak)
+  const CUT_DELAY_MS  = 1500;    // how long after play() before the text splits
+
+  let cutTimer = null;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        try { video.currentTime = SKIP_INTRO_TO; } catch (err) {}
+        const p = video.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+        // Reset + retrigger cut animation
+        sawCut.classList.remove('is-cut');
+        void sawCut.offsetWidth;
+        if (cutTimer) clearTimeout(cutTimer);
+        cutTimer = setTimeout(() => sawCut.classList.add('is-cut'), CUT_DELAY_MS);
+      } else {
+        try { video.pause(); } catch (err) {}
+        if (cutTimer) { clearTimeout(cutTimer); cutTimer = null; }
+      }
+    });
+  }, { threshold: 0.3 });
+  obs.observe(video);
+})();
+
 /* ── Pause-section hourglass video: replay on every scroll into view ─── */
 (function() {
   const video = document.getElementById('pauseVideo');
@@ -3104,84 +3187,9 @@ document.querySelectorAll('.r, .r-left, .r-right, .r-scale, .r-blur, .r-pop').fo
   obs.observe(video);
 })();
 
-/* ── Odometer prices: roll up to target value when scrolled into view ── */
-(function() {
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const odos = document.querySelectorAll('.odo[data-odo]');
-  if (!odos.length) return;
-
-  function fmt(n) {
-    return n.toLocaleString('nb-NO').replace(/ /g, ' ');
-  }
-
-  /* Render targetStr into el as digit-stack columns. Reuses nodes so the
-     slide animation actually plays on subsequent calls. */
-  function renderOdo(el, targetStr) {
-    const chars = Array.from(targetStr);
-    const existing = Array.from(el.children);
-    chars.forEach((ch, i) => {
-      const isDigit = ch >= '0' && ch <= '9';
-      const wantClass = isDigit ? 'odo-digit' : 'odo-sep';
-      let node = existing[i];
-      if (!node || node.className !== wantClass) {
-        const fresh = document.createElement('span');
-        fresh.className = wantClass;
-        if (isDigit) {
-          const stack = document.createElement('span');
-          stack.className = 'odo-digit-stack';
-          for (let d = 0; d <= 9; d++) {
-            const s = document.createElement('span');
-            s.textContent = d;
-            stack.appendChild(s);
-          }
-          fresh.appendChild(stack);
-        } else {
-          fresh.textContent = ch;
-        }
-        if (node) el.replaceChild(fresh, node);
-        else el.appendChild(fresh);
-        node = fresh;
-      }
-      if (isDigit) {
-        const stack = node.firstChild;
-        const digit = parseInt(ch, 10);
-        const ty = -digit * 100;
-        stack.style.transform = 'translateY(' + ty + '%)';
-      } else {
-        node.textContent = ch;
-      }
-    });
-    while (el.children.length > chars.length) el.removeChild(el.lastChild);
-    el.setAttribute('aria-label', targetStr);
-  }
-
-  // Initialize each price at its zero-padded form so it rolls UP to target.
-  odos.forEach(el => {
-    const target = parseInt(el.dataset.odo, 10) || 0;
-    const zeros = fmt(target).replace(/\d/g, '0');
-    el.textContent = '';
-    renderOdo(el, zeros);
-    void el.offsetHeight;
-  });
-
-  if (reduceMotion) {
-    odos.forEach(el => renderOdo(el, fmt(parseInt(el.dataset.odo, 10) || 0)));
-    return;
-  }
-
-  const seen = new WeakSet();
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting || seen.has(entry.target)) return;
-      seen.add(entry.target);
-      const el = entry.target;
-      const target = parseInt(el.dataset.odo, 10) || 0;
-      const idx = Array.from(odos).indexOf(el);
-      setTimeout(() => renderOdo(el, fmt(target)), idx * 90);
-    });
-  }, { threshold: 0.5 });
-  odos.forEach(el => obs.observe(el));
-})();
+/* Odometer JS removed — prices now render as plain text in the HTML so they
+   never end up blank or stuck at zero. The .odo class still styles them with
+   tabular-nums so they're aligned. */
 
 /* ── Magnetic CTAs (pointer/hover only) ─────────────────────────── */
 (function() {
