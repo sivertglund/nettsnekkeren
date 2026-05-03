@@ -30,7 +30,7 @@
     "url": "https://nettsnekkeren.no/",
     "email": "post@nettsnekkeren.no",
     "telephone": "+4746783148",
-    "priceRange": "9900-45000 NOK",
+    "priceRange": "5990-45000 NOK",
     "areaServed": {
       "@type": "Country",
       "name": "Norge"
@@ -39,9 +39,9 @@
     "paymentAccepted": "Faktura",
     "offers": {
       "@type": "Offer",
-      "description": "Skreddersydd nettside fra 9 900 kr med fornøydgaranti — opptil fem revisjonsrunder inkludert",
+      "description": "Skreddersydd nettside fra 5 990 kr med fornøydgaranti — opptil fem revisjonsrunder inkludert",
       "priceCurrency": "NOK",
-      "price": "9900"
+      "price": "5990"
     }
   }
   </script>
@@ -809,11 +809,13 @@
     right: clamp(20px, 5%, 80px);
     top: 50%;
     transform: translateY(-50%);
-    width: clamp(120px, 13vw, 180px);
+    width: clamp(140px, 15vw, 210px);
     aspect-ratio: 3 / 4;
-    background: #f3eada;
-    -webkit-mask-image: radial-gradient(ellipse 65% 75% at center, #000 55%, transparent 92%);
-            mask-image: radial-gradient(ellipse 65% 75% at center, #000 55%, transparent 92%);
+    /* Roomier ellipse so the hammer + character body don't get clipped, but
+       still tight enough that the cream bg fades cleanly into the page. */
+    background: transparent;
+    -webkit-mask-image: radial-gradient(ellipse 50% 86% at 50% 50%, #000 70%, transparent 100%);
+            mask-image: radial-gradient(ellipse 50% 86% at 50% 50%, #000 70%, transparent 100%);
     pointer-events: none;
   }
   .services-hammer {
@@ -821,7 +823,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    mix-blend-mode: darken;
+    mix-blend-mode: multiply;
   }
   @media (max-width: 920px) {
     .services-hammer-wrap { display: none; }
@@ -868,37 +870,67 @@
     font-weight: 700;
   }
 
-  /* Intro claim — two paragraphs grouped inside a hand-drawn marker oval that
-     animates in (drawn left-to-right via stroke-dashoffset) when the section
-     enters view. Strong tags here are black/bold (overrides the honey above). */
-  .intro-claim {
-    position: relative;
-    display: inline-block;
-    padding: 18px 44px 20px;
-    margin-top: 6px;
+  /* Intro stat pills — two compact stat cards: leveringstid + betaling. Big
+     Super Wonder number/keyword in honey, dual labels (bold lead + small
+     caption) carry the meaning. Distinctive look that ties to the brand. */
+  .intro-pills {
+    list-style: none;
+    padding: 0;
+    margin: clamp(22px, 2.6vw, 36px) 0 0;
+    display: flex;
+    gap: clamp(12px, 1.4vw, 20px);
+    justify-content: center;
+    flex-wrap: wrap;
   }
-  .intro-claim p { margin: 0; }
-  .intro-claim p + p { margin-top: 6px; }
-  .intro-claim p strong {
-    color: var(--ink);
-    font-style: normal;
+  .intro-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: clamp(12px, 1.3vw, 18px) clamp(18px, 2vw, 26px);
+    border-radius: 16px;
+    background: var(--honey-light);
+    border: 1.5px solid rgba(192, 120, 24, .25);
+    transition: transform .35s var(--ease-snap), box-shadow .3s, border-color .3s, background .3s;
+  }
+  .intro-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(192, 120, 24, .14);
+    border-color: var(--honey);
+    background: #fff;
+  }
+  .intro-pill-num {
+    font-family: 'Super Wonder', sans-serif;
+    font-size: clamp(28px, 3.1vw, 40px);
     font-weight: 800;
+    color: var(--honey);
+    letter-spacing: -.04em;
+    line-height: 1;
   }
-  .intro-claim-ring {
-    position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    overflow: visible;
+  .intro-pill-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    line-height: 1.15;
   }
-  .intro-claim-ring path {
-    fill: none;
-    stroke: var(--ink);
-    stroke-width: 2.2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    opacity: .82;
-    vector-effect: non-scaling-stroke;
+  .intro-pill-meta strong {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(13px, 1.2vw, 15px);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -.01em;
+  }
+  .intro-pill-meta small {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink-55);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    margin-top: 3px;
+  }
+  @media (max-width: 540px) {
+    .intro-pill { padding: 10px 16px; gap: 12px; border-radius: 14px; }
+    .intro-pill-num { font-size: 26px; }
   }
   .svc-card p strong {
     color: var(--honey);
@@ -2490,13 +2522,22 @@
     <div class="services-header-row">
       <div class="sec-header" id="intro">
         <h2 class="r">Bedre. Billigere.<br /><em>Raskere.</em></h2>
-        <div class="intro-claim r">
-          <svg class="intro-claim-ring" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M 100 4 C 158 2, 197 13, 194 30 C 197 51, 144 58, 96 56 C 42 57, 4 46, 7 29 C 5 10, 54 3, 100 4 Z"/>
-          </svg>
-          <p class="r d1">Skreddersydd nettside, ferdig på noen <strong>dager</strong>.</p>
-          <p class="r d2"><strong>Engangsbetaling</strong>.</p>
-        </div>
+        <ul class="intro-pills r d1" aria-label="Hovedløfter">
+          <li class="intro-pill">
+            <span class="intro-pill-num">1–2</span>
+            <span class="intro-pill-meta">
+              <strong>uker</strong>
+              <small>leveringstid</small>
+            </span>
+          </li>
+          <li class="intro-pill">
+            <span class="intro-pill-num">1×</span>
+            <span class="intro-pill-meta">
+              <strong>betaling</strong>
+              <small>ingen abonnement</small>
+            </span>
+          </li>
+        </ul>
       </div>
       <div class="services-hammer-wrap" aria-hidden="true">
         <video class="services-hammer" autoplay muted loop playsinline preload="metadata"
@@ -2517,7 +2558,7 @@
             <line x1="7" y1="7" x2="7.01" y2="7"/>
           </svg>
         </div>
-        <h3>Pris fra kun 4&nbsp;990</h3>
+        <h3>Pris fra kun 5&nbsp;990</h3>
         <p>Bygges kun av <em>Nettsnekkeren</em>, ikke et stort byrå. Jeg garanterer et resultat som blir minst like bra (og mye billigere).</p>
       </div>
 
@@ -2754,7 +2795,7 @@
         </div>
         <div class="tier-price">
           <span class="tier-price-from">fra</span>
-          <span class="tier-price-num"><span class="odo" data-odo="4990">4 990</span></span>
+          <span class="tier-price-num"><span class="odo" data-odo="5990">5 990</span></span>
           <span class="tier-price-suffix">kr</span>
         </div>
         <ul class="tier-features">
