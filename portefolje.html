@@ -189,6 +189,21 @@
       .portfolio-hero { padding: 72px 0 40px; }
       .concepts-section { padding: 40px 0 72px; }
     }
+    @media (max-width: 768px) {
+      html, body { overflow-x: hidden; }
+      .portfolio-hero h1 { font-size: clamp(34px, 9vw, 56px); }
+      .portfolio-hero p { font-size: 16px; }
+      .portfolio-cta { padding: 56px 24px; }
+      .portfolio-cta h2 { font-size: clamp(28px, 7vw, 40px); }
+      .portfolio-cta p { font-size: 15px; }
+    }
+    @media (max-width: 480px) {
+      .container, .container-sm { padding: 0 16px; }
+      .concept-card { border-radius: 18px; }
+    }
+    @media (hover: none) {
+      .concept-card:hover { transform: none; }
+    }
   </style>
 </head>
 <body>

@@ -167,6 +167,24 @@
       .fg-row { grid-template-columns: 1fr; }
       .contact-form-card { padding: 24px; }
     }
+    @media (max-width: 768px) {
+      html, body { overflow-x: hidden; }
+      .contact-page { padding: 96px 0 64px; }
+      .contact-info > p { font-size: 16px; }
+      .contact-method { padding: 14px 16px; }
+      .contact-form-card h2 { font-size: clamp(24px, 6vw, 32px); }
+      .fg input, .fg textarea, .fg select { font-size: 16px; }   /* iOS no-zoom */
+      .btn-submit { width: 100%; justify-content: center; padding: 14px 20px; }
+    }
+    @media (max-width: 480px) {
+      .container, .container-sm { padding: 0 16px; }
+      .contact-form-card { padding: 20px 18px; }
+      .contact-method { padding: 12px 14px; }
+      .contact-method-val { font-size: 14px; }
+    }
+    @media (hover: none) {
+      .contact-method:hover, .btn:hover, .btn-submit:hover:not(:disabled) { transform: none; }
+    }
   </style>
 </head>
 <body>

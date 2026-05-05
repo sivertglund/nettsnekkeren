@@ -381,6 +381,17 @@
       .bb-contact-details { gap: 24px; flex-direction: column; align-items: center; }
       .bb-contact-detail { text-align: center; }
     }
+    @media (max-width: 768px) {
+      html, body { overflow-x: hidden; }
+      .bb-hero h1 { font-size: clamp(34px, 8vw, 52px); }
+      .bb-hero p { font-size: 16px; }
+      .bb-section-head h2 { font-size: clamp(28px, 7vw, 40px); }
+      .bb-section-head p { font-size: 15px; }
+      .bb-trust-inner strong { font-size: 32px; }
+    }
+    @media (hover: none) {
+      .bb-svc-card:hover, .bb-step:hover, .bb-cta:hover { transform: none; }
+    }
   </style>
 </head>
 <body>
